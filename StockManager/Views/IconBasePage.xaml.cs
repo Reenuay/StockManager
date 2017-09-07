@@ -12,19 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using StockManager.ViewModels;
 
 namespace StockManager.Views
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для IconBasePage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class IconBasePage : Page
     {
-        public MainWindow()
+        public IconBasePage()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
         }
     }
 }

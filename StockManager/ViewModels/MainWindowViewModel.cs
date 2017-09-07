@@ -1,47 +1,125 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Controls;
+using System.Windows.Input;
+using MaterialDesignThemes.Wpf;
+using StockManager.Utils;
+using StockManager.Views;
 
 namespace StockManager.ViewModels
 {
-    class MainWindowViewModel
+    class MainWindowViewModel : INotifyPropertyChanged
     {
-        public MainMenuItem[] MainMenuItems
+        #region Fields
+
+        private List<MainMenuItemSource> _mainMenuItems;
+        private Page _currentPage;
+        private ICommand _changePageCommand;
+
+        #endregion
+
+        #region Properties / Events
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public MainMenuItemSource[] MainMenuItems
         {
             get
             {
-                return new MainMenuItem[] {
-                    new MainMenuItem
-                    {
-                        Name = "Home",
-                        Icon = "Home"
-                    },
-                    new MainMenuItem
-                    {
-                        Name = "Icons",
-                        Icon = "FileTree"
-                    },
-                    new MainMenuItem
-                    {
-                        Name = "Sets",
-                        Icon = "PackageVariant"
-                    },
-                    new MainMenuItem
-                    {
-                        Name = "Keywords",
-                        Icon = "Key"
-                    }
-                };
+                return _mainMenuItems.ToArray();
             }
+        }
+
+        public Page CurrentPage
+        {
+            get
+            {
+                return _currentPage;
+            }
+
+            set
+            {
+                if (_currentPage != value)
+                {
+                    _currentPage = value;
+                    NotifyPropertyChanged("CurrentPage");
+                }
+            }
+        }
+
+        public ICommand ChangePageCommand
+        {
+            get
+            {
+                _changePageCommand = _changePageCommand ?? new RelayCommand(p => p is Page, p => ChangePage((Page)p));
+                return _changePageCommand;
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void ChangePage(Page page)
+        {
+            if (CurrentPage != page && page != null)
+            {
+                CurrentPage = page;
+            }
+        }
+
+        #endregion
+
+        public MainWindowViewModel()
+        {
+            //Создаём список элементов меню
+            _mainMenuItems = new List<MainMenuItemSource>
+            {
+                new MainMenuItemSource()
+                {
+                    Name = "Home",
+                    Icon = PackIconKind.Home,
+                    Page = new HomePage()
+                    {
+                        DataContext = new HomePageViewModel()
+                    }
+                },
+                new MainMenuItemSource()
+                {
+                    Name = "IconBase",
+                    Icon = PackIconKind.FileTree,
+                    Page = new IconBasePage()
+                    {
+                        DataContext = new IconBasePageViewModel()
+                    }
+                }
+            };
+
+            //Переходим на домашнюю страницу
+            CurrentPage = _mainMenuItems[0].Page;
         }
     }
 
-    struct MainMenuItem
+    struct MainMenuItemSource
     {
-        public string Name { get; set; }
-        public string Icon { get; set; }
+        public string Name
+        {
+            get; set;
+        }
+        
+        public PackIconKind Icon
+        {
+            get; set;
+        }
+
+        public Page Page
+        {
+            get; set;
+        }
     }
 }
