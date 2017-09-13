@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MaterialDesignThemes.Wpf;
@@ -51,7 +52,9 @@ namespace StockManager.ViewModels
         {
             get
             {
-                _changePageCommand = _changePageCommand ?? new RelayCommand(p => p is Page, p => ChangePage((Page)p));
+                _changePageCommand = _changePageCommand
+                    ?? new RelayCommand(p => p is Page, p => ChangePage(p as Page));
+
                 return _changePageCommand;
             }
         }
@@ -97,6 +100,16 @@ namespace StockManager.ViewModels
                     {
                         DataContext = new IconBasePageViewModel()
                     }
+                },
+                new MainMenuItemSource()
+                {
+                    Name = "Settings",
+                    Icon = PackIconKind.Settings,
+                    Page = new SettingsPage()
+                    {
+                        DataContext = new SettingsPageViewModel()
+                    },
+                    HorizontalAlignment = HorizontalAlignment.Right
                 }
             };
 
@@ -111,13 +124,18 @@ namespace StockManager.ViewModels
         {
             get; set;
         }
-        
+
         public PackIconKind Icon
         {
             get; set;
         }
 
         public Page Page
+        {
+            get; set;
+        }
+
+        public HorizontalAlignment HorizontalAlignment
         {
             get; set;
         }
