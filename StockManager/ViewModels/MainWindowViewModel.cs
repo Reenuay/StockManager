@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MaterialDesignThemes.Wpf;
+using StockManager.Models;
 using StockManager.Utils;
 using StockManager.Views;
 
@@ -13,7 +14,7 @@ namespace StockManager.ViewModels
     {
         #region Fields
 
-        private List<MainMenuItemSource> _mainMenuItems;
+        private List<MainMenuItemModel> _mainMenuItems;
         private Page _currentPage;
         private ICommand _changePageCommand;
 
@@ -23,7 +24,7 @@ namespace StockManager.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public MainMenuItemSource[] MainMenuItems
+        public MainMenuItemModel[] MainMenuItems
         {
             get
             {
@@ -81,9 +82,9 @@ namespace StockManager.ViewModels
         public MainWindowViewModel()
         {
             //Создаём список элементов меню
-            _mainMenuItems = new List<MainMenuItemSource>
+            _mainMenuItems = new List<MainMenuItemModel>
             {
-                new MainMenuItemSource()
+                new MainMenuItemModel()
                 {
                     Name = "Home",
                     Icon = PackIconKind.Home,
@@ -92,7 +93,7 @@ namespace StockManager.ViewModels
                         DataContext = new HomePageViewModel()
                     }
                 },
-                new MainMenuItemSource()
+                new MainMenuItemModel()
                 {
                     Name = "IconBase",
                     Icon = PackIconKind.FileTree,
@@ -101,7 +102,7 @@ namespace StockManager.ViewModels
                         DataContext = new IconBasePageViewModel()
                     }
                 },
-                new MainMenuItemSource()
+                new MainMenuItemModel()
                 {
                     Name = "Settings",
                     Icon = PackIconKind.Settings,
@@ -115,29 +116,6 @@ namespace StockManager.ViewModels
 
             //Переходим на домашнюю страницу
             CurrentPage = _mainMenuItems[0].Page;
-        }
-    }
-
-    struct MainMenuItemSource
-    {
-        public string Name
-        {
-            get; set;
-        }
-
-        public PackIconKind Icon
-        {
-            get; set;
-        }
-
-        public Page Page
-        {
-            get; set;
-        }
-
-        public HorizontalAlignment HorizontalAlignment
-        {
-            get; set;
         }
     }
 }

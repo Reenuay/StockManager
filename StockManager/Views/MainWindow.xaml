@@ -44,6 +44,6 @@
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
         </Menu>
-        <Frame x:Name="PageContainer" NavigationUIVisibility="Hidden" Content="{Binding CurrentPage}" Margin="10 10"/>
+        <Frame x:Name="PageContainer" NavigationUIVisibility="Hidden" Content="{Binding CurrentPage}" Margin="10"/>
     </DockPanel>
 </Window>
