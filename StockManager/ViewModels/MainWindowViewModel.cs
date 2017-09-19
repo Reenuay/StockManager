@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using MaterialDesignThemes.Wpf;
 using StockManager.Models;
-using StockManager.Utils;
+using StockManager.Commands;
 using StockManager.Views;
 
 namespace StockManager.ViewModels

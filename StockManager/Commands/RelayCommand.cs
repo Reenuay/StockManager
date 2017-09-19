@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace StockManager.Utils
+namespace StockManager.Commands
 {
     /// <summary>
     /// Задаёт общий интерфейс для комманд в WPF приложении
@@ -13,8 +13,8 @@ namespace StockManager.Utils
 
         public RelayCommand(Predicate<object> canExecute, Action<object> execute)
         {
-            this._canExecute = canExecute;
-            this._execute = execute;
+            _canExecute = canExecute;
+            _execute = execute;
         }
 
         public event EventHandler CanExecuteChanged
