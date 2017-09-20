@@ -81,9 +81,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Migrations\201709202117147_Initial.cs" />
+    <Compile Include="Migrations\201709202117147_Initial.Designer.cs">
+      <DependentUpon>201709202117147_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Base.cs" />
+    <Compile Include="Models\Keyword.cs" />
+    <Compile Include="Models\StockManagerContext.cs" />
+    <Compile Include="Models\Icon.cs" />
+    <Compile Include="Utilities\CheckSumGenerator.cs" />
     <Compile Include="ViewModels\HomePageViewModel.cs" />
     <Compile Include="ViewModels\IconBasePageViewModel.cs" />
-    <Compile Include="Models\MainMenuItemModel.cs" />
+    <Compile Include="Models\MainMenuItem.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
@@ -114,6 +124,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Migrations\201709202117147_Initial.resx">
+      <DependentUpon>201709202117147_Initial.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

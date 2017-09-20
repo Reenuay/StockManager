@@ -4,7 +4,7 @@ using MaterialDesignThemes.Wpf;
 
 namespace StockManager.Models
 {
-    class MainMenuItemModel
+    class MainMenuItem
     {
         public string Name
         {

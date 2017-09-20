@@ -14,7 +14,7 @@ namespace StockManager.ViewModels
     {
         #region Fields
 
-        private List<MainMenuItemModel> _mainMenuItems;
+        private List<MainMenuItem> _mainMenuItems;
         private Page _currentPage;
         private ICommand _changePageCommand;
 
@@ -24,7 +24,7 @@ namespace StockManager.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public MainMenuItemModel[] MainMenuItems
+        public MainMenuItem[] MainMenuItems
         {
             get
             {
@@ -54,7 +54,16 @@ namespace StockManager.ViewModels
             get
             {
                 _changePageCommand = _changePageCommand
-                    ?? new RelayCommand(p => p is Page, p => ChangePage(p as Page));
+                    ?? new RelayCommand(
+                        p => p is Page,
+                        p =>
+                        {
+                            Page page = p as Page;
+                            if (CurrentPage != page && page != null)
+                            {
+                                CurrentPage = page;
+                            }
+                        });
 
                 return _changePageCommand;
             }
@@ -69,22 +78,14 @@ namespace StockManager.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void ChangePage(Page page)
-        {
-            if (CurrentPage != page && page != null)
-            {
-                CurrentPage = page;
-            }
-        }
-
         #endregion
 
         public MainWindowViewModel()
         {
             //Создаём список элементов меню
-            _mainMenuItems = new List<MainMenuItemModel>
+            _mainMenuItems = new List<MainMenuItem>
             {
-                new MainMenuItemModel()
+                new MainMenuItem()
                 {
                     Name = "Home",
                     Icon = PackIconKind.Home,
@@ -93,7 +94,7 @@ namespace StockManager.ViewModels
                         DataContext = new HomePageViewModel()
                     }
                 },
-                new MainMenuItemModel()
+                new MainMenuItem()
                 {
                     Name = "IconBase",
                     Icon = PackIconKind.FileTree,
@@ -102,7 +103,7 @@ namespace StockManager.ViewModels
                         DataContext = new IconBasePageViewModel()
                     }
                 },
-                new MainMenuItemModel()
+                new MainMenuItem()
                 {
                     Name = "Settings",
                     Icon = PackIconKind.Settings,
