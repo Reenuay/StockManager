@@ -26,7 +26,7 @@ namespace StockManager.Models
         public Icon(FileInfo file)
         {
             FullPath = file.FullName;
-            CheckSum = CheckSumGenerator.GenerateFileHash(file);
+            CheckSum = HashGenerator.FileToMD5(file);
             IsDeleted = false;
         }
     }

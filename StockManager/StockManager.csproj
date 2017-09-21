@@ -90,7 +90,7 @@
     <Compile Include="Models\Keyword.cs" />
     <Compile Include="Models\StockManagerContext.cs" />
     <Compile Include="Models\Icon.cs" />
-    <Compile Include="Utilities\CheckSumGenerator.cs" />
+    <Compile Include="Utilities\HashGenerator.cs" />
     <Compile Include="ViewModels\HomePageViewModel.cs" />
     <Compile Include="ViewModels\IconBasePageViewModel.cs" />
     <Compile Include="Models\MainMenuItem.cs" />

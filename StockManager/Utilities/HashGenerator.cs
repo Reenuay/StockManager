@@ -4,9 +4,9 @@ using System.Security.Cryptography;
 
 namespace StockManager.Utilities
 {
-    static class CheckSumGenerator
+    static class HashGenerator
     {
-        public static string GenerateFileHash(FileInfo file)
+        public static string FileToMD5(FileInfo file)
         {
             using (MD5 md5Hash = MD5.Create())
             {
