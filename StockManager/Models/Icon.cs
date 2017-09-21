@@ -6,6 +6,9 @@ using StockManager.Utilities;
 
 namespace StockManager.Models
 {
+    /// <summary>
+    /// Являет собой запись файла иконки в базе.
+    /// </summary>
     public class Icon : Base
     {
         [Required, Index("IconUniqueFile", 1, IsUnique = true)]

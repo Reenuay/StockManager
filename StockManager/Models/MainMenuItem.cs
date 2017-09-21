@@ -4,6 +4,9 @@ using MaterialDesignThemes.Wpf;
 
 namespace StockManager.Models
 {
+    /// <summary>
+    /// Являет собой элемент главного меню приложения.
+    /// </summary>
     class MainMenuItem
     {
         public string Name
@@ -20,7 +23,7 @@ namespace StockManager.Models
         {
             get; set;
         }
-
+        
         public HorizontalAlignment HorizontalAlignment
         {
             get; set;
