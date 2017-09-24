@@ -12,13 +12,13 @@ namespace StockManager.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        FullPath = c.String(nullable: false, maxLength: 4000),
                         CheckSum = c.String(nullable: false, maxLength: 32),
+                        FullPath = c.String(nullable: false, maxLength: 4000),
                         IsDeleted = c.Boolean(nullable: false),
                         DateCreated = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .Index(t => new { t.FullPath, t.CheckSum }, unique: true, name: "IconUniqueFile");
+                .Index(t => t.CheckSum, unique: true);
             
             CreateTable(
                 "dbo.Keywords",
@@ -53,7 +53,7 @@ namespace StockManager.Migrations
             DropIndex("dbo.KeywordIcons", new[] { "Icon_Id" });
             DropIndex("dbo.KeywordIcons", new[] { "Keyword_Id" });
             DropIndex("dbo.Keywords", new[] { "Name" });
-            DropIndex("dbo.Icons", "IconUniqueFile");
+            DropIndex("dbo.Icons", new[] { "CheckSum" });
             DropTable("dbo.KeywordIcons");
             DropTable("dbo.Keywords");
             DropTable("dbo.Icons");

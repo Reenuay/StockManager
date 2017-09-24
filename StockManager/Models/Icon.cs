@@ -11,13 +11,13 @@ namespace StockManager.Models
     /// </summary>
     public class Icon : Base
     {
-        [Required, Index("IconUniqueFile", 1, IsUnique = true)]
-        public string FullPath { get; private set; }
-
-        [Required, Index("IconUniqueFile", 2, IsUnique = true), MinLength(32), MaxLength(32)]
+        [Required, Index(IsUnique = true), MinLength(32), MaxLength(32)]
         public string CheckSum { get; private set; }
 
-        public bool IsDeleted { get; set; }
+        [Required]
+        public string FullPath { get; private set; }
+
+        public bool IsDeleted { get; private set; }
 
         public virtual List<Keyword> Keywords { get; private set; } = new List<Keyword>();
 

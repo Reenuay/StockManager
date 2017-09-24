@@ -81,11 +81,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Migrations\201709202117147_Initial.cs" />
-    <Compile Include="Migrations\201709202117147_Initial.Designer.cs">
-      <DependentUpon>201709202117147_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201709241453373_Initial.cs" />
+    <Compile Include="Migrations\201709241453373_Initial.Designer.cs">
+      <DependentUpon>201709241453373_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\StockManagerSqlMigrationSqlGenerator.cs" />
     <Compile Include="Models\Base.cs" />
     <Compile Include="Models\Keyword.cs" />
     <Compile Include="Models\StockManagerContext.cs" />
@@ -124,8 +125,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201709202117147_Initial.resx">
-      <DependentUpon>201709202117147_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201709241453373_Initial.resx">
+      <DependentUpon>201709241453373_Initial.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

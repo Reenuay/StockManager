@@ -13,7 +13,7 @@ namespace StockManager.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201709202117147_Initial"; }
+            get { return "201709241453373_Initial"; }
         }
         
         string IMigrationMetadata.Source
