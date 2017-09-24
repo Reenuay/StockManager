@@ -16,5 +16,61 @@
       Title="IconBasePage">
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <GroupBox Grid.RowSpan="2" Header="Card Group Box" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="FormatListBulleted" Height="32" Width="32" VerticalAlignment="Center" />
+                        <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Icons"/>
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <ListBox ItemsSource="{Binding Icons}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </GroupBox>
+        <GroupBox Grid.Column="1" Header="Card Group Box" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Image" Height="32" Width="32" VerticalAlignment="Center" />
+                        <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Preview"/>
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+        </GroupBox>
+        <GroupBox Grid.Column="1" Grid.Row="1" Header="Card Group Box" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Information" Height="32" Width="32" VerticalAlignment="Center" />
+                        <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Info"/>
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+        </GroupBox>
+        <GroupBox Grid.Column="2" Grid.RowSpan="2" Header="Card Group Box" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Key" Height="32" Width="32" VerticalAlignment="Center" />
+                        <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Keywords"/>
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+        </GroupBox>
     </Grid>
 </Page>

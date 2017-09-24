@@ -97,7 +97,7 @@ namespace StockManager.ViewModels
                 new MainMenuItem()
                 {
                     Name = "IconBase",
-                    Icon = PackIconKind.FileTree,
+                    Icon = PackIconKind.FormatListBulleted,
                     Page = new IconBasePage()
                     {
                         DataContext = new IconBasePageViewModel()

@@ -19,6 +19,15 @@ namespace StockManager.Models
 
         public bool IsDeleted { get; private set; }
 
+        [NotMapped]
+        public string Name
+        {
+            get
+            {
+                return Path.GetFileNameWithoutExtension(FullPath);
+            }
+        }
+
         public virtual List<Keyword> Keywords { get; private set; } = new List<Keyword>();
 
         protected Icon() { }
