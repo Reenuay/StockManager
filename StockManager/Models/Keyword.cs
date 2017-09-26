@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,9 +17,15 @@ namespace StockManager.Models
 
         protected Keyword() { }
 
-        public Keyword(string lowerCaseName, params Icon[] icons)
+        public Keyword(string name, params Icon[] icons)
         {
-            Name = lowerCaseName.ToLower();
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            if (name == "")
+                throw new ArgumentException($"Argument {nameof(name)} can not be empty string.");
+
+            Name = name.ToLower();
 
             if (icons != null)
                 Icons.AddRange(icons);

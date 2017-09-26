@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
@@ -17,25 +18,25 @@ namespace StockManager.Models
         [Required]
         public string FullPath { get; private set; }
 
-        public bool IsDeleted { get; private set; }
-
-        [NotMapped]
-        public string Name
-        {
-            get
-            {
-                return Path.GetFileNameWithoutExtension(FullPath);
-            }
-        }
+        public bool IsDeleted { get; set; }
 
         public virtual List<Keyword> Keywords { get; private set; } = new List<Keyword>();
 
+        [NotMapped]
+        public string Name => Path.GetFileNameWithoutExtension(FullPath);
+
         protected Icon() { }
 
-        public Icon(FileInfo file)
+        public Icon(string path)
         {
-            FullPath = file.FullName;
-            CheckSum = HashGenerator.FileToMD5(file);
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
+            if (!File.Exists(path))
+                throw new FileNotFoundException($"File {path} was not found.", path);
+
+            FullPath = path;
+            CheckSum = HashGenerator.FileToMD5(new FileInfo(path));
             IsDeleted = false;
         }
     }
