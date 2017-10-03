@@ -11,10 +11,14 @@ namespace StockManager.Commands
         private Predicate<object> _canExecute;
         private Action<object> _execute;
 
-        public RelayCommand(Predicate<object> canExecute, Action<object> execute)
+        public RelayCommand(Action<object> execute) : this(execute, null)
         {
-            _canExecute = canExecute;
-            _execute = execute;
+        }
+
+        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
+        {
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute ?? (x => true);
         }
 
         public event EventHandler CanExecuteChanged

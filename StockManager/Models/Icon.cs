@@ -13,31 +13,23 @@ namespace StockManager.Models
     public class Icon : Base
     {
         [Required, Index(IsUnique = true), MinLength(32), MaxLength(32)]
-        public string CheckSum { get; private set; }
+        public string CheckSum { get; set; }
 
         [Required]
-        public string FullPath { get; private set; }
+        public string FullPath { get; set; }
 
         public bool IsDeleted { get; set; }
 
-        public virtual List<Keyword> Keywords { get; private set; } = new List<Keyword>();
+        public virtual List<Keyword> Keywords { get; set; }
+            = new List<Keyword>();
 
         [NotMapped]
-        public string Name => Path.GetFileNameWithoutExtension(FullPath);
-
-        protected Icon() { }
-
-        public Icon(string path)
+        public string Name
         {
-            if (path == null)
-                throw new ArgumentNullException(nameof(path));
-
-            if (!File.Exists(path))
-                throw new FileNotFoundException($"File {path} was not found.", path);
-
-            FullPath = path;
-            CheckSum = HashGenerator.FileToMD5(new FileInfo(path));
-            IsDeleted = false;
+            get
+            {
+                return Path.GetFileName(FullPath);
+            }
         }
     }
 }

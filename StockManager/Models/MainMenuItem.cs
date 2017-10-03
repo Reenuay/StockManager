@@ -23,7 +23,7 @@ namespace StockManager.Models
         {
             get; set;
         }
-        
+
         public HorizontalAlignment HorizontalAlignment
         {
             get; set;

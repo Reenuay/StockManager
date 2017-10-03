@@ -4,8 +4,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MaterialDesignThemes.Wpf;
-using StockManager.Models;
 using StockManager.Commands;
+using StockManager.Models;
 using StockManager.Views;
 
 namespace StockManager.ViewModels
@@ -15,8 +15,8 @@ namespace StockManager.ViewModels
         #region Fields
 
         private List<MainMenuItem> _mainMenuItems;
-        private Page _currentPage;
-        private ICommand _changePageCommand;
+        private Page currentPage;
+        private ICommand changePageCommand;
 
         #endregion
 
@@ -36,15 +36,15 @@ namespace StockManager.ViewModels
         {
             get
             {
-                return _currentPage;
+                return currentPage;
             }
 
             set
             {
-                if (_currentPage != value)
+                if (currentPage != value)
                 {
-                    _currentPage = value;
-                    NotifyPropertyChanged("CurrentPage");
+                    currentPage = value;
+                    NotifyPropertyChanged(nameof(CurrentPage));
                 }
             }
         }
@@ -53,9 +53,8 @@ namespace StockManager.ViewModels
         {
             get
             {
-                _changePageCommand = _changePageCommand
+                changePageCommand = changePageCommand
                     ?? new RelayCommand(
-                        p => p is Page,
                         p =>
                         {
                             Page page = p as Page;
@@ -63,9 +62,11 @@ namespace StockManager.ViewModels
                             {
                                 CurrentPage = page;
                             }
-                        });
+                        },
+                        p => p is Page
+                    );
 
-                return _changePageCommand;
+                return changePageCommand;
             }
         }
 
@@ -75,7 +76,10 @@ namespace StockManager.ViewModels
 
         private void NotifyPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs(propertyName)
+            );
         }
 
         #endregion
