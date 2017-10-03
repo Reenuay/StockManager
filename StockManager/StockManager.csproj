@@ -52,6 +52,9 @@
     <Reference Include="MaterialDesignThemes.Wpf, Version=2.3.1.953, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.2.3.1.953\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -81,6 +84,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Migrations\201709241453373_Initial.cs" />
     <Compile Include="Migrations\201709241453373_Initial.Designer.cs">
       <DependentUpon>201709241453373_Initial.cs</DependentUpon>
@@ -91,7 +95,10 @@
     <Compile Include="Models\Keyword.cs" />
     <Compile Include="Models\StockManagerContext.cs" />
     <Compile Include="Models\Icon.cs" />
+    <Compile Include="Repositories\Repository.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Utilities\HashGenerator.cs" />
+    <Compile Include="Utilities\IconDirectory.cs" />
     <Compile Include="ViewModels\HomePageViewModel.cs" />
     <Compile Include="ViewModels\IconBasePageViewModel.cs" />
     <Compile Include="Models\MainMenuItem.cs" />
@@ -132,6 +139,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

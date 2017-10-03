@@ -1,16 +1,15 @@
 ﻿<Page x:Class="StockManager.Views.IconBasePage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      xmlns:local="clr-namespace:StockManager.Views"
-      mc:Ignorable="d" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
       d:DesignHeight="455" d:DesignWidth="845"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
       TextElement.FontWeight="Regular"
       TextElement.FontSize="13"
-      TextOptions.TextFormattingMode="Ideal" 
+      TextOptions.TextFormattingMode="Ideal"
       TextOptions.TextRenderingMode="Auto"
       FontFamily="{DynamicResource MaterialDesignFont}"
       Title="IconBasePage">
@@ -30,17 +29,71 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="FormatListBulleted" Height="32" Width="32" VerticalAlignment="Center" />
-                        <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Icons"/>
+                        <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Icon List"/>
                     </StackPanel>
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
-            <ListBox ItemsSource="{Binding Icons}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                    <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="0,0,5,0" Height="36" Width="36"
+                        Command="{Binding SyncCommand}"
+                        materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsSyncing}"
+                        materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsSyncing}"
+                        materialDesign:ButtonProgressAssist.Value="0">
+                        <materialDesign:PackIcon Width="24" Height="24">
+                            <materialDesign:PackIcon.Style>
+                                <Style TargetType="materialDesign:PackIcon">
+                                    <Setter Property="Kind" Value="Sync"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSyncComplete}" Value="True">
+                                            <Setter Property="Kind" Value="Check" />
+                                            <DataTrigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.8" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.EnterActions>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </materialDesign:PackIcon.Style>
+                        </materialDesign:PackIcon>
+                    </Button>
+                    <TextBlock Text="Refresh" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                </StackPanel>
+                <Border Margin="5" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}"/>
+                <ListBox ItemsSource="{Binding IconList, Mode=OneWay}" IsSynchronizedWithCurrentItem="True" Margin="0,5,0,0" IsEnabled="{Binding Path=IsSyncing, Converter={StaticResource InverseBooleanConverter}}">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch">
+                                <TextBlock Text="{Binding Name}"/>
+                                <materialDesign:PackIcon HorizontalAlignment="Right">
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsDeleted}" Value="false">
+                                                    <Setter Property="Kind" Value="CheckCircleOutline" />
+                                                    <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsDeleted}" Value="true">
+                                                    <Setter Property="Kind" Value="CloseCircleOutline" />
+                                                    <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                </materialDesign:PackIcon>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
         </GroupBox>
         <GroupBox Grid.Column="1" Header="Card Group Box" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
             <GroupBox.HeaderTemplate>

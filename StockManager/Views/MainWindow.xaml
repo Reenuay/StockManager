@@ -9,7 +9,7 @@
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
@@ -19,7 +19,7 @@
     <DockPanel>
         <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2" Mode="PrimaryMid" DockPanel.Dock="Top">
             <Grid>
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Stock Manager</TextBlock>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Text="Stock Manager"/>
             </Grid>
         </materialDesign:ColorZone>
         <Menu x:Name="MainMenu" DockPanel.Dock="Top" IsMainMenu="True" ItemsSource="{Binding MainMenuItems}">
