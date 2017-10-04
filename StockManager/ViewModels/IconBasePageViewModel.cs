@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Input;
@@ -19,7 +20,7 @@ namespace StockManager.ViewModels
 
         private FileSystemWatcher watcher;
         private BackgroundWorker backgroundLoader;
-        private List<Icon> iconList;
+        private List<Icon> iconList = new List<Icon>();
 
         private ICommand syncCommand;
         private bool isSyncing;
@@ -42,7 +43,25 @@ namespace StockManager.ViewModels
                 {
                     iconList = value;
                     NotifyPropertyChanged(nameof(IconList));
+                    NotifyPropertyChanged(nameof(ExistingIconsCount));
+                    NotifyPropertyChanged(nameof(DeletedIconsCount));
                 }
+            }
+        }
+
+        public int ExistingIconsCount
+        {
+            get
+            {
+                return iconList.Count(i => !i.IsDeleted);
+            }
+        }
+
+        public int DeletedIconsCount
+        {
+            get
+            {
+                return iconList.Count(i => i.IsDeleted);
             }
         }
 
