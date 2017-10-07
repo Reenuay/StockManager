@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using NLog;
 using StockManager.Commands;
 using StockManager.Models;
@@ -18,17 +19,21 @@ namespace StockManager.ViewModels
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        private FileSystemWatcher watcher;
         private BackgroundWorker backgroundLoader;
-        private List<Icon> iconList = new List<Icon>();
+        private FileSystemWatcher watcher;
 
+        private List<Icon> iconList = new List<Icon>();
+        private BitmapSource preview;
+        private ICommand showPreviewCommand;
         private ICommand syncCommand;
-        private bool isSyncing;
         private bool isSyncComplete;
+        private bool isSyncing;
 
         #endregion
 
-        #region Properties / Events
+        #region Properties
+
+        #region IconList
 
         public List<Icon> IconList
         {
@@ -65,7 +70,9 @@ namespace StockManager.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+
+        #region SyncCommand
 
         public ICommand SyncCommand
         {
@@ -125,6 +132,51 @@ namespace StockManager.ViewModels
 
         #endregion
 
+        public ICommand ShowPreviewCommand
+        {
+            get
+            {
+                showPreviewCommand = showPreviewCommand
+                    ?? new RelayCommand(
+                        o =>
+                        {
+                            if (o is Icon i)
+                            {
+
+                            }
+                        },
+                        o => o is Icon
+                    );
+
+                return showPreviewCommand;
+            }
+        }
+
+        public BitmapSource Preview
+        {
+            get
+            {
+                return preview;
+            }
+
+            set
+            {
+                if (preview != value)
+                {
+                    preview = value;
+                    NotifyPropertyChanged(nameof(Preview));
+                }
+            }
+        }
+
+        #endregion
+
+        #region Events
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+
         #region Methods
 
         private void NotifyPropertyChanged(string propertyName)
@@ -151,8 +203,13 @@ namespace StockManager.ViewModels
             return false;
         }
 
+        #region Watcher
+
         private void OnCreatedOrChanged(object source, FileSystemEventArgs e)
         {
+            if (!IconDirectory.ExtensionIsAllowed(e.FullPath))
+                return;
+
             if (TryGenerateHash(e.FullPath, out string hash))
             {
                 Repository<Icon> iconRepo = new Repository<Icon>();
@@ -195,6 +252,9 @@ namespace StockManager.ViewModels
 
         private void OnDeleted(object source, FileSystemEventArgs e)
         {
+            if (!IconDirectory.ExtensionIsAllowed(e.FullPath))
+                return;
+
             Repository<Icon> iconRepo = new Repository<Icon>();
 
             // Помечаем все иконки с данным путём как удалённые
@@ -212,6 +272,9 @@ namespace StockManager.ViewModels
 
         private void OnRenamed(object source, RenamedEventArgs e)
         {
+            if (!IconDirectory.ExtensionIsAllowed(e.FullPath))
+                return;
+
             Repository<Icon> iconRepo = new Repository<Icon>();
 
             Icon icon = iconRepo.Find(i =>
@@ -308,6 +371,8 @@ namespace StockManager.ViewModels
 
         #endregion
 
+        #endregion
+
         public IconBasePageViewModel()
         {
             // Проверяем папку иконок и создаём, если её нет
@@ -335,6 +400,7 @@ namespace StockManager.ViewModels
             watcher.Deleted += OnDeleted;
             watcher.Renamed += OnRenamed;
 
+            // Подгружаем иконки из папки
             RunSync();
         }
     }

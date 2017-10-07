@@ -5,6 +5,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+      xmlns:commands="clr-namespace:StockManager.Commands"
       mc:Ignorable="d"
       d:DesignHeight="455" d:DesignWidth="845"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -62,7 +63,7 @@
             </GroupBox.HeaderTemplate>
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                    <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="0,0,5,0" Height="36" Width="36"
+                    <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="5" Height="36" Width="36"
                             Command="{Binding SyncCommand}"
                             materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsSyncing}"
                             materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsSyncing}"
@@ -90,10 +91,15 @@
                     <TextBlock Text="Refresh" VerticalAlignment="Center" Margin="5,0,0,0"/>
                 </StackPanel>
                 <Border Margin="5" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}"/>
-                <ListBox ItemsSource="{Binding Source={StaticResource SortedIconList}}" IsSynchronizedWithCurrentItem="True" Margin="0,5,0,0" IsEnabled="{Binding Path=IsSyncing, Converter={StaticResource InverseBooleanConverter}}">
+                <ListBox ItemsSource="{Binding Source={StaticResource SortedIconList}}"
+                         IsSynchronizedWithCurrentItem="True" Margin="0,5,0,0"
+                         IsEnabled="{Binding Path=IsSyncing, Converter={StaticResource InverseBooleanConverter}}">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="commands:CommandBehavior.Command" Value="{Binding DataContext.ShowPreviewCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
+                            <Setter Property="commands:CommandBehavior.CommandParameter" Value="{Binding }"/>
+                            <Setter Property="commands:CommandBehavior.RoutedEventName" Value="PreviewMouseLeftButtonDown"/>
                         </Style>
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
@@ -105,7 +111,7 @@
                                         <Style TargetType="materialDesign:PackIcon">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsDeleted}" Value="false">
-                                                    <Setter Property="Kind" Value="CheckCircleOutline" />
+                                                    <Setter Property="Kind" Value="CheckCircleOutline"/>
                                                     <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding IsDeleted}" Value="true">
@@ -131,6 +137,9 @@
                     </StackPanel>
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
+            <Grid Margin="5">
+                <Image Source="{Binding Preview}"/>
+            </Grid>
         </GroupBox>
         <GroupBox Grid.Column="1" Grid.Row="1" Header="Card Group Box" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
             <GroupBox.HeaderTemplate>

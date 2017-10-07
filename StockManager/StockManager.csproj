@@ -84,6 +84,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\CommandBehavior.cs" />
+    <Compile Include="Commands\EventHooker.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Migrations\201709241453373_Initial.cs" />
     <Compile Include="Migrations\201709241453373_Initial.Designer.cs">
