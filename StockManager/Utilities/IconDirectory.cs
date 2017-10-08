@@ -38,7 +38,8 @@ namespace StockManager.Utilities
         }
 
         /// <summary>
-        /// Возвращает <see cref="BitmapSource"/> для файла предпросмотра иконок
+        /// Возвращает <see cref="BitmapSource"/> для файла
+        /// предпросмотра иконок
         /// </summary>
         public static BitmapImage PreviewImage
         {
@@ -64,9 +65,9 @@ namespace StockManager.Utilities
         }
 
         /// <summary>
-        /// Создаёт сервис <see cref="FileSystemWatcher"/> для отслеживания изменений в папке иконок с настроенными параметрами
+        /// Создаёт сервис <see cref="FileSystemWatcher"/> для отслеживания
+        /// изменений в папке иконок с настроенными параметрами
         /// </summary>
-        /// <returns>Возвращает, настроенный для папки иконок, <see cref="FileSystemWatcher"/></returns>
         public static FileSystemWatcher CreateWatcher()
         {
             return new FileSystemWatcher
@@ -83,7 +84,6 @@ namespace StockManager.Utilities
         /// <summary>
         /// Проверяет, существует ли уже папка иконок
         /// </summary>
-        /// <returns>Возвращает булевское значение, определяющее существует ли папка иконок</returns>
         public static bool Exists()
         {
             return Directory.Exists(Settings.Default.IconDirectoryName);
@@ -93,7 +93,6 @@ namespace StockManager.Utilities
         /// Проверяет разрешёно ли в папке иконок расширение файла
         /// </summary>
         /// <param name="fullPath">Полный путь до файла с расширением</param>
-        /// <returns>Возвращает результат проверки на допущенность расширения файла</returns>
         public static bool ExtensionIsAllowed(string fullPath)
         {
             return Settings
@@ -105,7 +104,6 @@ namespace StockManager.Utilities
         /// <summary>
         /// Возвращает все пути до файлов разрешённого типа
         /// </summary>
-        /// <returns>Возвращает массив строк, представляющих пути до файлов</returns>
         public static string[] GetIcons()
         {
             return Directory.GetFiles(

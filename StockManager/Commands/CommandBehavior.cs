@@ -4,12 +4,15 @@ using System.Windows.Input;
 
 namespace StockManager.Commands
 {
+    /// <summary>
+    /// Предоставляет коммандное поведение для объектов не реализующих интерфейс <see cref="ICommand"/>
+    /// </summary>
     public static class CommandBehavior
     {
         #region Command
 
         /// <summary>
-        /// The actual ICommand to run
+        /// Проигрываемая комманда <see cref="ICommand"/>
         /// </summary>
         public static readonly DependencyProperty CommandProperty =
             DependencyProperty.RegisterAttached("Command",
@@ -18,7 +21,7 @@ namespace StockManager.Commands
                 new FrameworkPropertyMetadata((ICommand)null));
 
         /// <summary>
-        /// Gets the Command property.
+        /// Получает CommandProperty
         /// </summary>
         public static ICommand GetCommand(DependencyObject d)
         {
@@ -26,7 +29,7 @@ namespace StockManager.Commands
         }
 
         /// <summary>
-        /// Sets the Command property.
+        /// Устанавливает CommandProperty
         /// </summary>
         public static void SetCommand(DependencyObject d, ICommand value)
         {
@@ -38,7 +41,7 @@ namespace StockManager.Commands
         #region CommandParameter
 
         /// <summary>
-        /// The parameter for Execute method of ICommand
+        /// Параметер для метода <see cref="ICommand.Execute(object)"/>
         /// </summary>
         public static readonly DependencyProperty CommandParameterProperty =
             DependencyProperty.RegisterAttached("CommandParameter",
@@ -47,7 +50,7 @@ namespace StockManager.Commands
                 new FrameworkPropertyMetadata((object)null));
 
         /// <summary>
-        /// Gets the CommandParameter property.
+        /// Получает CommandParameterProperty
         /// </summary>
         public static object GetCommandParameter(DependencyObject d)
         {
@@ -55,7 +58,7 @@ namespace StockManager.Commands
         }
 
         /// <summary>
-        /// Sets the CommandParameter property.
+        /// Устанавливает CommandParameterProperty
         /// </summary>
         public static void SetCommandParameter(DependencyObject d, object value)
         {
@@ -67,7 +70,7 @@ namespace StockManager.Commands
         #region RoutedEventName
 
         /// <summary>
-        /// The event that should actually execute the ICommand
+        /// Cобытие, которое вызовет команду <see cref="ICommand"/>
         /// </summary>
         public static readonly DependencyProperty RoutedEventNameProperty =
             DependencyProperty.RegisterAttached("RoutedEventName",
@@ -77,7 +80,7 @@ namespace StockManager.Commands
                 new PropertyChangedCallback(OnRoutedEventNameChanged)));
 
         /// <summary>
-        /// Gets the RoutedEventName property.
+        /// Получает RoutedEventNameProperty
         /// </summary>
         public static string GetRoutedEventName(DependencyObject d)
         {
@@ -85,7 +88,7 @@ namespace StockManager.Commands
         }
 
         /// <summary>
-        /// Sets the RoutedEventName property.
+        /// Устанавливает RoutedEventNameProperty
         /// </summary>
         public static void SetRoutedEventName(DependencyObject d, string value)
         {
@@ -93,18 +96,15 @@ namespace StockManager.Commands
         }
 
         /// <summary>
-        /// Hooks up a Dynamically created EventHandler (by using the
-        /// <see cref="EventHooker">EventHooker</see> class) that when
-        /// run will run the associated ICommand
+        /// Перехватывает, динамически созданное, событие посредством
+        /// класса <see cref="EventHooker"/>, который затем, при вызове
+        /// события, обработает ассоциированную комманду
         /// </summary>
         private static void OnRoutedEventNameChanged(DependencyObject d,
             DependencyPropertyChangedEventArgs e)
         {
             string routedEvent = (string)e.NewValue;
 
-            //If the RoutedEvent string is not null, create a new
-            //dynamically created EventHandler that when run will execute
-            //the actual bound ICommand instance (usually in the ViewModel)
             if (!string.IsNullOrEmpty(routedEvent))
             {
                 EventHooker eventHooker = new EventHooker
@@ -115,7 +115,6 @@ namespace StockManager.Commands
                 EventInfo eventInfo = d.GetType().GetEvent(routedEvent,
                     BindingFlags.Public | BindingFlags.Instance);
 
-                //Hook up Dynamically created event handler
                 if (eventInfo != null)
                 {
                     eventInfo.AddEventHandler(d,
