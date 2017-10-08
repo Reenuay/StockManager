@@ -34,7 +34,7 @@
             <RowDefinition Height="3*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        <GroupBox Grid.RowSpan="2" Header="Card Group Box" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
+        <GroupBox Grid.RowSpan="2" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <Grid>
@@ -97,7 +97,7 @@
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            <Setter Property="commands:CommandBehavior.Command" Value="{Binding DataContext.ShowPreviewCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
+                            <Setter Property="commands:CommandBehavior.Command" Value="{Binding DataContext.ShowInfoCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
                             <Setter Property="commands:CommandBehavior.CommandParameter" Value="{Binding }"/>
                             <Setter Property="commands:CommandBehavior.RoutedEventName" Value="PreviewMouseLeftButtonDown"/>
                         </Style>
@@ -128,7 +128,7 @@
                 </ListBox>
             </StackPanel>
         </GroupBox>
-        <GroupBox Grid.Column="1" Header="Card Group Box" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
+        <GroupBox Grid.Column="1" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -138,10 +138,10 @@
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
             <Grid Margin="5">
-                <Image Source="{Binding Preview}"/>
+                <Image Source="{Binding IconInfo.Preview}"/>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Column="1" Grid.Row="1" Header="Card Group Box" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
+        <GroupBox Grid.Column="1" Grid.Row="1" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -152,16 +152,101 @@
             </GroupBox.HeaderTemplate>
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="{Binding IconInfo.RelativePath}"/>
-                <TextBlock Text="{Binding IconInfo.CheckSum}" Grid.Row="1"/>
-                <TextBlock Text="{Binding IconInfo.Size}" Grid.Row="2"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <materialDesign:Card Grid.ColumnSpan="2" Margin="5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Background="{StaticResource PrimaryHueDarkBrush}">
+                            <TextBlock Text="Relative Path"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Margin="10"
+                                       Style="{StaticResource MaterialDesignSubheadingTextBlock}"/>
+                        </Border>
+                        <TextBlock Grid.Row="1"
+                                   Text="{Binding IconInfo.RelativePath}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Margin="10"
+                                   Style="{StaticResource MaterialDesignSubheadingTextBlock}"/>
+                    </Grid>
+                </materialDesign:Card>
+                <materialDesign:Card Grid.Row="1" Grid.ColumnSpan="2" Margin="5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Background="{StaticResource PrimaryHueDarkBrush}">
+                            <TextBlock Text="CheckSum"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Margin="10"
+                                       Style="{StaticResource MaterialDesignSubheadingTextBlock}"/>
+                        </Border>
+                        <TextBlock Grid.Row="1"
+                                   Text="{Binding IconInfo.CheckSum}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Margin="10"
+                                   Style="{StaticResource MaterialDesignSubheadingTextBlock}"/>
+                    </Grid>
+                </materialDesign:Card>
+                <materialDesign:Card Grid.Row="2" Margin="5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Background="{StaticResource PrimaryHueDarkBrush}">
+                            <TextBlock Text="Size"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Margin="10"
+                                       Style="{StaticResource MaterialDesignSubheadingTextBlock}"/>
+                        </Border>
+                        <TextBlock Grid.Row="1"
+                                   Text="{Binding IconInfo.Size}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Margin="10"
+                                   Style="{StaticResource MaterialDesignSubheadingTextBlock}"/>
+                    </Grid>
+                </materialDesign:Card>
+                <materialDesign:Card Grid.Row="2" Grid.Column="1" Margin="5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Background="{StaticResource PrimaryHueDarkBrush}">
+                            <TextBlock Text="Date Added"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Margin="10"
+                                       Style="{StaticResource MaterialDesignSubheadingTextBlock}"/>
+                        </Border>
+                        <TextBlock Grid.Row="1"
+                                   Text="{Binding IconInfo.Date}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Margin="10"
+                                   Style="{StaticResource MaterialDesignSubheadingTextBlock}"/>
+                    </Grid>
+                </materialDesign:Card>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Column="2" Grid.RowSpan="2" Header="Card Group Box" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
+        <GroupBox Grid.Column="2" Grid.RowSpan="2" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

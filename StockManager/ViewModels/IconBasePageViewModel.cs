@@ -24,8 +24,8 @@ namespace StockManager.ViewModels
         private FileSystemWatcher watcher;
 
         private List<Icon> iconList = new List<Icon>();
-        private BitmapSource preview;
-        private ICommand showPreviewCommand;
+        private IconInfo iconInfo = new IconInfo();
+        private ICommand showInfoCommand;
         private ICommand syncCommand;
         private bool isSyncComplete;
         private bool isSyncing;
@@ -135,20 +135,26 @@ namespace StockManager.ViewModels
 
         #region ShowPreviewCommand
 
-        public ICommand ShowPreviewCommand
+        public ICommand ShowInfoCommand
         {
             get
             {
-                showPreviewCommand = showPreviewCommand
+                showInfoCommand = showInfoCommand
                     ?? new RelayCommand(
                         o =>
                         {
                             if (o is Icon i)
                             {
-                                if (i.IsDeleted)
+                                IconInfo info = new IconInfo
                                 {
-                                    Preview = IconDirectory.PreviewImage;
-                                }
+                                    RelativePath = i.FullPath.Remove(
+                                        0,
+                                        Environment.CurrentDirectory.Length + 1
+                                    ),
+                                    CheckSum = i.CheckSum,
+                                    Preview = IconDirectory.PreviewImage,
+                                    Date = i.DateCreated.ToString("dd.MM.yyyy")
+                                };
 
                                 if (!i.IsDeleted)
                                 {
@@ -157,31 +163,37 @@ namespace StockManager.ViewModels
                                             = new MagickImage(i.FullPath)
                                     )
                                     {
-                                        Preview = image.ToBitmapSource();
+                                        info.Preview = image.ToBitmapSource();
                                     }
+
+                                    info.Size = ((
+                                        new FileInfo(i.FullPath)
+                                    ).Length / 1024).ToString() + " KB";
                                 }
+
+                                IconInfo = info;
                             }
                         },
                         o => o is Icon
                     );
 
-                return showPreviewCommand;
+                return showInfoCommand;
             }
         }
 
-        public BitmapSource Preview
+        public IconInfo IconInfo
         {
             get
             {
-                return preview;
+                return iconInfo;
             }
 
             set
             {
-                if (preview != value)
+                if (iconInfo != value)
                 {
-                    preview = value;
-                    NotifyPropertyChanged(nameof(Preview));
+                    iconInfo = value;
+                    NotifyPropertyChanged(nameof(IconInfo));
                 }
             }
         }
