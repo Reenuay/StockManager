@@ -3,6 +3,9 @@ using System.Windows.Data;
 
 namespace StockManager.Converters
 {
+    /// <summary>
+    /// Инвертирует булевское значение
+    /// </summary>
     [ValueConversion(typeof(bool), typeof(bool))]
     public class InverseBooleanConverter : IValueConverter
     {

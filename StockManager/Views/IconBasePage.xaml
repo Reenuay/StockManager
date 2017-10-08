@@ -150,6 +150,16 @@
                     </StackPanel>
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding IconInfo.RelativePath}"/>
+                <TextBlock Text="{Binding IconInfo.CheckSum}" Grid.Row="1"/>
+                <TextBlock Text="{Binding IconInfo.Size}" Grid.Row="2"/>
+            </Grid>
         </GroupBox>
         <GroupBox Grid.Column="2" Grid.RowSpan="2" Header="Card Group Box" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
             <GroupBox.HeaderTemplate>

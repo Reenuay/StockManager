@@ -149,7 +149,8 @@ namespace StockManager.ViewModels
                                 {
                                     Preview = IconDirectory.PreviewImage;
                                 }
-                                else
+
+                                if (!i.IsDeleted)
                                 {
                                     using (
                                         MagickImage image
