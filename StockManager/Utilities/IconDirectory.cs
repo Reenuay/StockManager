@@ -1,11 +1,15 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
+using System.Windows.Media.Imaging;
 using StockManager.Properties;
 
 namespace StockManager.Utilities
 {
     static class IconDirectory
     {
+        private static BitmapImage previewImage;
+
         public static string[] AllowedExtensions
         {
             get
@@ -13,6 +17,29 @@ namespace StockManager.Utilities
                 return Settings.Default.AllowedFileExtensions
                     .Cast<string>()
                     .ToArray();
+            }
+        }
+
+        public static string FullPath
+        {
+            get
+            {
+                return Path.GetFullPath(Settings.Default.IconDirectoryName);
+            }
+        }
+
+        public static BitmapImage PreviewImage
+        {
+            get
+            {
+                if (previewImage == null)
+                {
+                    previewImage = new BitmapImage(
+                        new Uri("/Resources/Preview.png", UriKind.Relative)
+                    );
+                }
+
+                return previewImage;
             }
         }
 
@@ -28,7 +55,7 @@ namespace StockManager.Utilities
                 NotifyFilter = NotifyFilters.LastWrite
                 | NotifyFilters.FileName,
 
-                Path = GetFullPath(),
+                Path = FullPath,
                 IncludeSubdirectories = true,
                 EnableRaisingEvents = true
             };
@@ -45,11 +72,6 @@ namespace StockManager.Utilities
                 .Default
                 .AllowedFileExtensions
                 .Contains(Path.GetExtension(fullPath));
-        }
-
-        public static string GetFullPath()
-        {
-            return Path.GetFullPath(Settings.Default.IconDirectoryName);
         }
 
         public static string[] GetIcons()

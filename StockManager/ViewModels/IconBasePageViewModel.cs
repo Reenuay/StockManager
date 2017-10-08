@@ -10,6 +10,7 @@ using StockManager.Commands;
 using StockManager.Models;
 using StockManager.Repositories;
 using StockManager.Utilities;
+using ImageMagick;
 
 namespace StockManager.ViewModels
 {
@@ -132,6 +133,8 @@ namespace StockManager.ViewModels
 
         #endregion
 
+        #region ShowPreviewCommand
+
         public ICommand ShowPreviewCommand
         {
             get
@@ -142,7 +145,20 @@ namespace StockManager.ViewModels
                         {
                             if (o is Icon i)
                             {
-
+                                if (i.IsDeleted)
+                                {
+                                    Preview = IconDirectory.PreviewImage;
+                                }
+                                else
+                                {
+                                    using (
+                                        MagickImage image
+                                            = new MagickImage(i.FullPath)
+                                    )
+                                    {
+                                        Preview = image.ToBitmapSource();
+                                    }
+                                }
                             }
                         },
                         o => o is Icon
@@ -168,6 +184,8 @@ namespace StockManager.ViewModels
                 }
             }
         }
+
+        #endregion
 
         #endregion
 
@@ -381,7 +399,7 @@ namespace StockManager.ViewModels
                 IconDirectory.Create();
                 logger.Debug(
                     "Directory for icons created: "
-                    + IconDirectory.GetFullPath()
+                    + IconDirectory.FullPath
                 );
             }
 
