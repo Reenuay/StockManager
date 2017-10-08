@@ -1,4 +1,6 @@
-﻿using System.Windows.Media.Imaging;
+﻿using System.Collections.Generic;
+using System.Windows.Media.Imaging;
+using StockManager.Utilities;
 
 namespace StockManager.Models
 {
@@ -14,6 +16,7 @@ namespace StockManager.Models
         public string Size { get; set; } = "...";
         public string Date { get; set; } = "...";
 
-        public BitmapSource Preview { get; set; }
+        public BitmapSource Preview { get; set; } = IconDirectory.PreviewImage;
+        public List<Keyword> Keywords { get; set; } = new List<Keyword>();
     }
 }

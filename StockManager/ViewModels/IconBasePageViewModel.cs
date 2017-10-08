@@ -152,8 +152,8 @@ namespace StockManager.ViewModels
                                         Environment.CurrentDirectory.Length + 1
                                     ),
                                     CheckSum = i.CheckSum,
-                                    Preview = IconDirectory.PreviewImage,
-                                    Date = i.DateCreated.ToString("dd.MM.yyyy")
+                                    Date = i.DateCreated.ToString("dd.MM.yyyy"),
+                                    Keywords = i.Keywords
                                 };
 
                                 if (!i.IsDeleted)
