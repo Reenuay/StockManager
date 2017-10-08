@@ -5,12 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using ImageMagick;
 using NLog;
 using StockManager.Commands;
 using StockManager.Models;
 using StockManager.Repositories;
 using StockManager.Utilities;
-using ImageMagick;
 
 namespace StockManager.ViewModels
 {
