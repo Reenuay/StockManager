@@ -9,7 +9,7 @@ namespace StockManager.Repositories
 {
     class Repository<TEntity> : IRepository<TEntity> where TEntity : Base
     {
-        protected StockManagerContext context = new StockManagerContext();
+        protected Context context = new Context();
 
         public virtual bool AutoSaveChanges { get; set; }
         public virtual bool AutoSaveSuspended { get; protected set; } = false;

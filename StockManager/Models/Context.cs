@@ -5,7 +5,7 @@ namespace StockManager.Models
     /// <summary>
     /// Являет собой контекст базы данных приложения.
     /// </summary>
-    class StockManagerContext : DbContext
+    class Context : DbContext
     {
         public DbSet<Icon> Icons { get; set; }
 

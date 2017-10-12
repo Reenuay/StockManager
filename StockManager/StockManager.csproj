@@ -95,12 +95,16 @@
     <Compile Include="Migrations\201709241453373_Initial.Designer.cs">
       <DependentUpon>201709241453373_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710121905528_KeywordHierarchy.cs" />
+    <Compile Include="Migrations\201710121905528_KeywordHierarchy.Designer.cs">
+      <DependentUpon>201710121905528_KeywordHierarchy.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\StockManagerSqlMigrationSqlGenerator.cs" />
     <Compile Include="Models\Base.cs" />
     <Compile Include="Models\IconInfo.cs" />
     <Compile Include="Models\Keyword.cs" />
-    <Compile Include="Models\StockManagerContext.cs" />
+    <Compile Include="Models\Context.cs" />
     <Compile Include="Models\Icon.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
@@ -142,6 +146,9 @@
     <Resource Include="Resources\Preview.png" />
     <EmbeddedResource Include="Migrations\201709241453373_Initial.resx">
       <DependentUpon>201709241453373_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710121905528_KeywordHierarchy.resx">
+      <DependentUpon>201710121905528_KeywordHierarchy.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

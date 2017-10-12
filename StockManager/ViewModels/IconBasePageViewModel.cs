@@ -234,6 +234,16 @@ namespace StockManager.ViewModels
             return false;
         }
 
+        private void RefreshIconList()
+        {
+            IconList = new Repository<Icon>().SelectAll();
+        }
+
+        private void RefreshIconList(Repository<Icon> iconRepo)
+        {
+            IconList = iconRepo.SelectAll();
+        }
+
         #region Watcher
 
         private void OnCreatedOrChanged(object source, FileSystemEventArgs e)
@@ -329,15 +339,9 @@ namespace StockManager.ViewModels
             RefreshIconList(iconRepo);
         }
 
-        private void RefreshIconList()
-        {
-            IconList = new Repository<Icon>().SelectAll();
-        }
+        #endregion
 
-        private void RefreshIconList(Repository<Icon> iconRepo)
-        {
-            IconList = iconRepo.SelectAll();
-        }
+        #region Background Loader
 
         private void Sync(object sender, DoWorkEventArgs e)
         {

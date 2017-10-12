@@ -3,7 +3,7 @@ namespace StockManager.Migrations
     using System.Data.Entity.Migrations;
     using StockManager.Models;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<StockManagerContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<Context>
     {
         public Configuration()
         {

@@ -11,24 +11,13 @@ namespace StockManager.Models
     public class Keyword : Base
     {
         [Required, Index(IsUnique = true)]
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
-        public virtual List<Icon> Icons { get; private set; } = new List<Icon>();
+        public virtual Keyword Parent { get; set; }
 
-        protected Keyword() { }
+        public virtual List<Keyword> Children { get; set; }
+            = new List<Keyword>();
 
-        public Keyword(string name, params Icon[] icons)
-        {
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
-            if (name == "")
-                throw new ArgumentException($"Argument {nameof(name)} can not be empty string.");
-
-            Name = name.ToLower();
-
-            if (icons != null)
-                Icons.AddRange(icons);
-        }
+        public virtual List<Icon> Icons { get;  set; } = new List<Icon>();
     }
 }
