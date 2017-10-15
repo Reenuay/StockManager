@@ -14,5 +14,8 @@ namespace StockManager.Models
 
         [Required, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime DateCreated { get; private set; }
+
+        [Required]
+        public DateTime DateChanged { get; set; }
     }
 }

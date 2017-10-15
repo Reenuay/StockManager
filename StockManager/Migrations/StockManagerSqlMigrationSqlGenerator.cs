@@ -28,7 +28,7 @@
 
         private static void SetDateCreatedColumn(PropertyModel column)
         {
-            if (column.Name == "DateCreated")
+            if (column.Name == "DateCreated" || column.Name == "DateChanged")
             {
                 column.DefaultValueSql = "getdate()";
             }

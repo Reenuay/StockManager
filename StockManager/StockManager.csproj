@@ -99,6 +99,10 @@
     <Compile Include="Migrations\201710121905528_KeywordHierarchy.Designer.cs">
       <DependentUpon>201710121905528_KeywordHierarchy.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710150934588_Add_DateChanged.cs" />
+    <Compile Include="Migrations\201710150934588_Add_DateChanged.Designer.cs">
+      <DependentUpon>201710150934588_Add_DateChanged.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\StockManagerSqlMigrationSqlGenerator.cs" />
     <Compile Include="Models\Base.cs" />
@@ -149,6 +153,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710121905528_KeywordHierarchy.resx">
       <DependentUpon>201710121905528_KeywordHierarchy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710150934588_Add_DateChanged.resx">
+      <DependentUpon>201710150934588_Add_DateChanged.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

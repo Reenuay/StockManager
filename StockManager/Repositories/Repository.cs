@@ -52,6 +52,7 @@ namespace StockManager.Repositories
 
         public virtual void Update(TEntity item)
         {
+            item.DateChanged = DateTime.Now;
             context.Entry(item).State = EntityState.Modified;
 
             if (AutoSaveChanges)
