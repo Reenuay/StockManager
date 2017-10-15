@@ -2,7 +2,7 @@ namespace StockManager.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class Initial : DbMigration
     {
         public override void Up()
@@ -19,7 +19,7 @@ namespace StockManager.Migrations
                     })
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.CheckSum, unique: true);
-            
+
             CreateTable(
                 "dbo.Keywords",
                 c => new
@@ -30,7 +30,7 @@ namespace StockManager.Migrations
                     })
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.Name, unique: true);
-            
+
             CreateTable(
                 "dbo.KeywordIcons",
                 c => new
@@ -43,9 +43,9 @@ namespace StockManager.Migrations
                 .ForeignKey("dbo.Icons", t => t.Icon_Id, cascadeDelete: true)
                 .Index(t => t.Keyword_Id)
                 .Index(t => t.Icon_Id);
-            
+
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.KeywordIcons", "Icon_Id", "dbo.Icons");

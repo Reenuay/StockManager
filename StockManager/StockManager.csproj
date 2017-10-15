@@ -103,6 +103,10 @@
     <Compile Include="Migrations\201710150934588_Add_DateChanged.Designer.cs">
       <DependentUpon>201710150934588_Add_DateChanged.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710151012094_Add_IsDefault_Keyword.cs" />
+    <Compile Include="Migrations\201710151012094_Add_IsDefault_Keyword.Designer.cs">
+      <DependentUpon>201710151012094_Add_IsDefault_Keyword.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\StockManagerSqlMigrationSqlGenerator.cs" />
     <Compile Include="Models\Base.cs" />
@@ -156,6 +160,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710150934588_Add_DateChanged.resx">
       <DependentUpon>201710150934588_Add_DateChanged.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710151012094_Add_IsDefault_Keyword.resx">
+      <DependentUpon>201710151012094_Add_IsDefault_Keyword.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
