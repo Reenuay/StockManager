@@ -16,6 +16,7 @@ namespace StockManager.Migrations
                         FullPath = c.String(nullable: false, maxLength: 4000),
                         IsDeleted = c.Boolean(nullable: false),
                         DateCreated = c.DateTime(nullable: false),
+                        DateChanged = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.CheckSum, unique: true);
@@ -27,6 +28,7 @@ namespace StockManager.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false, maxLength: 4000),
                         DateCreated = c.DateTime(nullable: false),
+                        DateChanged = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.Name, unique: true);

@@ -7,12 +7,12 @@ using StockManager.Models;
 
 namespace StockManager.Repositories
 {
-    class Repository<TEntity> : IRepository<TEntity> where TEntity : Base
+    class Repository<TEntity> : IDisposable, IRepository<TEntity> where TEntity : Base
     {
         protected Context context = new Context();
 
-        public virtual bool AutoSaveChanges { get; set; }
-        public virtual bool AutoSaveSuspended { get; protected set; } = false;
+        public virtual bool AutoSaveChanges { get; set; } = true;
+        public virtual bool AutoSaveSuspended { get; protected set; }
 
         public virtual DbSet<TEntity> Set
         {
@@ -20,11 +20,6 @@ namespace StockManager.Repositories
             {
                 return context.Set<TEntity>();
             }
-        }
-
-        public Repository(bool autoSaveChanges = true)
-        {
-            AutoSaveChanges = autoSaveChanges;
         }
 
         public virtual TEntity Find(Expression<Func<TEntity, bool>> predicate)
@@ -52,7 +47,6 @@ namespace StockManager.Repositories
 
         public virtual void Update(TEntity item)
         {
-            item.DateChanged = DateTime.Now;
             context.Entry(item).State = EntityState.Modified;
 
             if (AutoSaveChanges)
@@ -82,6 +76,11 @@ namespace StockManager.Repositories
                 AutoSaveChanges = true;
                 AutoSaveSuspended = false;
             }
+        }
+
+        public void Dispose()
+        {
+            context.Dispose();
         }
     }
 }

@@ -14,7 +14,7 @@ using StockManager.Utilities;
 
 namespace StockManager.ViewModels
 {
-    class IconBasePageViewModel : INotifyPropertyChanged
+    class IconBasePageViewModel : IDisposable, INotifyPropertyChanged
     {
         #region Fields
 
@@ -244,6 +244,12 @@ namespace StockManager.ViewModels
             IconList = iconRepo.SelectAll();
         }
 
+        public void Dispose()
+        {
+            backgroundLoader.Dispose();
+            watcher.Dispose();
+        }
+
         #region Watcher
 
         private void OnCreatedOrChanged(object source, FileSystemEventArgs e)
@@ -385,7 +391,14 @@ namespace StockManager.ViewModels
                 }
             }
 
-            iconRepo.SaveChanges();
+            try
+            {
+                iconRepo.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                logger.Error(ex);
+            }
         }
 
         private void SyncCompleted(object sender, RunWorkerCompletedEventArgs e)

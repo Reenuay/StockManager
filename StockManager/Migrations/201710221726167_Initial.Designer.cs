@@ -7,13 +7,13 @@ namespace StockManager.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Add_IsDefault_Keyword : IMigrationMetadata
+    public sealed partial class Initial : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Add_IsDefault_Keyword));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
         
         string IMigrationMetadata.Id
         {
-            get { return "201710151012094_Add_IsDefault_Keyword"; }
+            get { return "201710221726167_Initial"; }
         }
         
         string IMigrationMetadata.Source

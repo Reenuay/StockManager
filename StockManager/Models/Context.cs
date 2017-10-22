@@ -1,11 +1,12 @@
 ﻿using System.Data.Entity;
+using EntityFramework.Triggers;
 
 namespace StockManager.Models
 {
     /// <summary>
     /// Являет собой контекст базы данных приложения.
     /// </summary>
-    class Context : DbContext
+    class Context : DbContextWithTriggers
     {
         public DbSet<Icon> Icons { get; set; }
 

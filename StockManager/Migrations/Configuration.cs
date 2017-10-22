@@ -8,7 +8,6 @@ namespace StockManager.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            SetSqlGenerator("System.Data.SqlServerCe.4.0", new StockManagerSqlMigrationSqlGenerator());
         }
     }
 }
