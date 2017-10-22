@@ -39,7 +39,6 @@ namespace StockManager.Repositories
         /// </summary>
         public List<TEntity> SelectAll()
         {
-
             return context.Set<TEntity>().ToList();
         }
 

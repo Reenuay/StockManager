@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using StockManager.Models;
-using System.Data.Entity;
 
 namespace StockManager.Repositories
 {
