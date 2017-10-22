@@ -261,37 +261,37 @@ namespace StockManager.ViewModels
             {
                 Repository<Icon> iconRepo = new Repository<Icon>();
 
-                // Помечаем все иконки с данным путём как удалённые
-                iconRepo.SuspendAutoSave();
-
-                iconRepo.Select(i => i.FullPath == e.FullPath)
-                    .ForEach(i => {
-                        i.IsDeleted = true;
-                        iconRepo.Update(i);
-                    });
-
-                iconRepo.SaveChanges();
-
-                // Ищем иконку с полученной чек-суммой
-                Icon icon = iconRepo.Find(i => i.CheckSum == hash);
-
-                if (icon == null)
+                iconRepo.ExecuteTransaction(() =>
                 {
-                    // Добавляем новую
-                    iconRepo.Insert(new Icon
+                    // Помечаем все иконки с данным путём как удалённые
+                    iconRepo.Select(i => i.FullPath == e.FullPath)
+                        .ForEach(i =>
+                        {
+                            i.IsDeleted = true;
+                            iconRepo.Update(i);
+                        });
+
+                    // Ищем иконку с полученной чек-суммой
+                    Icon icon = iconRepo.Find(i => i.CheckSum == hash);
+
+                    if (icon == null)
                     {
-                        FullPath = e.FullPath,
-                        CheckSum = hash,
-                        IsDeleted = false
-                    });
-                }
-                else
-                {
-                    // Или обновляем уже существующую
-                    icon.FullPath = e.FullPath;
-                    icon.IsDeleted = false;
-                    iconRepo.Update(icon);
-                }
+                        // Добавляем новую
+                        iconRepo.Insert(new Icon
+                        {
+                            FullPath = e.FullPath,
+                            CheckSum = hash,
+                            IsDeleted = false
+                        });
+                    }
+                    else
+                    {
+                        // Или обновляем уже существующую
+                        icon.FullPath = e.FullPath;
+                        icon.IsDeleted = false;
+                        iconRepo.Update(icon);
+                    }
+                });
 
                 RefreshIconList(iconRepo);
             }
@@ -304,16 +304,17 @@ namespace StockManager.ViewModels
 
             Repository<Icon> iconRepo = new Repository<Icon>();
 
-            // Помечаем все иконки с данным путём как удалённые
-            iconRepo.SuspendAutoSave();
-
-            iconRepo.Select(i => i.FullPath == e.FullPath)
-                .ForEach(i => {
+            iconRepo.ExecuteTransaction(() =>
+            {
+                // Помечаем все иконки с данным путём как удалённые
+                iconRepo.Select(i => i.FullPath == e.FullPath)
+                .ForEach(i =>
+                {
                     i.IsDeleted = true;
                     iconRepo.Update(i);
                 });
+            });
 
-            iconRepo.SaveChanges();
             RefreshIconList(iconRepo);
         }
 
@@ -351,54 +352,46 @@ namespace StockManager.ViewModels
 
         private void Sync(object sender, DoWorkEventArgs e)
         {
-            // Получаем локальную копию репозитория
             Repository<Icon> iconRepo = new Repository<Icon>();
 
-            // Помечаем все иконки как удалённые
-            iconRepo.SuspendAutoSave();
-
-            iconRepo.SelectAll()
-                .ForEach(i => {
+            iconRepo.ExecuteTransaction(() =>
+            {
+                // Помечаем все иконки как удалённые
+                iconRepo.SelectAll()
+                .ForEach(i =>
+                {
                     i.IsDeleted = true;
                     iconRepo.Update(i);
                 });
 
-            // Пробегаемся по файлам в директории
-            foreach (string iconFile in IconDirectory.GetIcons())
-            {
-                if (TryGenerateHash(iconFile, out string hash))
+                // Пробегаемся по файлам в директории
+                foreach (string iconFile in IconDirectory.GetIcons())
                 {
-                    // Ищем иконку с полученной чек-суммой
-                    Icon icon = iconRepo.Find(i => i.CheckSum == hash);
+                    if (TryGenerateHash(iconFile, out string hash))
+                    {
+                        // Ищем иконку с полученной чек-суммой
+                        Icon icon = iconRepo.Find(i => i.CheckSum == hash);
 
-                    if (icon == null)
-                    {
-                        // Добавляем новую
-                        iconRepo.Insert(new Icon
+                        if (icon == null)
                         {
-                            FullPath = iconFile,
-                            CheckSum = hash,
-                            IsDeleted = false
-                        });
-                    }
-                    else
-                    {
-                        // Или обновляем уже существующую
-                        icon.FullPath = iconFile;
-                        icon.IsDeleted = false;
-                        iconRepo.Update(icon);
+                            // Добавляем новую
+                            iconRepo.Insert(new Icon
+                            {
+                                FullPath = iconFile,
+                                CheckSum = hash,
+                                IsDeleted = false
+                            });
+                        }
+                        else
+                        {
+                            // Или обновляем уже существующую
+                            icon.FullPath = iconFile;
+                            icon.IsDeleted = false;
+                            iconRepo.Update(icon);
+                        }
                     }
                 }
-            }
-
-            try
-            {
-                iconRepo.SaveChanges();
-            }
-            catch(Exception ex)
-            {
-                logger.Error(ex);
-            }
+            });
         }
 
         private void SyncCompleted(object sender, RunWorkerCompletedEventArgs e)
