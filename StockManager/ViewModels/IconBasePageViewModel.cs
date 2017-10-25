@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using ImageMagick;
 using NLog;
 using StockManager.Commands;

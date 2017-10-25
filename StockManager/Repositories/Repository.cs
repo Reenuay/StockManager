@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using StockManager.Models;
+using NLog;
 
 namespace StockManager.Repositories
 {
@@ -14,6 +15,7 @@ namespace StockManager.Repositories
     class Repository<TEntity> : IRepository<TEntity> where TEntity : Base
     {
         private Context context = new Context();
+        private Logger logger = LogManager.GetCurrentClassLogger();
         private bool autoCommit = true;
 
         /// <summary>
@@ -99,7 +101,17 @@ namespace StockManager.Repositories
         private void SaveChanges()
         {
             if (autoCommit)
-                context.SaveChanges();
+            {
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch(Exception ex)
+                {
+                    logger.Fatal(ex);
+                    throw new Exception("Error saving to database.");
+                }
+            }
         }
     }
 }

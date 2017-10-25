@@ -11,5 +11,7 @@ namespace StockManager.Models
         public DbSet<Icon> Icons { get; set; }
 
         public DbSet<Keyword> Keywords { get; set; }
+
+        public DbSet<LogEntry> LogEntries { get; set; }
     }
 }

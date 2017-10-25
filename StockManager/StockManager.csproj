@@ -108,12 +108,17 @@
     <Compile Include="Migrations\201710221726167_Initial.Designer.cs">
       <DependentUpon>201710221726167_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710232114022_LogEntry.cs" />
+    <Compile Include="Migrations\201710232114022_LogEntry.Designer.cs">
+      <DependentUpon>201710232114022_LogEntry.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Base.cs" />
     <Compile Include="Models\IconInfo.cs" />
     <Compile Include="Models\Keyword.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\Icon.cs" />
+    <Compile Include="Models\LogEntry.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Utilities\HashGenerator.cs" />
@@ -155,12 +160,16 @@
     <EmbeddedResource Include="Migrations\201710221726167_Initial.resx">
       <DependentUpon>201710221726167_Initial.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710232114022_LogEntry.resx">
+      <DependentUpon>201710232114022_LogEntry.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
