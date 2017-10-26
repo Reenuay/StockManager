@@ -7,6 +7,7 @@ using MaterialDesignThemes.Wpf;
 using StockManager.Commands;
 using StockManager.Models;
 using StockManager.Views;
+using System;
 
 namespace StockManager.ViewModels
 {
@@ -14,7 +15,7 @@ namespace StockManager.ViewModels
     {
         #region Fields
 
-        private List<MainMenuItem> _mainMenuItems;
+        private List<MainMenuItem> mainMenuItems;
         private Page currentPage;
         private ICommand changePageCommand;
 
@@ -28,7 +29,7 @@ namespace StockManager.ViewModels
         {
             get
             {
-                return _mainMenuItems.ToArray();
+                return mainMenuItems.ToArray();
             }
         }
 
@@ -57,13 +58,15 @@ namespace StockManager.ViewModels
                     ?? new RelayCommand(
                         p =>
                         {
-                            Page page = p as Page;
-                            if (CurrentPage != page && page != null)
+                            if (p is Lazy<Page> page)
                             {
-                                CurrentPage = page;
+                                if (CurrentPage != page.Value)
+                                {
+                                    CurrentPage = page.Value;
+                                }
                             }
                         },
-                        p => p is Page
+                        p => p is Lazy<Page>
                     );
 
                 return changePageCommand;
@@ -87,40 +90,40 @@ namespace StockManager.ViewModels
         public MainWindowViewModel()
         {
             //Создаём список элементов меню
-            _mainMenuItems = new List<MainMenuItem>
+            mainMenuItems = new List<MainMenuItem>
             {
                 new MainMenuItem()
                 {
                     Name = "Home",
                     Icon = PackIconKind.Home,
-                    Page = new HomePage()
+                    Page = new Lazy<Page>(() => new HomePage()
                     {
                         DataContext = new HomePageViewModel()
-                    }
+                    })
                 },
                 new MainMenuItem()
                 {
                     Name = "IconBase",
                     Icon = PackIconKind.FormatListBulleted,
-                    Page = new IconBasePage()
+                    Page = new Lazy<Page>(() => new IconBasePage()
                     {
                         DataContext = new IconBasePageViewModel()
-                    }
+                    })
                 },
                 new MainMenuItem()
                 {
                     Name = "Settings",
                     Icon = PackIconKind.Settings,
-                    Page = new SettingsPage()
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    Page = new Lazy<Page>(() => new SettingsPage()
                     {
                         DataContext = new SettingsPageViewModel()
-                    },
-                    HorizontalAlignment = HorizontalAlignment.Right
+                    })
                 }
             };
 
             //Переходим на домашнюю страницу
-            CurrentPage = _mainMenuItems[0].Page;
+            CurrentPage = mainMenuItems[0].Page.Value;
         }
     }
 }

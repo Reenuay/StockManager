@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using MaterialDesignThemes.Wpf;
 
@@ -19,7 +20,7 @@ namespace StockManager.Models
             get; set;
         }
 
-        public Page Page
+        public Lazy<Page> Page
         {
             get; set;
         }
