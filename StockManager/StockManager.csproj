@@ -121,6 +121,7 @@
     <Compile Include="Models\LogEntry.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Services\IconSynchronizator.cs" />
     <Compile Include="Utilities\HashGenerator.cs" />
     <Compile Include="Utilities\IconDirectory.cs" />
     <Compile Include="ViewModels\HomePageViewModel.cs" />

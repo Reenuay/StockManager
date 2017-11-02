@@ -9,35 +9,36 @@ using NLog;
 namespace StockManager.Repositories
 {
     /// <summary>
-    /// Реализует методы обобщённого репозитория
+    /// Реализует методы обобщённого репозитория.
     /// </summary>
     /// <typeparam name="TEntity">Сущность в репозитории</typeparam>
     class Repository<TEntity> : IRepository<TEntity> where TEntity : Base
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private Context context = new Context();
-        private Logger logger = LogManager.GetCurrentClassLogger();
         private bool autoCommit = true;
 
         /// <summary>
-        /// Находит уникальную запись в репозитории по заданному условию
+        /// Находит уникальную запись в репозитории по заданному условию.
         /// </summary>
-        /// <param name="predicate">Условие поиска</param>
+        /// <param name="predicate">Условие поиска.</param>
         public TEntity Find(Expression<Func<TEntity, bool>> predicate)
         {
             return context.Set<TEntity>().FirstOrDefault(predicate);
         }
 
         /// <summary>
-        /// Находит записи в репозитории, удовлетворяющие заданному условию
+        /// Находит записи в репозитории, удовлетворяющие заданному условию.
         /// </summary>
-        /// <param name="predicate">Условие поиска</param>
+        /// <param name="predicate">Условие поиска.</param>
         public List<TEntity> Select(Expression<Func<TEntity, bool>> predicate)
         {
             return context.Set<TEntity>().Where(predicate).ToList();
         }
 
         /// <summary>
-        /// Возвращает все записи из репозитория
+        /// Возвращает все записи из репозитория.
         /// </summary>
         public List<TEntity> SelectAll()
         {
@@ -45,9 +46,9 @@ namespace StockManager.Repositories
         }
 
         /// <summary>
-        /// Добавляем новый элемент в репозиторий
+        /// Добавляем новый элемент в репозиторий.
         /// </summary>
-        /// <param name="item">Новый элемент</param>
+        /// <param name="item">Новый элемент.</param>
         public void Insert(TEntity item)
         {
             if (item == null)
@@ -58,9 +59,9 @@ namespace StockManager.Repositories
         }
 
         /// <summary>
-        /// Обновляет существующий элемент в репозитории
+        /// Обновляет существующий элемент в репозитории.
         /// </summary>
-        /// <param name="item">Обновляемый элемент</param>
+        /// <param name="item">Обновляемый элемент.</param>
         public void Update(TEntity item)
         {
             if (item == null)
@@ -71,9 +72,9 @@ namespace StockManager.Repositories
         }
 
         /// <summary>
-        /// Удаляет элемент из репозитория
+        /// Удаляет элемент из репозитория.
         /// </summary>
-        /// <param name="item">Удаляемый элемент</param>
+        /// <param name="item">Удаляемый элемент.</param>
         public void Delete(TEntity item)
         {
             if (item == null)
@@ -84,9 +85,9 @@ namespace StockManager.Repositories
         }
 
         /// <summary>
-        /// Выполняет транзакцию
+        /// Выполняет транзакцию.
         /// </summary>
-        /// <param name="transaction">Транзакция</param>
+        /// <param name="transaction">Транзакция.</param>
         public void ExecuteTransaction(Action transaction)
         {
             if (transaction == null)

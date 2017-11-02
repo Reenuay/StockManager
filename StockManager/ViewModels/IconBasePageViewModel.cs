@@ -9,25 +9,21 @@ using NLog;
 using StockManager.Commands;
 using StockManager.Models;
 using StockManager.Repositories;
-using StockManager.Utilities;
+using StockManager.Services;
 
 namespace StockManager.ViewModels
 {
-    class IconBasePageViewModel : IDisposable, INotifyPropertyChanged
+    class IconBasePageViewModel : INotifyPropertyChanged
     {
         #region Fields
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
-
-        private BackgroundWorker backgroundLoader;
-        private FileSystemWatcher watcher;
 
         private List<Icon> iconList = new List<Icon>();
         private IconInfo iconInfo = new IconInfo();
         private ICommand showInfoCommand;
         private ICommand syncCommand;
         private bool isSyncComplete;
-        private bool isSyncing;
 
         #endregion
 
@@ -88,7 +84,7 @@ namespace StockManager.ViewModels
                                 return;
                             }
 
-                            RunSync();
+                            IconSynchronizator.RequestSynchronization();
                         }
                     );
 
@@ -100,16 +96,7 @@ namespace StockManager.ViewModels
         {
             get
             {
-                return isSyncing;
-            }
-
-            set
-            {
-                if (isSyncing != value)
-                {
-                    isSyncing = value;
-                    NotifyPropertyChanged(nameof(IsSyncing));
-                }
+                return IconSynchronizator.IsSynchronizing;
             }
         }
 
@@ -144,7 +131,7 @@ namespace StockManager.ViewModels
                         {
                             if (o is Icon i)
                             {
-                                IconInfo info = new IconInfo
+                                var info = new IconInfo
                                 {
                                     RelativePath = i.FullPath.Remove(
                                         0,
@@ -158,7 +145,7 @@ namespace StockManager.ViewModels
                                 if (!i.IsDeleted)
                                 {
                                     using (
-                                        MagickImage image
+                                        var image
                                             = new MagickImage(i.FullPath)
                                     )
                                     {
@@ -217,231 +204,26 @@ namespace StockManager.ViewModels
             );
         }
 
-        private bool TryGenerateHash(string fullPath, out string hash)
-        {
-            try
-            {
-                hash = HashGenerator.FileToMD5(fullPath);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex);
-            }
-
-            hash = "";
-            return false;
-        }
-
         private void RefreshIconList()
         {
             IconList = new Repository<Icon>().SelectAll();
         }
 
-        private void RefreshIconList(Repository<Icon> iconRepo)
-        {
-            IconList = iconRepo.SelectAll();
-        }
-
-        public void Dispose()
-        {
-            backgroundLoader.Dispose();
-            watcher.Dispose();
-        }
-
-        #region Watcher
-
-        private void OnCreatedOrChanged(object source, FileSystemEventArgs e)
-        {
-            if (!IconDirectory.ExtensionIsAllowed(e.FullPath))
-                return;
-
-            if (TryGenerateHash(e.FullPath, out string hash))
-            {
-                Repository<Icon> iconRepo = new Repository<Icon>();
-
-                iconRepo.ExecuteTransaction(() =>
-                {
-                    // Помечаем все иконки с данным путём как удалённые
-                    iconRepo.Select(i => i.FullPath == e.FullPath)
-                        .ForEach(i =>
-                        {
-                            i.IsDeleted = true;
-                            iconRepo.Update(i);
-                        });
-
-                    // Ищем иконку с полученной чек-суммой
-                    Icon icon = iconRepo.Find(i => i.CheckSum == hash);
-
-                    if (icon == null)
-                    {
-                        // Добавляем новую
-                        iconRepo.Insert(new Icon
-                        {
-                            FullPath = e.FullPath,
-                            CheckSum = hash,
-                            IsDeleted = false
-                        });
-                    }
-                    else
-                    {
-                        // Или обновляем уже существующую
-                        icon.FullPath = e.FullPath;
-                        icon.IsDeleted = false;
-                        iconRepo.Update(icon);
-                    }
-                });
-
-                RefreshIconList(iconRepo);
-            }
-        }
-
-        private void OnDeleted(object source, FileSystemEventArgs e)
-        {
-            if (!IconDirectory.ExtensionIsAllowed(e.FullPath))
-                return;
-
-            Repository<Icon> iconRepo = new Repository<Icon>();
-
-            iconRepo.ExecuteTransaction(() =>
-            {
-                // Помечаем все иконки с данным путём как удалённые
-                iconRepo.Select(i => i.FullPath == e.FullPath)
-                .ForEach(i =>
-                {
-                    i.IsDeleted = true;
-                    iconRepo.Update(i);
-                });
-            });
-
-            RefreshIconList(iconRepo);
-        }
-
-        private void OnRenamed(object source, RenamedEventArgs e)
-        {
-            if (!IconDirectory.ExtensionIsAllowed(e.FullPath))
-                return;
-
-            Repository<Icon> iconRepo = new Repository<Icon>();
-
-            Icon icon = iconRepo.Find(i =>
-                i.FullPath == e.OldFullPath
-                && i.IsDeleted == false);
-
-            if (icon != null)
-            {
-                icon.FullPath = e.FullPath;
-                iconRepo.Update(icon);
-            }
-            else
-            {
-                logger.Warn(
-                    $"File {e.OldFullPath} was renamed to {e.FullPath}"
-                    + " but non-deleted icon with that name does not exists"
-                    + " in database."
-                );
-            }
-
-            RefreshIconList(iconRepo);
-        }
-
-        #endregion
-
-        #region Background Loader
-
-        private void Sync(object sender, DoWorkEventArgs e)
-        {
-            Repository<Icon> iconRepo = new Repository<Icon>();
-
-            iconRepo.ExecuteTransaction(() =>
-            {
-                // Помечаем все иконки как удалённые
-                iconRepo.SelectAll()
-                .ForEach(i =>
-                {
-                    i.IsDeleted = true;
-                    iconRepo.Update(i);
-                });
-
-                // Пробегаемся по файлам в директории
-                foreach (string iconFile in IconDirectory.GetIcons())
-                {
-                    if (TryGenerateHash(iconFile, out string hash))
-                    {
-                        // Ищем иконку с полученной чек-суммой
-                        Icon icon = iconRepo.Find(i => i.CheckSum == hash);
-
-                        if (icon == null)
-                        {
-                            // Добавляем новую
-                            iconRepo.Insert(new Icon
-                            {
-                                FullPath = iconFile,
-                                CheckSum = hash,
-                                IsDeleted = false
-                            });
-                        }
-                        else
-                        {
-                            // Или обновляем уже существующую
-                            icon.FullPath = iconFile;
-                            icon.IsDeleted = false;
-                            iconRepo.Update(icon);
-                        }
-                    }
-                }
-            });
-        }
-
-        private void SyncCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            RefreshIconList();
-            IsSyncing = false;
-            IsSyncComplete = true;
-        }
-
-        private void RunSync()
-        {
-            if (!backgroundLoader.IsBusy)
-            {
-                backgroundLoader.RunWorkerAsync();
-                IsSyncing = true;
-            }
-        }
-
-        #endregion
-
         #endregion
 
         public IconBasePageViewModel()
         {
-            // Проверяем папку иконок и создаём, если её нет
-            if (!IconDirectory.Exists())
+            IconSynchronizator.SyncStarted += (sender, e) =>
             {
-                IconDirectory.Create();
-                logger.Debug(
-                    "Directory for icons created: "
-                    + IconDirectory.FullPath
-                );
-            }
+                NotifyPropertyChanged(nameof(IsSyncing));
+            };
 
-            // Инициализируем сервис фоновой загрузки
-            backgroundLoader = new BackgroundWorker();
-
-            // Настраиваем сервис фоновой загрузки
-            backgroundLoader.DoWork += Sync;
-            backgroundLoader.RunWorkerCompleted += SyncCompleted;
-
-            // Инициализируем наблюдатель
-            watcher = IconDirectory.CreateWatcher();
-
-            watcher.Created += OnCreatedOrChanged;
-            watcher.Changed += OnCreatedOrChanged;
-            watcher.Deleted += OnDeleted;
-            watcher.Renamed += OnRenamed;
-
-            // Подгружаем иконки из папки
-            RunSync();
+            IconSynchronizator.SyncCompleted += (sender, e) =>
+            {
+                IsSyncComplete = true;
+                NotifyPropertyChanged(nameof(IsSyncing));
+                RefreshIconList();
+            };
         }
     }
 }
