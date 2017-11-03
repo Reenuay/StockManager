@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Windows.Input;
-using ImageMagick;
 using NLog;
+using PropertyChanged;
 using StockManager.Commands;
 using StockManager.Models;
 using StockManager.Repositories;
@@ -13,17 +11,13 @@ using StockManager.Services;
 
 namespace StockManager.ViewModels
 {
-    class IconBasePageViewModel : INotifyPropertyChanged
+    [AddINotifyPropertyChangedInterface]
+    class IconBasePageViewModel
     {
         #region Fields
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
-
-        private List<Icon> iconList = new List<Icon>();
-        private IconInfo iconInfo = new IconInfo();
-        private ICommand showInfoCommand;
-        private ICommand syncCommand;
-        private bool isSyncComplete;
+        private Context context = new Context();
 
         #endregion
 
@@ -31,30 +25,13 @@ namespace StockManager.ViewModels
 
         #region IconList
 
-        public List<Icon> IconList
-        {
-            get
-            {
-                return iconList;
-            }
-
-            private set
-            {
-                if (iconList != value)
-                {
-                    iconList = value;
-                    NotifyPropertyChanged(nameof(IconList));
-                    NotifyPropertyChanged(nameof(ExistingIconsCount));
-                    NotifyPropertyChanged(nameof(DeletedIconsCount));
-                }
-            }
-        }
+        public List<Icon> IconList { get; private set; }
 
         public int ExistingIconsCount
         {
             get
             {
-                return iconList.Count(i => !i.IsDeleted);
+                return IconList.Count(i => !i.IsDeleted);
             }
         }
 
@@ -62,7 +39,7 @@ namespace StockManager.ViewModels
         {
             get
             {
-                return iconList.Count(i => i.IsDeleted);
+                return IconList.Count(i => i.IsDeleted);
             }
         }
 
@@ -74,155 +51,135 @@ namespace StockManager.ViewModels
         {
             get
             {
-                syncCommand = syncCommand
-                    ?? new RelayCommand(
-                        o =>
+                return new RelayCommand(
+                    o =>
+                    {
+                        if (IsSyncComplete)
                         {
-                            if (IsSyncComplete)
-                            {
-                                IsSyncComplete = false;
-                                return;
-                            }
-
-                            IconSynchronizator.RequestSynchronization();
+                            IsSyncComplete = false;
+                            return;
                         }
-                    );
 
-                return syncCommand;
+                        IconSynchronizator.RequestSynchronization();
+                    }
+                );
             }
         }
 
-        public bool IsSyncing
-        {
-            get
-            {
-                return IconSynchronizator.IsSynchronizing;
-            }
-        }
-
-        public bool IsSyncComplete
-        {
-            get
-            {
-                return isSyncComplete;
-            }
-
-            set
-            {
-                if (isSyncComplete != value)
-                {
-                    isSyncComplete = value;
-                    NotifyPropertyChanged(nameof(IsSyncComplete));
-                }
-            }
-        }
+        public bool IsSyncing { get; private set; }
+        public bool IsSyncComplete { get; private set; }
 
         #endregion
 
-        #region ShowPreviewCommand
+        #region ShowInfoCommand
 
         public ICommand ShowInfoCommand
         {
             get
             {
-                showInfoCommand = showInfoCommand
-                    ?? new RelayCommand(
-                        o =>
+                return new RelayCommand(
+                    o =>
+                    {
+                        if (o is Icon i)
                         {
-                            if (o is Icon i)
-                            {
-                                var info = new IconInfo
-                                {
-                                    RelativePath = i.FullPath.Remove(
-                                        0,
-                                        Environment.CurrentDirectory.Length + 1
-                                    ),
-                                    CheckSum = i.CheckSum,
-                                    Date = i.DateCreated.ToString("dd.MM.yyyy"),
-                                    Keywords = i.Keywords
-                                };
-
-                                if (!i.IsDeleted)
-                                {
-                                    using (
-                                        var image
-                                            = new MagickImage(i.FullPath)
-                                    )
-                                    {
-                                        info.Preview = image.ToBitmapSource();
-                                    }
-
-                                    info.Size = ((
-                                        new FileInfo(i.FullPath)
-                                    ).Length / 1024).ToString() + " KB";
-                                }
-
-                                IconInfo = info;
-                            }
-                        },
-                        o => o is Icon
-                    );
-
-                return showInfoCommand;
+                            IconInfo = new IconViewModel(i);
+                        }
+                    },
+                    o => o is Icon
+                );
             }
         }
 
-        public IconInfo IconInfo
+        public IconViewModel IconInfo { get; private set; }
+
+        #endregion
+
+        #region AddKeywordsCommand
+
+        public ICommand AddKeywordsCommand
         {
             get
             {
-                return iconInfo;
-            }
+                return new RelayCommand(
+                    o =>
+                    {
+                        var keywordNames
+                            = (KeywordsText ?? "").ToLower().Split(
+                                new string[]{ "\r\n", "\r", "\n" },
+                                StringSplitOptions.RemoveEmptyEntries
+                            ).Distinct();
 
-            set
-            {
-                if (iconInfo != value)
-                {
-                    iconInfo = value;
-                    NotifyPropertyChanged(nameof(IconInfo));
-                }
+                        var newKeywordNames
+                            = from keywordName
+                              in keywordNames
+                              where IconInfo.Keywords.All(k =>
+                              {
+                                  return k.Name != keywordName;
+                              })
+                              select keywordName;
+
+                        var repo = new Repository<Keyword>(context);
+
+                        repo.ExecuteTransaction(() =>
+                        {
+                            foreach (var newKeywordName in newKeywordNames)
+                            {
+                                var keyword
+                                    = repo.Find(k => k.Name == newKeywordName);
+
+                                if (keyword == null)
+                                {
+                                    keyword = new Keyword
+                                    {
+                                        Name = newKeywordName
+                                    };
+
+                                    repo.Insert(keyword);
+                                }
+
+                                keyword.Icons.Add(IconInfo.Icon);
+                            }
+                        });
+
+                        KeywordsText = "";
+                    }
+                );
             }
         }
 
-        #endregion
+        public string KeywordsText { get; set; }
 
         #endregion
-
-        #region Events
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
 
         #region Methods
 
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(
-                this,
-                new PropertyChangedEventArgs(propertyName)
-            );
-        }
-
         private void RefreshIconList()
         {
-            IconList = new Repository<Icon>().SelectAll();
+            IconList = new Repository<Icon>(context).SelectAll();
         }
 
         #endregion
 
         public IconBasePageViewModel()
         {
-            IconSynchronizator.SyncStarted += (sender, e) =>
-            {
-                NotifyPropertyChanged(nameof(IsSyncing));
-            };
+            IconList = new List<Icon>();
+            IconInfo = new IconViewModel();
 
-            IconSynchronizator.SyncCompleted += (sender, e) =>
+            IconSynchronizator.SyncStateChanged += (sender, e) =>
             {
-                IsSyncComplete = true;
-                NotifyPropertyChanged(nameof(IsSyncing));
-                RefreshIconList();
+                IsSyncing = e.State == SyncState.Started ? true : false;
+
+                if (e.State == SyncState.Started)
+                {
+                    IconInfo = new IconViewModel();
+                }
+                else
+                {
+                    IsSyncComplete = true;
+                    RefreshIconList();
+                }
             };
         }
     }

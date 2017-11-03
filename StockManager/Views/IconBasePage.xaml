@@ -43,8 +43,8 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Margin="5,0" Kind="FormatListBulleted" Height="32" Width="32" VerticalAlignment="Center"/>
-                            <TextBlock Margin="5,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Icon List"/>
+                            <materialDesign:PackIcon Kind="FormatListBulleted" Height="32" Width="32" VerticalAlignment="Center"/>
+                            <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Icon List"/>
                         </StackPanel>
                         <StackPanel Margin="5,0" Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
                             <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}"
@@ -139,7 +139,7 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Image" Height="32" Width="32" VerticalAlignment="Center" />
-                        <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Preview"/>
+                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Preview"/>
                     </StackPanel>
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
@@ -152,7 +152,7 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Information" Height="32" Width="32" VerticalAlignment="Center" />
-                        <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Info"/>
+                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Info"/>
                     </StackPanel>
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
@@ -190,7 +190,7 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Key" Height="32" Width="32" VerticalAlignment="Center"/>
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Keywords"/>
+                            <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Keywords"/>
                         </StackPanel>
                         <TextBlock Grid.Column="1"
                                    HorizontalAlignment="Right"
@@ -201,9 +201,34 @@
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
             <Grid>
-                <ListBox ItemsSource="{Binding IconInfo.Keywords}"
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel IsEnabled="{Binding Path=IconInfo.Icon, Converter={StaticResource ObjectToBooleanConverter}}">
+                    <TextBox Grid.Row="1"
+                             MaxHeight="100"
+                             Margin="5"
+                             Style="{StaticResource MaterialDesignTextAreaTextBox}"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Auto"
+                             materialDesign:HintAssist.Hint="Type a few keywords each one on a new line"
+                             Text="{Binding KeywordsText}"/>
+                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                            Command="{Binding AddKeywordsCommand}"
+                            ToolTip="MaterialDesignFlatButton"
+                            Margin="5">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" Height="32" Width="32" VerticalAlignment="Center"/>
+                            <TextBlock Text="Add" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <ListBox Grid.Row="1"
+                         ItemsSource="{Binding IconInfo.Keywords}"
                          IsSynchronizedWithCurrentItem="True" Margin="0,5,0,0"
-                         IsEnabled="{Binding Path=IsSyncing, Converter={StaticResource InverseBooleanConverter}}">
+                         IsEnabled="{Binding Path=IconInfo.Keywords, Converter={StaticResource ObjectToBooleanConverter}}">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

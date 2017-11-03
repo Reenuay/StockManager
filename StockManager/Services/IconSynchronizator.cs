@@ -22,26 +22,22 @@ namespace StockManager.Services
 
         #endregion
 
-        #region Properties
-
-        /// <summary>
-        /// Указывает синхронизирована ли база.
-        /// </summary>
-        public static bool IsSynchronizing { get; private set; }
-
-        #endregion
-
         #region Events
 
         /// <summary>
-        /// Выстреливает, когда начинается синхронизация.
+        /// Выстреливает когда начинается синхронизация.
         /// </summary>
-        public static event EventHandler SyncStarted;
+        public static event IconSynchronizatorEventHandler SyncStarted;
 
         /// <summary>
-        /// Выстреливает, когда синхронизация завершена.
+        /// Выстреливает когда синхронизация завершена.
         /// </summary>
-        public static event EventHandler SyncCompleted;
+        public static event IconSynchronizatorEventHandler SyncCompleted;
+
+        /// <summary>
+        /// Выстреливает когда меняется состояние синхронизации сервиса.
+        /// </summary>
+        public static event IconSynchronizatorEventHandler SyncStateChanged;
 
         #endregion
 
@@ -54,7 +50,7 @@ namespace StockManager.Services
             if (!IconDirectory.ExtensionIsAllowed(e.FullPath))
                 return;
 
-            FireSyncStarted(sender, e);
+            FireSyncStarted(sender);
 
             if (HashGenerator.TryFileToMD5(e.FullPath, out string hash))
             {
@@ -92,7 +88,7 @@ namespace StockManager.Services
                 });
             }
 
-            FireSyncCompleted(sender, e);
+            FireSyncCompleted(sender);
         }
 
         private static void OnDeleted(object sender, FileSystemEventArgs e)
@@ -100,7 +96,7 @@ namespace StockManager.Services
             if (!IconDirectory.ExtensionIsAllowed(e.FullPath))
                 return;
 
-            FireSyncStarted(sender, e);
+            FireSyncStarted(sender);
 
             var iconRepo = new Repository<Icon>();
 
@@ -115,7 +111,7 @@ namespace StockManager.Services
                 });
             });
 
-            FireSyncCompleted(sender, e);
+            FireSyncCompleted(sender);
         }
 
         private static void OnRenamed(object sender, RenamedEventArgs e)
@@ -123,7 +119,7 @@ namespace StockManager.Services
             if (!IconDirectory.ExtensionIsAllowed(e.FullPath))
                 return;
 
-            FireSyncStarted(sender, e);
+            FireSyncStarted(sender);
 
             var iconRepo = new Repository<Icon>();
 
@@ -146,7 +142,7 @@ namespace StockManager.Services
                 );
             }
 
-            FireSyncCompleted(sender, e);
+            FireSyncCompleted(sender);
         }
 
         #endregion
@@ -166,7 +162,7 @@ namespace StockManager.Services
 
         private static void Sync(object sender, DoWorkEventArgs e)
         {
-            FireSyncStarted(sender, e);
+            FireSyncStarted(sender);
 
             var iconRepo = new Repository<Icon>();
 
@@ -212,22 +208,24 @@ namespace StockManager.Services
 
         private static void OnSyncCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            FireSyncCompleted(sender, e);
-        }
-
-        private static void FireSyncStarted(object sender, EventArgs e)
-        {
-            IsSynchronizing = true;
-            SyncStarted?.Invoke(sender, e);
-        }
-
-        private static void FireSyncCompleted(object sender, EventArgs e)
-        {
-            IsSynchronizing = false;
-            SyncCompleted?.Invoke(sender, e);
+            FireSyncCompleted(sender);
         }
 
         #endregion
+
+        private static void FireSyncStarted(object sender)
+        {
+            var e = new IconSynchronizatorEventArgs(SyncState.Started);
+            SyncStarted?.Invoke(sender, e);
+            SyncStateChanged?.Invoke(sender, e);
+        }
+
+        private static void FireSyncCompleted(object sender)
+        {
+            var e = new IconSynchronizatorEventArgs(SyncState.Completed);
+            SyncCompleted?.Invoke(sender, e);
+            SyncStateChanged?.Invoke(sender, e);
+        }
 
         #endregion
 

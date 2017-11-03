@@ -23,6 +23,7 @@
 
             <!-- Converters -->
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <converters:ObjectToBooleanConverter x:Key="ObjectToBooleanConverter"/>
 
         </ResourceDictionary>
     </Application.Resources>

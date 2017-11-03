@@ -4,29 +4,24 @@ using System.Windows.Data;
 namespace StockManager.Converters
 {
     /// <summary>
-    /// Инвертирует булевское значение.
+    /// Возвращает true или false в зависимости от того, инициализирована ли
+    /// переменная или нет.
     /// </summary>
-    [ValueConversion(typeof(bool), typeof(bool))]
-    public class InverseBooleanConverter : IValueConverter
+    [ValueConversion(typeof(object), typeof(bool))]
+    class ObjectToBooleanConverter : IValueConverter
     {
         #region IValueConverter Members
 
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
-            if (!(value is bool))
-                throw new InvalidOperationException("The value must be a boolean");
-
-            return !(bool)value;
+            return value != null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
-            if (!(value is bool))
-                throw new InvalidOperationException("The value must be a boolean");
-
-            return !(bool)value;
+            throw new NotSupportedException();
         }
 
         #endregion

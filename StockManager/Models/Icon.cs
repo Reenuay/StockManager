@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
@@ -18,8 +18,8 @@ namespace StockManager.Models
 
         public bool IsDeleted { get; set; }
 
-        public virtual List<Keyword> Keywords { get; set; }
-            = new List<Keyword>();
+        public virtual ObservableCollection<Keyword> Keywords { get; set; }
+            = new ObservableCollection<Keyword>();
 
         [NotMapped]
         public string Name

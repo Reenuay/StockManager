@@ -14,9 +14,9 @@ namespace StockManager.Repositories
     /// <typeparam name="TEntity">Сущность в репозитории</typeparam>
     class Repository<TEntity> : IRepository<TEntity> where TEntity : Base
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static Logger logger = LogManager.GetLogger("EmergencyLogger");
 
-        private Context context = new Context();
+        private Context context;
         private bool autoCommit = true;
 
         /// <summary>
@@ -110,9 +110,19 @@ namespace StockManager.Repositories
                 catch(Exception ex)
                 {
                     logger.Fatal(ex);
-                    throw new Exception("Error saving to database.");
                 }
             }
+        }
+
+        public Repository()
+        {
+            context = new Context();
+        }
+
+        public Repository(Context context)
+        {
+            this.context
+                = context ?? throw new ArgumentNullException(nameof(context));
         }
     }
 }
