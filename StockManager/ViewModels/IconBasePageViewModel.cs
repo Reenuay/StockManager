@@ -6,7 +6,6 @@ using NLog;
 using PropertyChanged;
 using StockManager.Commands;
 using StockManager.Models;
-using StockManager.Repositories;
 using StockManager.Services;
 
 namespace StockManager.ViewModels

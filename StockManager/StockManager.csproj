@@ -136,7 +136,7 @@
     <Compile Include="Utilities\IconDirectory.cs" />
     <Compile Include="ViewModels\HomePageViewModel.cs" />
     <Compile Include="ViewModels\IconBasePageViewModel.cs" />
-    <Compile Include="Models\MainMenuItem.cs" />
+    <Compile Include="ViewModels\MainMenuItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />

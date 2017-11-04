@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MaterialDesignThemes.Wpf;
 using StockManager.Commands;
-using StockManager.Models;
 using StockManager.Views;
-using System;
 
 namespace StockManager.ViewModels
 {
@@ -15,7 +14,7 @@ namespace StockManager.ViewModels
     {
         #region Fields
 
-        private List<MainMenuItem> mainMenuItems;
+        private List<MainMenuItemViewModel> mainMenuItems;
         private Page currentPage;
         private ICommand changePageCommand;
 
@@ -25,7 +24,7 @@ namespace StockManager.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public MainMenuItem[] MainMenuItems
+        public MainMenuItemViewModel[] MainMenuItems
         {
             get
             {
@@ -90,9 +89,9 @@ namespace StockManager.ViewModels
         public MainWindowViewModel()
         {
             //Создаём список элементов меню
-            mainMenuItems = new List<MainMenuItem>
+            mainMenuItems = new List<MainMenuItemViewModel>
             {
-                new MainMenuItem()
+                new MainMenuItemViewModel()
                 {
                     Name = "Home",
                     Icon = PackIconKind.Home,
@@ -101,7 +100,7 @@ namespace StockManager.ViewModels
                         DataContext = new HomePageViewModel()
                     })
                 },
-                new MainMenuItem()
+                new MainMenuItemViewModel()
                 {
                     Name = "Icons",
                     Icon = PackIconKind.FormatListBulleted,
@@ -110,7 +109,7 @@ namespace StockManager.ViewModels
                         DataContext = new IconBasePageViewModel()
                     })
                 },
-                new MainMenuItem()
+                new MainMenuItemViewModel()
                 {
                     Name = "Settings",
                     Icon = PackIconKind.Settings,

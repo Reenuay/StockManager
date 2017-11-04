@@ -3,12 +3,12 @@ using System.Windows;
 using System.Windows.Controls;
 using MaterialDesignThemes.Wpf;
 
-namespace StockManager.Models
+namespace StockManager.ViewModels
 {
     /// <summary>
     /// Являет собой элемент главного меню приложения.
     /// </summary>
-    class MainMenuItem
+    class MainMenuItemViewModel
     {
         public string Name
         {
