@@ -8,7 +8,7 @@ namespace StockManager.Repositories
     /// Предоставляет обощённые CRUD операции для взаимодействия с репозиторием
     /// </summary>
     /// <typeparam name="TEntity">Сущность в репозитории</typeparam>
-    interface IRepository<TEntity>
+    interface IRepository<TEntity> : IDisposable
     {
         /// <summary>
         /// Находит уникальную запись в репозитории по заданному условию

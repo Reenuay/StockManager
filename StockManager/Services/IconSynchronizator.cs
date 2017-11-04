@@ -55,20 +55,21 @@ namespace StockManager.Services
 
             if (HashGenerator.TryFileToMD5(e.FullPath, out string hash))
             {
-                var repo = new Repository<Icon>();
+                var repo = App.GetRepository<Icon>();
 
                 repo.ExecuteTransaction(() =>
                 {
                     // Помечаем все иконки с данным путём как удалённые
-                    repo.Select(i => i.FullPath == e.FullPath)
-                        .ForEach(i =>
+                    repo
+                    .Select(i => i.FullPath == e.FullPath)
+                    .ForEach(i =>
+                    {
+                        if (!i.IsDeleted)
                         {
-                            if (!i.IsDeleted)
-                            {
-                                i.IsDeleted = true;
-                                repo.Update(i);
-                            }
-                        });
+                            i.IsDeleted = true;
+                            repo.Update(i);
+                        }
+                    });
 
                     // Ищем иконку с полученной чек-суммой
                     Icon icon = repo.Find(i => i.CheckSum == hash);
@@ -103,20 +104,21 @@ namespace StockManager.Services
 
             FireSyncStarted(sender);
 
-            var repo = new Repository<Icon>();
+            var repo = App.GetRepository<Icon>();
 
             repo.ExecuteTransaction(() =>
             {
                 // Помечаем все иконки с данным путём как удалённые
-                repo.Select(i => i.FullPath == e.FullPath)
-                    .ForEach(i =>
+                repo
+                .Select(i => i.FullPath == e.FullPath)
+                .ForEach(i =>
+                {
+                    if (!i.IsDeleted)
                     {
-                        if (!i.IsDeleted)
-                        {
-                            i.IsDeleted = true;
-                            repo.Update(i);
-                        }
-                    });
+                        i.IsDeleted = true;
+                        repo.Update(i);
+                    }
+                });
             });
 
             FireSyncCompleted(sender);
@@ -129,7 +131,7 @@ namespace StockManager.Services
 
             FireSyncStarted(sender);
 
-            var repo = new Repository<Icon>();
+            var repo = App.GetRepository<Icon>();
 
             Icon icon = repo.Find(i =>
                 i.FullPath == e.OldFullPath
@@ -172,7 +174,7 @@ namespace StockManager.Services
         {
             FireSyncStarted(sender);
 
-            var repo = new Repository<Icon>();
+            var repo = App.GetRepository<Icon>();
 
             repo.ExecuteTransaction(() =>
             {

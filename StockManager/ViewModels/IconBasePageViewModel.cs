@@ -17,7 +17,6 @@ namespace StockManager.ViewModels
         #region Fields
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private Context context = new Context();
 
         #endregion
 
@@ -105,27 +104,32 @@ namespace StockManager.ViewModels
                     {
                         var keywordNames
                             = (KeywordsText ?? "").ToLower().Split(
-                                new string[]{ "\r\n", "\r", "\n" },
+                                new string[] { "\r\n", "\r", "\n" },
                                 StringSplitOptions.RemoveEmptyEntries
                             ).Distinct();
 
+                        Icon icon = App.GetRepository<Icon>().Find(
+                            i => i.Id == IconInfo.Icon.Id
+                        );
+
                         var newKeywordNames
                             = from keywordName
-                              in keywordNames
-                              where IconInfo.Keywords.All(k =>
+                                in keywordNames
+                              where icon.Keywords.All(k =>
                               {
                                   return k.Name != keywordName;
                               })
                               select keywordName;
 
-                        var repo = new Repository<Keyword>(context);
+                        var repo = App.GetRepository<Keyword>();
 
                         repo.ExecuteTransaction(() =>
                         {
                             foreach (var newKeywordName in newKeywordNames)
                             {
-                                var keyword
-                                    = repo.Find(k => k.Name == newKeywordName);
+                                var keyword = repo.Find(
+                                    k => k.Name == newKeywordName
+                                );
 
                                 if (keyword == null)
                                 {
@@ -157,7 +161,7 @@ namespace StockManager.ViewModels
 
         private void RefreshIconList()
         {
-            IconList = new Repository<Icon>(context).SelectAll();
+            IconList = App.GetRepository<Icon>().SelectAll();
         }
 
         #endregion

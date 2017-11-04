@@ -18,6 +18,7 @@ namespace StockManager.Repositories
 
         private Context context;
         private bool autoCommit = true;
+        private bool isDisposed = false;
 
         /// <summary>
         /// Находит уникальную запись в репозитории по заданному условию.
@@ -111,6 +112,15 @@ namespace StockManager.Repositories
                 {
                     logger.Fatal(ex);
                 }
+            }
+        }
+
+        public void Dispose()
+        {
+            if (!isDisposed)
+            {
+                isDisposed = true;
+                context.Dispose();
             }
         }
 

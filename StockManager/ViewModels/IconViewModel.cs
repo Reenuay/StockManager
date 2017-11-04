@@ -64,6 +64,7 @@ namespace StockManager.ViewModels
                 RelativePath = "...";
                 Date = "...";
                 Size = "...";
+                Preview = IconDirectory.PreviewImage;
             }
         }
     }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using StockManager.Models;
+using StockManager.Repositories;
 
 namespace StockManager
 {
@@ -13,5 +9,11 @@ namespace StockManager
     /// </summary>
     public partial class App : Application
     {
+        private static Context context = new Context();
+
+        internal static Repository<TEntity> GetRepository<TEntity>() where TEntity: Base
+        {
+            return new Repository<TEntity>(context);
+        }
     }
 }
