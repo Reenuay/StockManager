@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using NLog;
@@ -54,24 +55,24 @@ namespace StockManager.Services
 
             if (HashGenerator.TryFileToMD5(e.FullPath, out string hash))
             {
-                var iconRepo = new Repository<Icon>();
+                var repo = new Repository<Icon>();
 
-                iconRepo.ExecuteTransaction(() =>
+                repo.ExecuteTransaction(() =>
                 {
                     // Помечаем все иконки с данным путём как удалённые
-                    iconRepo.Select(i => i.FullPath == e.FullPath)
+                    repo.Select(i => i.FullPath == e.FullPath)
                         .ForEach(i =>
                         {
                             i.IsDeleted = true;
                         });
 
                     // Ищем иконку с полученной чек-суммой
-                    Icon icon = iconRepo.Find(i => i.CheckSum == hash);
+                    Icon icon = repo.Find(i => i.CheckSum == hash);
 
                     if (icon == null)
                     {
                         // Добавляем новую
-                        iconRepo.Insert(new Icon
+                        repo.Insert(new Icon
                         {
                             FullPath = e.FullPath,
                             CheckSum = hash,
@@ -83,7 +84,7 @@ namespace StockManager.Services
                         // Или обновляем уже существующую
                         icon.FullPath = e.FullPath;
                         icon.IsDeleted = false;
-                        iconRepo.Update(icon);
+                        repo.Update(icon);
                     }
                 });
             }
@@ -98,17 +99,17 @@ namespace StockManager.Services
 
             FireSyncStarted(sender);
 
-            var iconRepo = new Repository<Icon>();
+            var repo = new Repository<Icon>();
 
-            iconRepo.ExecuteTransaction(() =>
+            repo.ExecuteTransaction(() =>
             {
                 // Помечаем все иконки с данным путём как удалённые
-                iconRepo.Select(i => i.FullPath == e.FullPath)
-                .ForEach(i =>
-                {
-                    i.IsDeleted = true;
-                    iconRepo.Update(i);
-                });
+                repo.Select(i => i.FullPath == e.FullPath)
+                    .ForEach(i =>
+                    {
+                        i.IsDeleted = true;
+                        repo.Update(i);
+                    });
             });
 
             FireSyncCompleted(sender);
@@ -121,9 +122,9 @@ namespace StockManager.Services
 
             FireSyncStarted(sender);
 
-            var iconRepo = new Repository<Icon>();
+            var repo = new Repository<Icon>();
 
-            Icon icon = iconRepo.Find(i =>
+            Icon icon = repo.Find(i =>
                 i.FullPath == e.OldFullPath
                 && i.IsDeleted == false
             );
@@ -131,7 +132,7 @@ namespace StockManager.Services
             if (icon != null)
             {
                 icon.FullPath = e.FullPath;
-                iconRepo.Update(icon);
+                repo.Update(icon);
             }
             else
             {
@@ -164,44 +165,54 @@ namespace StockManager.Services
         {
             FireSyncStarted(sender);
 
-            var iconRepo = new Repository<Icon>();
+            var repo = new Repository<Icon>();
 
-            iconRepo.ExecuteTransaction(() =>
+            repo.ExecuteTransaction(() =>
             {
-                // Помечаем все иконки как удалённые.
-                iconRepo.SelectAll()
-                .ForEach(i =>
-                {
-                    i.IsDeleted = true;
-                    iconRepo.Update(i);
-                });
+                // Собираем все чек-суммы и пути в один словарь.
+                var pathOf = new Dictionary<string, string>();
 
-                // Пробегаемся по файлам в директории.
-                foreach (var iconFile in IconDirectory.GetIcons())
+                foreach (var fileName in IconDirectory.GetIcons())
                 {
-                    if (HashGenerator.TryFileToMD5(iconFile, out string hash))
+                    if (HashGenerator.TryFileToMD5(fileName, out string hash))
                     {
-                        // Ищем иконку с полученной чек-суммой.
-                        Icon icon = iconRepo.Find(i => i.CheckSum == hash);
+                        pathOf[hash] = fileName;
+                    }
+                }
 
-                        if (icon == null)
+                // Сверяем иконки в базе со словарём.
+                foreach (var icon in repo.SelectAll())
+                {
+                    if (pathOf.TryGetValue(icon.CheckSum, out string path))
+                    {
+                        if (icon.FullPath == path)
                         {
-                            // Добавляем новую.
-                            iconRepo.Insert(new Icon
-                            {
-                                FullPath = iconFile,
-                                CheckSum = hash,
-                                IsDeleted = false
-                            });
+                            pathOf.Remove(icon.CheckSum);
+                            icon.IsDeleted = false;
+                            repo.Update(icon);
                         }
                         else
                         {
-                            // Или обновляем уже существующую.
-                            icon.FullPath = iconFile;
-                            icon.IsDeleted = false;
-                            iconRepo.Update(icon);
+                            icon.FullPath = path;
+                            repo.Update(icon);
                         }
                     }
+                    else
+                    {
+                        icon.IsDeleted = true;
+                        repo.Update(icon);
+                    }
+                }
+
+                // Значения, которые остались в словаре - добавляем в базу.
+                foreach (KeyValuePair<string, string> entry in pathOf)
+                {
+                    repo.Insert(new Icon
+                    {
+                        FullPath = entry.Value,
+                        CheckSum = entry.Key,
+                        IsDeleted = false
+                    });
                 }
             });
         }
