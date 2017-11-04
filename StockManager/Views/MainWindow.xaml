@@ -22,20 +22,25 @@
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Text="Stock Manager"/>
             </Grid>
         </materialDesign:ColorZone>
-        <Menu x:Name="MainMenu" DockPanel.Dock="Top" IsMainMenu="True" ItemsSource="{Binding MainMenuItems}">
+        <Menu DockPanel.Dock="Top" IsMainMenu="True" ItemsSource="{Binding MainMenuItems}">
             <Menu.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="{Binding Icon}" VerticalAlignment="Center" Margin="3 0"/>
-                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="3 0"/>
+                        <materialDesign:PackIcon Kind="{Binding Icon}" VerticalAlignment="Center" Margin="3,0"/>
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="3,0"/>
                     </StackPanel>
                 </DataTemplate>
             </Menu.ItemTemplate>
             <Menu.ItemContainerStyle>
                 <Style TargetType="MenuItem" BasedOn="{StaticResource MaterialDesignMenuItem}">
                     <Setter Property="Command" Value="{Binding DataContext.ChangePageCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
-                    <Setter Property="CommandParameter" Value="{Binding Page}"/>
+                    <Setter Property="CommandParameter" Value="{Binding}"/>
                     <Setter Property="HorizontalAlignment" Value="{Binding HorizontalAlignment}"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsSelected}" Value="true">
+                            <Setter Property="Foreground" Value="{StaticResource SecondaryAccentBrush}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
             </Menu.ItemContainerStyle>
             <Menu.ItemsPanel>

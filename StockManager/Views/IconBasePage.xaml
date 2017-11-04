@@ -47,16 +47,21 @@
                             <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="List"/>
                         </StackPanel>
                         <StackPanel Margin="5,0" Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}"
-                                       Text="{Binding DataContext.IconList.Count, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
-                            <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text=" / "/>
-                            <TextBlock Foreground="{StaticResource SuccessBrush}"
-                                       Style="{StaticResource MaterialDesignSubheadingTextBlock}"
-                                       Text="{Binding DataContext.ExistingIconsCount, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
-                            <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text=" / "/>
-                            <TextBlock Foreground="{StaticResource ErrorBrush}"
-                                       Style="{StaticResource MaterialDesignSubheadingTextBlock}"
-                                       Text="{Binding DataContext.DeletedIconsCount, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
+                            <StackPanel Orientation="Horizontal" Margin="8,0">
+                                <materialDesign:PackIcon Kind="PlusCircleOutline" VerticalAlignment="Center" Margin="0,0,6,0" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                                <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}"
+                                           Text="{Binding DataContext.IconList.Count, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="8,0">
+                                <materialDesign:PackIcon Kind="CheckCircleOutline" VerticalAlignment="Center" Margin="0,0,6,0" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                                <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}"
+                                           Text="{Binding DataContext.ExistingIconsCount, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="8,0">
+                                <materialDesign:PackIcon Kind="CloseCircleOutline" VerticalAlignment="Center" Margin="0,0,6,0" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                                <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}"
+                                           Text="{Binding DataContext.DeletedIconsCount, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
@@ -220,8 +225,8 @@
                             ToolTip="MaterialDesignFlatButton"
                             Margin="5">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Plus" Height="32" Width="32" VerticalAlignment="Center"/>
-                            <TextBlock Text="Add" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}"/>
+                            <materialDesign:PackIcon Kind="Plus" Height="32" Width="32" VerticalAlignment="Center" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                            <TextBlock Text="Add" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Foreground="{StaticResource SecondaryAccentBrush}"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>

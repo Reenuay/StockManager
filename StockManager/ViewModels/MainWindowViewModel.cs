@@ -57,15 +57,20 @@ namespace StockManager.ViewModels
                     ?? new RelayCommand(
                         p =>
                         {
-                            if (p is Lazy<Page> page)
+                            if (p is MainMenuItemViewModel item)
                             {
-                                if (CurrentPage != page.Value)
+                                if (CurrentPage != item.Page.Value)
                                 {
-                                    CurrentPage = page.Value;
+                                    CurrentPage = item.Page.Value;
+                                    mainMenuItems.ForEach(i =>
+                                    {
+                                        i.IsSelected = false;
+                                    });
+                                    item.IsSelected = true;
                                 }
                             }
                         },
-                        p => p is Lazy<Page>
+                        p => p is MainMenuItemViewModel
                     );
 
                 return changePageCommand;
@@ -123,6 +128,7 @@ namespace StockManager.ViewModels
 
             //Переходим на домашнюю страницу
             CurrentPage = mainMenuItems[0].Page.Value;
+            mainMenuItems[0].IsSelected = true;
         }
     }
 }
