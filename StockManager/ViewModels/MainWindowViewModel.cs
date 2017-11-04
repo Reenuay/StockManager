@@ -103,7 +103,7 @@ namespace StockManager.ViewModels
                 },
                 new MainMenuItem()
                 {
-                    Name = "IconBase",
+                    Name = "Icons",
                     Icon = PackIconKind.FormatListBulleted,
                     Page = new Lazy<Page>(() => new IconBasePage()
                     {

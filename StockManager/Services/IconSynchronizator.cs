@@ -63,7 +63,11 @@ namespace StockManager.Services
                     repo.Select(i => i.FullPath == e.FullPath)
                         .ForEach(i =>
                         {
-                            i.IsDeleted = true;
+                            if (!i.IsDeleted)
+                            {
+                                i.IsDeleted = true;
+                                repo.Update(i);
+                            }
                         });
 
                     // Ищем иконку с полученной чек-суммой
@@ -107,8 +111,11 @@ namespace StockManager.Services
                 repo.Select(i => i.FullPath == e.FullPath)
                     .ForEach(i =>
                     {
-                        i.IsDeleted = true;
-                        repo.Update(i);
+                        if (!i.IsDeleted)
+                        {
+                            i.IsDeleted = true;
+                            repo.Update(i);
+                        }
                     });
             });
 
