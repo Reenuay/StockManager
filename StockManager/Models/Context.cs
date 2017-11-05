@@ -9,8 +9,8 @@ namespace StockManager.Models
     class Context : DbContextWithTriggers
     {
         public DbSet<Icon> Icons { get; set; }
-
         public DbSet<Keyword> Keywords { get; set; }
+        public DbSet<Theme> Themes { get; set; }
 
         public DbSet<LogEntry> LogEntries { get; set; }
     }

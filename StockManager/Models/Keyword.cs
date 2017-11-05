@@ -14,5 +14,8 @@ namespace StockManager.Models
 
         public virtual ObservableCollection<Icon> Icons { get; set; }
             = new ObservableCollection<Icon>();
+
+        public virtual ObservableCollection<Theme> Themes { get; set; }
+            = new ObservableCollection<Theme>();
     }
 }
