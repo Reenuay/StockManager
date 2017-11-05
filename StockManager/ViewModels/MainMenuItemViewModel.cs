@@ -2,15 +2,13 @@
 using System.Windows;
 using System.Windows.Controls;
 using MaterialDesignThemes.Wpf;
-using PropertyChanged;
 
 namespace StockManager.ViewModels
 {
     /// <summary>
     /// Являет собой элемент главного меню приложения.
     /// </summary>
-    [AddINotifyPropertyChangedInterface]
-    class MainMenuItemViewModel
+    class MainMenuItemViewModel : ViewModelBase
     {
         public string Name { get; set; }
         public PackIconKind Icon { get; set; }

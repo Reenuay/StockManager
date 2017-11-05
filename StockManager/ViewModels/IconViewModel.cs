@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Media.Imaging;
 using ImageMagick;
-using PropertyChanged;
 using StockManager.Models;
 using StockManager.Utilities;
 
@@ -12,8 +11,7 @@ namespace StockManager.ViewModels
     /// <summary>
     /// Представляет из себя обёртку для иконки.
     /// </summary>
-    [AddINotifyPropertyChangedInterface]
-    class IconViewModel
+    class IconViewModel : ViewModelBase
     {
         #region Properties
 

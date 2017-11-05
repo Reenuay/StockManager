@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StockManager.ViewModels
 {
-    class SettingsPageViewModel
+    class SettingsPageViewModel : ViewModelBase
     {
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,42 +9,22 @@ using StockManager.Views;
 
 namespace StockManager.ViewModels
 {
-    class MainWindowViewModel : INotifyPropertyChanged
+    class MainWindowViewModel : ViewModelBase
     {
         #region Fields
 
         private List<MainMenuItemViewModel> mainMenuItems;
-        private Page currentPage;
         private ICommand changePageCommand;
 
         #endregion
 
-        #region Properties / Events
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        #region Properties
 
         public MainMenuItemViewModel[] MainMenuItems
         {
             get
             {
                 return mainMenuItems.ToArray();
-            }
-        }
-
-        public Page CurrentPage
-        {
-            get
-            {
-                return currentPage;
-            }
-
-            set
-            {
-                if (currentPage != value)
-                {
-                    currentPage = value;
-                    NotifyPropertyChanged(nameof(CurrentPage));
-                }
             }
         }
 
@@ -77,17 +56,7 @@ namespace StockManager.ViewModels
             }
         }
 
-        #endregion
-
-        #region Methods
-
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(
-                this,
-                new PropertyChangedEventArgs(propertyName)
-            );
-        }
+        public Page CurrentPage { get; private set; }
 
         #endregion
 

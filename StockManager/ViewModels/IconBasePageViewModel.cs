@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using NLog;
-using PropertyChanged;
 using StockManager.Commands;
 using StockManager.Models;
 using StockManager.Services;
 
 namespace StockManager.ViewModels
 {
-    [AddINotifyPropertyChangedInterface]
-    class IconBasePageViewModel
+    class IconBasePageViewModel : ViewModelBase
     {
         #region Fields
 

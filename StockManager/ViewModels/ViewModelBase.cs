@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PropertyChanged;
 
 namespace StockManager.ViewModels
 {
-    class HomePageViewModel : ViewModelBase
+    [AddINotifyPropertyChangedInterface]
+    abstract class ViewModelBase
     {
     }
 }
