@@ -8,7 +8,7 @@ namespace StockManager.Models
     /// <summary>
     /// Являет собой запись файла иконки в базе.
     /// </summary>
-    public class Icon : Base
+    class Icon : Changeable
     {
         [Required, Index(IsUnique = true), MinLength(32), MaxLength(32)]
         public string CheckSum { get; set; }

@@ -7,7 +7,7 @@ namespace StockManager.Models
     /// <summary>
     /// Являет собой уникальное ключевове слово.
     /// </summary>
-    public class Keyword : Base
+    class Keyword : Creatable
     {
         [Required, Index(IsUnique = true)]
         public string Name { get; set; }

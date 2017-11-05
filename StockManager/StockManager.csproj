@@ -119,8 +119,15 @@
     <Compile Include="Migrations\201710232114022_LogEntry.Designer.cs">
       <DependentUpon>201710232114022_LogEntry.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711051209173_ReorganizeHierarchy.cs" />
+    <Compile Include="Migrations\201711051209173_ReorganizeHierarchy.Designer.cs">
+      <DependentUpon>201711051209173_ReorganizeHierarchy.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Base.cs" />
+    <Compile Include="Models\Changeable.cs" />
+    <Compile Include="Models\Creatable.cs" />
+    <Compile Include="Models\Identity.cs" />
     <Compile Include="Services\IconSynchronizatorEventArgs.cs" />
     <Compile Include="Services\IconSynchronizatorEventHandler.cs" />
     <Compile Include="Services\SyncState.cs" />
@@ -174,6 +181,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710232114022_LogEntry.resx">
       <DependentUpon>201710232114022_LogEntry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711051209173_ReorganizeHierarchy.resx">
+      <DependentUpon>201711051209173_ReorganizeHierarchy.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
