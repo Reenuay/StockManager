@@ -6,7 +6,7 @@ namespace StockManager.Models
     /// <summary>
     /// Сущность, имеющая дату последнего изменения.
     /// </summary>
-    abstract class Changeable : Creatable
+    public abstract class Changeable : Creatable
     {
         public DateTime? DateChanged { get; private set; }
 

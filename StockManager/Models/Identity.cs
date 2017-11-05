@@ -3,7 +3,7 @@
     /// <summary>
     /// Сущность, имеющая целочисленный уникальный идентификатор.
     /// </summary>
-    abstract class Identity : Base
+    public abstract class Identity : Base
     {
         public int Id { get; private set; }
     }

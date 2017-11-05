@@ -7,7 +7,7 @@ namespace StockManager.Models
     /// <summary>
     /// Являет собой тематику наборов иконок.
     /// </summary>
-    class Theme : Creatable
+    public class Theme : Creatable
     {
         [Required, Index(IsUnique = true)]
         public string Name { get; set; }

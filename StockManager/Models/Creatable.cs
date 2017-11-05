@@ -7,7 +7,7 @@ namespace StockManager.Models
     /// <summary>
     /// Сущность, имеющая дату создания.
     /// </summary>
-    abstract class Creatable : Identity
+    public abstract class Creatable : Identity
     {
         [Required]
         public DateTime DateCreated { get; private set; }
