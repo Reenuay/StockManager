@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NLog;
 using PropertyChanged;
 
 namespace StockManager.ViewModels
@@ -10,5 +6,15 @@ namespace StockManager.ViewModels
     [AddINotifyPropertyChangedInterface]
     abstract class ViewModelBase
     {
+        private Logger logger;
+
+        public Logger Logger
+        {
+            get
+            {
+                return logger
+                    ?? (logger = LogManager.GetLogger(GetType().Name));
+            }
+        }
     }
 }

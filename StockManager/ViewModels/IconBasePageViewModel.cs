@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
-using NLog;
 using StockManager.Commands;
 using StockManager.Models;
 using StockManager.Services;
@@ -11,12 +10,6 @@ namespace StockManager.ViewModels
 {
     class IconBasePageViewModel : ViewModelBase
     {
-        #region Fields
-
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-
-        #endregion
-
         #region Properties
 
         #region IconList
@@ -50,12 +43,6 @@ namespace StockManager.ViewModels
                 return new RelayCommand(
                     o =>
                     {
-                        if (IsSyncComplete)
-                        {
-                            IsSyncComplete = false;
-                            return;
-                        }
-
                         IconSynchronizator.RequestSynchronization();
                     }
                 );
@@ -63,7 +50,6 @@ namespace StockManager.ViewModels
         }
 
         public bool IsSyncing { get; private set; }
-        public bool IsSyncComplete { get; private set; }
 
         #endregion
 
@@ -152,6 +138,29 @@ namespace StockManager.ViewModels
 
         #endregion
 
+        #region RemoveKeywordCommand
+
+        public ICommand RemoveKeywordCommand
+        {
+            get
+            {
+                return new RelayCommand(
+                    o =>
+                    {
+                        if (o is Keyword k)
+                        {
+                            var repo = App.GetRepository<Icon>();
+                            IconInfo.Icon.Keywords.Remove(k);
+                            repo.Update(IconInfo.Icon);
+                        }
+                    },
+                    o => o is Keyword
+                );
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Methods
@@ -167,6 +176,7 @@ namespace StockManager.ViewModels
         {
             IconList = new List<Icon>();
             IconInfo = new IconViewModel();
+            IsSyncing = false;
 
             IconSynchronizator.SyncStateChanged += (sender, e) =>
             {
@@ -178,7 +188,6 @@ namespace StockManager.ViewModels
                 }
                 else
                 {
-                    IsSyncComplete = true;
                     RefreshIconList();
                 }
             };

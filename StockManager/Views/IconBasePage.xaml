@@ -5,6 +5,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+      xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
       xmlns:commands="clr-namespace:StockManager.Commands"
       mc:Ignorable="d"
       d:DesignHeight="455" d:DesignWidth="845"
@@ -34,7 +35,7 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <GroupBox Grid.RowSpan="2" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
+        <GroupBox Grid.RowSpan="2" Style="{DynamicResource MaterialDesignGroupBox}" Margin="5" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="0">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <Grid>
@@ -47,17 +48,17 @@
                             <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="List"/>
                         </StackPanel>
                         <StackPanel Margin="5,0" Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <StackPanel Orientation="Horizontal" Margin="8,0">
+                            <StackPanel Orientation="Horizontal" Margin="8,0" ToolTip="Total count" Cursor="Hand">
                                 <materialDesign:PackIcon Kind="PlusCircleOutline" VerticalAlignment="Center" Margin="0,0,6,0" Foreground="{StaticResource SecondaryAccentBrush}"/>
                                 <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}"
                                            Text="{Binding DataContext.IconList.Count, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="8,0">
+                            <StackPanel Orientation="Horizontal" Margin="8,0" ToolTip="Existing count" Cursor="Hand">
                                 <materialDesign:PackIcon Kind="CheckCircleOutline" VerticalAlignment="Center" Margin="0,0,6,0" Foreground="{StaticResource SecondaryAccentBrush}"/>
                                 <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}"
                                            Text="{Binding DataContext.ExistingIconsCount, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="8,0">
+                            <StackPanel Orientation="Horizontal" Margin="8,0" ToolTip="Deleted count" Cursor="Hand">
                                 <materialDesign:PackIcon Kind="CloseCircleOutline" VerticalAlignment="Center" Margin="0,0,6,0" Foreground="{StaticResource SecondaryAccentBrush}"/>
                                 <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}"
                                            Text="{Binding DataContext.DeletedIconsCount, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
@@ -72,38 +73,63 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                    <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="5" Height="36" Width="36"
-                            Command="{Binding SyncCommand}"
-                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsSyncing}"
-                            materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding IsSyncing}"
-                            materialDesign:ButtonProgressAssist.Value="0">
-                        <materialDesign:PackIcon Width="24" Height="24">
-                            <materialDesign:PackIcon.Style>
-                                <Style TargetType="materialDesign:PackIcon">
-                                    <Setter Property="Kind" Value="Sync"/>
+                <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="5" Command="{Binding SyncCommand}" MinHeight="40">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsSyncComplete}" Value="True">
-                                            <Setter Property="Kind" Value="Check" />
+                                        <DataTrigger Binding="{Binding IsSyncing}" Value="True">
                                             <DataTrigger.EnterActions>
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.8" />
-                                                    </Storyboard>
-                                                </BeginStoryboard>
+                                                <BeginStoryboard Storyboard="{StaticResource FadeOutStory}"/>
                                             </DataTrigger.EnterActions>
+                                            <DataTrigger.ExitActions>
+                                                <BeginStoryboard Storyboard="{StaticResource WaitAndFadeInStory}"/>
+                                            </DataTrigger.ExitActions>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
-                            </materialDesign:PackIcon.Style>
-                        </materialDesign:PackIcon>
-                    </Button>
-                    <TextBlock Text="Refresh" VerticalAlignment="Center" Margin="5,0,0,0"/>
-                </StackPanel>
+                            </StackPanel.Style>
+                            <materialDesign:PackIcon Kind="Sync"
+                                                     Foreground="{StaticResource SecondaryAccentBrush}"
+                                                     Width="32"
+                                                     Height="32"
+                                                     VerticalAlignment="Center"/>
+                            <TextBlock Text="Refresh"
+                                       VerticalAlignment="Center"
+                                       Foreground="{StaticResource SecondaryAccentBrush}"
+                                       Style="{StaticResource MaterialDesignSubheadingTextBlock}"/>
+                        </StackPanel>
+                        <ProgressBar Value="0"
+                                     IsIndeterminate="True"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Width="32"
+                                     Height="32"
+                                     Foreground="{StaticResource SecondaryAccentBrush}"
+                                     Visibility="Collapsed">
+                            <ProgressBar.Style>
+                                <Style TargetType="ProgressBar" BasedOn="{StaticResource MaterialDesignCircularProgressBar}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSyncing}" Value="True">
+                                            <DataTrigger.EnterActions>
+                                                <BeginStoryboard Storyboard="{StaticResource WaitAndGrowOutStory}"/>
+                                            </DataTrigger.EnterActions>
+                                            <DataTrigger.ExitActions>
+                                                <BeginStoryboard Storyboard="{StaticResource ShrinkInStory}"/>
+                                            </DataTrigger.ExitActions>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ProgressBar.Style>
+                        </ProgressBar>
+                    </StackPanel>
+                </Button>
                 <Border Margin="5" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}" Grid.Row="1"/>
                 <ListBox ItemsSource="{Binding Source={StaticResource SortedIconList}}"
-                         IsSynchronizedWithCurrentItem="True" Margin="0,5,0,0"
-                         IsEnabled="{Binding Path=IsSyncing, Converter={StaticResource InverseBooleanConverter}}"
+                         IsSynchronizedWithCurrentItem="True"
+                         Margin="5"
+                         IsEnabled="{c:Binding Path=!IsSyncing}"
                          Grid.Row="2">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
@@ -116,18 +142,33 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding Name}"/>
-                                <materialDesign:PackIcon HorizontalAlignment="Right">
+                                <materialDesign:PackIcon HorizontalAlignment="Right"
+                                                         Kind="KeyRemove"
+                                                         Cursor="Hand"
+                                                         ToolTip="No keywords"
+                                                         Visibility="{c:Binding 'Keywords.Count==0'}"
+                                                         Grid.Column="1"
+                                                         Margin="5,0"
+                                                         Foreground="{StaticResource ErrorBrush}"/>
+                                <materialDesign:PackIcon HorizontalAlignment="Right" Cursor="Hand" Grid.Column="2" Margin="5,0">
                                     <materialDesign:PackIcon.Style>
                                         <Style TargetType="materialDesign:PackIcon">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsDeleted}" Value="false">
                                                     <Setter Property="Kind" Value="CheckCircleOutline"/>
                                                     <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                                                    <Setter Property="ToolTip" Value="Existing"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding IsDeleted}" Value="true">
                                                     <Setter Property="Kind" Value="CloseCircleOutline" />
                                                     <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
+                                                    <Setter Property="ToolTip" Value="Deleted"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -139,7 +180,7 @@
                 </ListBox>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Column="1" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
+        <GroupBox Grid.Column="1" Style="{DynamicResource MaterialDesignGroupBox}" Margin="5" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="0">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -152,7 +193,7 @@
                 <Image Source="{Binding IconInfo.Preview}"/>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Column="1" Grid.Row="1" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
+        <GroupBox Grid.Column="1" Grid.Row="1" Style="{DynamicResource MaterialDesignGroupBox}" Margin="5" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="0" x:Name="InfoCard">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -185,7 +226,7 @@
                 <Border Margin="0,10,0,0" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}"/>
             </StackPanel>
         </GroupBox>
-        <GroupBox Grid.Column="2" Grid.RowSpan="2" Style="{DynamicResource MaterialDesignCardGroupBox}" Margin="5">
+        <GroupBox Grid.Column="2" Style="{DynamicResource MaterialDesignGroupBox}" Margin="5" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="0">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <Grid>
@@ -207,33 +248,12 @@
             </GroupBox.HeaderTemplate>
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <StackPanel IsEnabled="{Binding Path=IconInfo.Icon, Converter={StaticResource ObjectToBooleanConverter}}">
-                    <TextBox Grid.Row="1"
-                             MaxHeight="100"
-                             Margin="5"
-                             Style="{StaticResource MaterialDesignTextAreaTextBox}"
-                             AcceptsReturn="True"
-                             TextWrapping="Wrap"
-                             VerticalScrollBarVisibility="Auto"
-                             materialDesign:HintAssist.Hint="Type a few keywords each one on a new line"
-                             Text="{Binding KeywordsText}"/>
-                    <Button Style="{StaticResource MaterialDesignFlatButton}"
-                            Command="{Binding AddKeywordsCommand}"
-                            ToolTip="MaterialDesignFlatButton"
-                            Margin="5">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Plus" Height="32" Width="32" VerticalAlignment="Center" Foreground="{StaticResource SecondaryAccentBrush}"/>
-                            <TextBlock Text="Add" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Foreground="{StaticResource SecondaryAccentBrush}"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-                <ListBox Grid.Row="1"
-                         ItemsSource="{Binding IconInfo.Keywords}"
-                         IsSynchronizedWithCurrentItem="True" Margin="0,5,0,0"
-                         IsEnabled="{Binding Path=IconInfo.Keywords, Converter={StaticResource ObjectToBooleanConverter}}">
+                <ListBox ItemsSource="{Binding IconInfo.Keywords}"
+                         IsSynchronizedWithCurrentItem="True"
+                         Margin="5"
+                         IsEnabled="{c:Binding 'IconInfo.Keywords!=null'}">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -243,10 +263,66 @@
                         <DataTemplate>
                             <Grid HorizontalAlignment="Stretch">
                                 <TextBlock Text="{Binding Name}"/>
+                                <materialDesign:PackIcon Kind="CloseCircleOutline"
+                                                         Foreground="{StaticResource ErrorBrush}"
+                                                         HorizontalAlignment="Right"
+                                                         VerticalAlignment="Center"
+                                                         ToolTip="Remove"
+                                                         Cursor="Hand">
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="commands:CommandBehavior.Command" Value="{Binding DataContext.RemoveKeywordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
+                                            <Setter Property="commands:CommandBehavior.CommandParameter" Value="{Binding }"/>
+                                            <Setter Property="commands:CommandBehavior.RoutedEventName" Value="PreviewMouseLeftButtonDown"/>
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                </materialDesign:PackIcon>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="2"
+                  Grid.Row="1"
+                  Style="{DynamicResource MaterialDesignGroupBox}"
+                  Margin="5"
+                  materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                  BorderThickness="0"
+                  MaxHeight="{Binding ElementName=InfoCard, Path=ActualHeight}">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="PlusCircle" Height="32" Width="32" VerticalAlignment="Center"/>
+                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Add Keywords"/>
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <Grid IsEnabled="{c:Binding 'IconInfo.Icon!=null'}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock TextWrapping="Wrap"
+                           Text="Be brief and concrete. Write each keyword on a new line."
+                           Foreground="{StaticResource SecondaryAccentBrush}"
+                           Margin="5"/>
+                <TextBox Grid.Row="1"
+                         Margin="5"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Auto"
+                         Text="{Binding KeywordsText}"/>
+                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                        Command="{Binding AddKeywordsCommand}"
+                        Margin="5"
+                        Grid.Row="2">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Plus" Height="32" Width="32" VerticalAlignment="Center" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                        <TextBlock Text="Add" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                    </StackPanel>
+                </Button>
             </Grid>
         </GroupBox>
     </Grid>
