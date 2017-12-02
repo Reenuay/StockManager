@@ -9,6 +9,9 @@ using StockManager.Views;
 
 namespace StockManager.ViewModels
 {
+    /// <summary>
+    /// Реализует логику взаимодействия вида окна и промежуточных данных.
+    /// </summary>
     class MainWindowViewModel : ViewModelBase
     {
         #region Fields
@@ -77,10 +80,19 @@ namespace StockManager.ViewModels
                 new MainMenuItemViewModel()
                 {
                     Name = "Icons",
-                    Icon = PackIconKind.FormatListBulleted,
+                    Icon = PackIconKind.ImageMultiple,
                     Page = new Lazy<Page>(() => new IconBasePage()
                     {
                         DataContext = new IconBasePageViewModel()
+                    })
+                },
+                new MainMenuItemViewModel()
+                {
+                    Name = "Themes",
+                    Icon = PackIconKind.Animation,
+                    Page = new Lazy<Page>(() => new ThemesPage()
+                    {
+                        DataContext = new ThemesPageViewModel()
                     })
                 },
                 new MainMenuItemViewModel()

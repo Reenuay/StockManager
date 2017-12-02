@@ -25,6 +25,28 @@
         </ObjectAnimationUsingKeyFrames>
     </Storyboard>
 
+    <Storyboard x:Key="GrowOutStory">
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Width">
+            <EasingDoubleKeyFrame Value="0" KeyTime="0"/>
+            <EasingDoubleKeyFrame Value="32" KeyTime="0:0:0.8">
+                <EasingDoubleKeyFrame.EasingFunction>
+                    <CircleEase EasingMode="EaseOut" />
+                </EasingDoubleKeyFrame.EasingFunction>
+            </EasingDoubleKeyFrame>
+        </DoubleAnimationUsingKeyFrames>
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Height">
+            <EasingDoubleKeyFrame Value="0" KeyTime="0"/>
+            <EasingDoubleKeyFrame Value="32" KeyTime="0:0:0.8">
+                <EasingDoubleKeyFrame.EasingFunction>
+                    <CircleEase EasingMode="EaseOut" />
+                </EasingDoubleKeyFrame.EasingFunction>
+            </EasingDoubleKeyFrame>
+        </DoubleAnimationUsingKeyFrames>
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+            <DiscreteObjectKeyFrame Value="{x:Static Visibility.Visible}" KeyTime="0"/>
+        </ObjectAnimationUsingKeyFrames>
+    </Storyboard>
+
     <Storyboard x:Key="ShrinkInStory">
         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Width">
             <EasingDoubleKeyFrame Value="32" KeyTime="0"/>
@@ -59,6 +81,20 @@
         </DoubleAnimationUsingKeyFrames>
         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
             <DiscreteObjectKeyFrame Value="{x:Static Visibility.Visible}" KeyTime="0:0:0.8"/>
+        </ObjectAnimationUsingKeyFrames>
+    </Storyboard>
+
+    <Storyboard x:Key="FadeInStory">
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+            <EasingDoubleKeyFrame Value="0" KeyTime="0"/>
+            <EasingDoubleKeyFrame Value="1" KeyTime="0:0:0.4">
+                <EasingDoubleKeyFrame.EasingFunction>
+                    <CircleEase EasingMode="EaseOut"/>
+                </EasingDoubleKeyFrame.EasingFunction>
+            </EasingDoubleKeyFrame>
+        </DoubleAnimationUsingKeyFrames>
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+            <DiscreteObjectKeyFrame Value="{x:Static Visibility.Visible}" KeyTime="0"/>
         </ObjectAnimationUsingKeyFrames>
     </Storyboard>
 

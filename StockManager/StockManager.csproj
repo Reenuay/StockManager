@@ -140,6 +140,10 @@
     <Compile Include="Services\IconSynchronizatorEventArgs.cs" />
     <Compile Include="Services\IconSynchronizatorEventHandler.cs" />
     <Compile Include="Services\SyncState.cs" />
+    <Compile Include="ValidationRules\BindingProxy.cs" />
+    <Compile Include="ValidationRules\ExistsInCollectionValidationRule.cs" />
+    <Compile Include="ValidationRules\NotEmptyValidationRule.cs" />
+    <Compile Include="ValidationRules\Wrapper.cs" />
     <Compile Include="ViewModels\IconViewModel.cs" />
     <Compile Include="Models\Keyword.cs" />
     <Compile Include="Models\Context.cs" />
@@ -156,6 +160,7 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
+    <Compile Include="ViewModels\ThemesPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
@@ -168,6 +173,9 @@
     </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ThemesPage.xaml.cs">
+      <DependentUpon>ThemesPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -236,6 +244,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ThemesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

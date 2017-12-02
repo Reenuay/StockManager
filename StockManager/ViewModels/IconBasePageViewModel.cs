@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using StockManager.Commands;
@@ -14,7 +14,7 @@ namespace StockManager.ViewModels
 
         #region IconList
 
-        public List<Icon> IconList { get; private set; }
+        public ObservableCollection<Icon> IconList { get; private set; }
 
         public int ExistingIconsCount
         {
@@ -97,7 +97,7 @@ namespace StockManager.ViewModels
 
                         var newKeywordNames
                             = from keywordName
-                                in keywordNames
+                              in keywordNames
                               where icon.Keywords.All(k =>
                               {
                                   return k.Name != keywordName;
@@ -167,14 +167,16 @@ namespace StockManager.ViewModels
 
         private void RefreshIconList()
         {
-            IconList = App.GetRepository<Icon>().SelectAll();
+            IconList = new ObservableCollection<Icon>(
+                App.GetRepository<Icon>().SelectAll()
+            );
         }
 
         #endregion
 
         public IconBasePageViewModel()
         {
-            IconList = new List<Icon>();
+            IconList = new ObservableCollection<Icon>();
             IconInfo = new IconViewModel();
             IsSyncing = false;
 
