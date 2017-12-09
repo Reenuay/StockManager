@@ -131,16 +131,27 @@
     <Compile Include="Migrations\201711051300475_Theme.Designer.cs">
       <DependentUpon>201711051300475_Theme.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712070954032_Complete.cs" />
+    <Compile Include="Migrations\201712070954032_Complete.Designer.cs">
+      <DependentUpon>201712070954032_Complete.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Background.cs" />
     <Compile Include="Models\Base.cs" />
+    <Compile Include="Models\Cell.cs" />
     <Compile Include="Models\Changeable.cs" />
     <Compile Include="Models\Creatable.cs" />
+    <Compile Include="Models\Composition.cs" />
+    <Compile Include="Models\Mapping.cs" />
     <Compile Include="Models\Identity.cs" />
+    <Compile Include="Models\Set.cs" />
+    <Compile Include="Models\Template.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Services\IconSynchronizatorEventArgs.cs" />
     <Compile Include="Services\IconSynchronizatorEventHandler.cs" />
     <Compile Include="Services\SyncState.cs" />
     <Compile Include="ValidationRules\BindingProxy.cs" />
+    <Compile Include="ValidationRules\ExistingKeywordValidationRule.cs" />
     <Compile Include="ValidationRules\ExistsInCollectionValidationRule.cs" />
     <Compile Include="ValidationRules\NotEmptyValidationRule.cs" />
     <Compile Include="ValidationRules\Wrapper.cs" />
@@ -161,6 +172,7 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="ViewModels\ThemesPageViewModel.cs" />
+    <Compile Include="ViewModels\SelectableListBoxItem.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
@@ -204,6 +216,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711051300475_Theme.resx">
       <DependentUpon>201711051300475_Theme.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712070954032_Complete.resx">
+      <DependentUpon>201712070954032_Complete.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

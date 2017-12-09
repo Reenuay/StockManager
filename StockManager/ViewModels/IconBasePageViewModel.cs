@@ -76,65 +76,59 @@ namespace StockManager.ViewModels
 
         #endregion
 
-        #region AddKeywordsCommand
+        #region AddKeywordCommand
 
-        public ICommand AddKeywordsCommand
+        public ICommand AddKeywordCommand
         {
             get
             {
                 return new RelayCommand(
                     o =>
                     {
-                        var keywordNames
-                            = (KeywordsText ?? "").ToLower().Split(
-                                new string[] { "\r\n", "\r", "\n" },
-                                StringSplitOptions.RemoveEmptyEntries
-                            ).Distinct();
-
-                        Icon icon = App.GetRepository<Icon>().Find(
-                            i => i.Id == IconInfo.Icon.Id
-                        );
-
-                        var newKeywordNames
-                            = from keywordName
-                              in keywordNames
-                              where icon.Keywords.All(k =>
-                              {
-                                  return k.Name != keywordName;
-                              })
-                              select keywordName;
-
-                        var repo = App.GetRepository<Keyword>();
-
-                        repo.ExecuteTransaction(() =>
+                        if (!string.IsNullOrEmpty(NewKeywordName))
                         {
-                            foreach (var newKeywordName in newKeywordNames)
+                            if (IconInfo.Icon.Keywords.All(k => k.Name != NewKeywordName))
                             {
-                                var keyword = repo.Find(
-                                    k => k.Name == newKeywordName
-                                );
+                                var repo = App.GetRepository<Keyword>();
 
-                                if (keyword == null)
+                                Keyword keyword = repo.Find(k => k.Name == NewKeywordName);
+
+                                repo.ExecuteTransaction(() =>
                                 {
-                                    keyword = new Keyword
+                                    if (keyword == null)
                                     {
-                                        Name = newKeywordName
-                                    };
+                                        keyword = new Keyword
+                                        {
+                                            Name = NewKeywordName
+                                        };
 
-                                    repo.Insert(keyword);
-                                }
+                                        repo.Insert(keyword);
+                                    }
+                                    else
+                                    {
+                                        repo.Update(keyword);
+                                    }
 
-                                keyword.Icons.Add(IconInfo.Icon);
+                                    keyword.Icons.Add(IconInfo.Icon);
+
+                                    foreach (var theme in ThemesList.Where(t => t.IsSelected).Select(t => t.Item))
+                                    {
+                                        if (!theme.Keywords.Contains(keyword))
+                                        {
+                                            theme.Keywords.Add(keyword);
+                                        }
+                                    }
+                                });
                             }
-                        });
+                        }
 
-                        KeywordsText = "";
+                        NewKeywordName = "";
                     }
                 );
             }
         }
 
-        public string KeywordsText { get; set; }
+        public string NewKeywordName { get; set; }
 
         #endregion
 
@@ -160,6 +154,12 @@ namespace StockManager.ViewModels
         }
 
         #endregion
+
+        public ObservableCollection<SelectableListBoxItem<Theme>> ThemesList
+        {
+            get;
+            set;
+        }
 
         #endregion
 
@@ -193,6 +193,12 @@ namespace StockManager.ViewModels
                     RefreshIconList();
                 }
             };
+
+            ThemesList = new ObservableCollection<SelectableListBoxItem<Theme>>(
+                App.GetRepository<Theme>().SelectAll().Select(
+                    t => new SelectableListBoxItem<Theme>(t)
+                )
+            );
         }
     }
 }

@@ -1,14 +1,13 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 
 namespace StockManager.Models
 {
     /// <summary>
-    /// Являет собой запись файла иконки в базе.
+    /// Фон для набора иконок.
     /// </summary>
-    public class Icon : Changeable
+    public class Background : Changeable
     {
         [Required, Index(IsUnique = true), MinLength(32), MaxLength(32)]
         public string CheckSum { get; set; }
@@ -17,12 +16,6 @@ namespace StockManager.Models
         public string FullPath { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        public virtual ObservableCollection<Keyword> Keywords { get; set; }
-            = new ObservableCollection<Keyword>();
-
-        public virtual ObservableCollection<Set> Sets { get; set; }
-            = new ObservableCollection<Set>();
 
         [NotMapped]
         public string Name

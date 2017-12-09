@@ -7,6 +7,7 @@
       xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
       xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
       xmlns:commands="clr-namespace:StockManager.Commands"
+      xmlns:vr="clr-namespace:StockManager.ValidationRules"
       mc:Ignorable="d"
       d:DesignHeight="455" d:DesignWidth="845"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -23,6 +24,7 @@
                 <scm:SortDescription PropertyName="Name"/>
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
+        <vr:BindingProxy x:Key="proxy" Data="{Binding}"/>
     </Page.Resources>
 
     <Grid>
@@ -249,38 +251,44 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <ListBox ItemsSource="{Binding IconInfo.Keywords}"
-                         IsSynchronizedWithCurrentItem="True"
-                         Margin="5"
-                         IsEnabled="{c:Binding 'IconInfo.Keywords!=null'}">
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid HorizontalAlignment="Stretch">
-                                <TextBlock Text="{Binding Name}"/>
-                                <materialDesign:PackIcon Kind="CloseCircleOutline"
-                                                         Foreground="{StaticResource ErrorBrush}"
-                                                         HorizontalAlignment="Right"
-                                                         VerticalAlignment="Center"
-                                                         ToolTip="Remove"
-                                                         Cursor="Hand">
-                                    <materialDesign:PackIcon.Style>
-                                        <Style TargetType="materialDesign:PackIcon">
-                                            <Setter Property="commands:CommandBehavior.Command" Value="{Binding DataContext.RemoveKeywordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
-                                            <Setter Property="commands:CommandBehavior.CommandParameter" Value="{Binding }"/>
-                                            <Setter Property="commands:CommandBehavior.RoutedEventName" Value="PreviewMouseLeftButtonDown"/>
-                                        </Style>
-                                    </materialDesign:PackIcon.Style>
-                                </materialDesign:PackIcon>
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="Auto">
+                    <ItemsControl ItemsSource="{Binding IconInfo.Keywords}" Margin="10">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <materialDesign:Chip Content="{Binding Path=Name}"
+                                                     IsDeletable="True"
+                                                     Margin="5"
+                                                     commands:CommandBehavior.Command="{Binding DataContext.RemoveKeywordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"
+                                                     commands:CommandBehavior.CommandParameter="{Binding }"
+                                                     commands:CommandBehavior.RoutedEventName="DeleteClick"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel HorizontalAlignment="Stretch"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+                <TextBox Grid.Row="1" Margin="5,5,5,20" IsEnabled="{c:Binding Path='IconInfo.Icon!=null'}">
+                    <TextBox.Text>
+                        <Binding Path="NewKeywordName" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <vr:NotEmptyValidationRule Message="Keyword name can not be empty."/>
+                                <vr:ExistingKeywordValidationRule Message="This keyword is already in use.">
+                                    <vr:ExistingKeywordValidationRule.KeywordsCollection>
+                                        <vr:Wrapper Value="{Binding Data.IconInfo.Keywords, Source={StaticResource proxy}}"/>
+                                    </vr:ExistingKeywordValidationRule.KeywordsCollection>
+                                </vr:ExistingKeywordValidationRule>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding AddKeywordCommand}" Key="Return"/>
+                    </TextBox.InputBindings>
+                </TextBox>
             </Grid>
         </GroupBox>
         <GroupBox Grid.Column="2"
@@ -293,36 +301,42 @@
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="PlusCircle" Height="32" Width="32" VerticalAlignment="Center"/>
-                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Add Keywords"/>
+                        <materialDesign:PackIcon Kind="Animation" Height="32" Width="32" VerticalAlignment="Center"/>
+                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Themes"/>
                     </StackPanel>
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
-            <Grid IsEnabled="{c:Binding 'IconInfo.Icon!=null'}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <TextBlock TextWrapping="Wrap"
-                           Text="Be brief and concrete. Write each keyword on a new line."
-                           Foreground="{StaticResource SecondaryAccentBrush}"
-                           Margin="5"/>
-                <TextBox Grid.Row="1"
-                         Margin="5"
-                         AcceptsReturn="True"
-                         TextWrapping="Wrap"
-                         VerticalScrollBarVisibility="Auto"
-                         Text="{Binding KeywordsText}"/>
-                <Button Style="{StaticResource MaterialDesignFlatButton}"
-                        Command="{Binding AddKeywordsCommand}"
-                        Margin="5"
-                        Grid.Row="2">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Plus" Height="32" Width="32" VerticalAlignment="Center" Foreground="{StaticResource SecondaryAccentBrush}"/>
-                        <TextBlock Text="Add" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Foreground="{StaticResource SecondaryAccentBrush}"/>
-                    </StackPanel>
-                </Button>
+            <Grid>
+                <ListBox ItemsSource="{Binding ThemesList}"
+                         IsSynchronizedWithCurrentItem="True"
+                         SelectionMode="Multiple"
+                         SelectedItem="{x:Null}"
+                         Margin="5">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Item.Name}"/>
+                                <materialDesign:PackIcon HorizontalAlignment="Right"
+                                                         Kind="Check"
+                                                         Cursor="Hand"
+                                                         ToolTip="Checked"
+                                                         Visibility="{c:Binding IsSelected}"
+                                                         Margin="5,0"
+                                                         Grid.Column="1"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Grid>
         </GroupBox>
     </Grid>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using EntityFramework.Triggers;
 
 namespace StockManager.Models
@@ -9,7 +8,6 @@ namespace StockManager.Models
     /// </summary>
     public abstract class Creatable : Identity
     {
-        [Required]
         public DateTime DateCreated { get; private set; }
 
         static Creatable()
