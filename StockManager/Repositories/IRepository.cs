@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 
 namespace StockManager.Repositories
@@ -20,12 +20,12 @@ namespace StockManager.Repositories
         /// Находит записи в репозитории, удовлетворяющие заданному условию
         /// </summary>
         /// <param name="predicate">Условие поиска</param>
-        List<TEntity> Select(Expression<Func<TEntity, bool>> predicate);
+        ObservableCollection<TEntity> Select(Expression<Func<TEntity, bool>> predicate);
 
         /// <summary>
         /// Возвращает все записи из репозитория
         /// </summary>
-        List<TEntity> SelectAll();
+        ObservableCollection<TEntity> SelectAll();
 
         /// <summary>
         /// Добавляем новый элемент в репозиторий

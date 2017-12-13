@@ -6,20 +6,20 @@ using System.Windows.Controls;
 
 namespace StockManager.ValidationRules
 {
-    class ExistingKeywordValidationRule : ValidationRule
+    class UniqueTemplateNameValidationRule : ValidationRule
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            var collection = KeywordsCollection.Value as IEnumerable<Keyword>;
+            var collection = TemplatesCollection.Value as IEnumerable<Template>;
             var newName = value as string;
 
-            return collection.Any(k => k.Name == newName.ToLower())
+            return collection.Any(t => t.Name == newName)
                 ? new ValidationResult(false, Message)
                 : ValidationResult.ValidResult;
         }
 
-        public Wrapper KeywordsCollection { get; set; }
+        public Wrapper TemplatesCollection { get; set; }
 
-        public string Message { get; set; } = "Keyword already existing.";
+        public string Message { get; set; } = "Template with this name is already existing.";
     }
 }

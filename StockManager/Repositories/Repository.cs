@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using StockManager.Models;
 using NLog;
+using StockManager.Models;
 
 namespace StockManager.Repositories
 {
@@ -33,17 +33,21 @@ namespace StockManager.Repositories
         /// Находит записи в репозитории, удовлетворяющие заданному условию.
         /// </summary>
         /// <param name="predicate">Условие поиска.</param>
-        public List<TEntity> Select(Expression<Func<TEntity, bool>> predicate)
+        public ObservableCollection<TEntity> Select(Expression<Func<TEntity, bool>> predicate)
         {
-            return context.Set<TEntity>().Where(predicate).ToList();
+            return new ObservableCollection<TEntity>(
+                context.Set<TEntity>().Where(predicate)
+            );
         }
 
         /// <summary>
         /// Возвращает все записи из репозитория.
         /// </summary>
-        public List<TEntity> SelectAll()
+        public ObservableCollection<TEntity> SelectAll()
         {
-            return context.Set<TEntity>().ToList();
+            return new ObservableCollection<TEntity>(
+                context.Set<TEntity>()
+            );
         }
 
         /// <summary>

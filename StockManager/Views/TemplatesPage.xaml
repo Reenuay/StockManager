@@ -1,0 +1,301 @@
+﻿<Page x:Class="StockManager.Views.TemplatesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+      xmlns:lc="clr-namespace:StockManager.Controls"
+      xmlns:commands="clr-namespace:StockManager.Commands"
+      xmlns:vr="clr-namespace:StockManager.ValidationRules"
+      mc:Ignorable="d"
+      d:DesignHeight="455" d:DesignWidth="845"
+      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+      TextElement.FontWeight="Regular"
+      TextElement.FontSize="13"
+      TextOptions.TextFormattingMode="Ideal"
+      TextOptions.TextRenderingMode="Auto"
+      FontFamily="{DynamicResource MaterialDesignFont}">
+    <Page.Resources>
+        <vr:BindingProxy x:Key="proxy" Data="{Binding}"/>
+    </Page.Resources>
+    <Grid>
+        <Grid Visibility="{c:Binding Path='IsListView'}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Style="{DynamicResource MaterialDesignGroupBox}"
+                  Margin="5"
+                  materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                  BorderThickness="0">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FormatListBulleted" Height="32" Width="32" VerticalAlignment="Center"/>
+                            <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="List"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ListBox Grid.Column="1" Grid.RowSpan="2" ItemsSource="{Binding Templates}" IsSynchronizedWithCurrentItem="True" Margin="5">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="commands:CommandBehavior.Command" Value="{Binding DataContext.SelectTemplateCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
+                                <Setter Property="commands:CommandBehavior.CommandParameter" Value="{Binding }"/>
+                                <Setter Property="commands:CommandBehavior.RoutedEventName" Value="PreviewMouseLeftButtonDown"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid HorizontalAlignment="Stretch">
+                                    <TextBlock Text="{Binding Name}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Border Margin="5" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}" Grid.Row="1"/>
+                    <Button Grid.Row="2"
+                            Command="{Binding ChangeViewCommand}"
+                            Margin="5"
+                            Style="{StaticResource MaterialDesignFlatButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" Height="32" Width="32" VerticalAlignment="Center" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                            <TextBlock Text="New" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Column="1"
+                      Style="{DynamicResource MaterialDesignGroupBox}"
+                      Margin="5"
+                      materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                      BorderThickness="0">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Image" Height="32" Width="32" VerticalAlignment="Center" />
+                                <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Preview"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <Grid VerticalAlignment="Top" Margin="5">
+                    <Border BorderThickness="5"
+                            BorderBrush="{DynamicResource MaterialDesignDivider}"
+                            Width="{Binding ElementName=TargetSize, Path=ActualWidth}"
+                            Height="{Binding ElementName=TargetSize, Path=ActualHeight}">
+                        <ItemsControl ItemsSource="{Binding SelectedTemplate.Cells}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderThickness="5" BorderBrush="{DynamicResource MaterialDesignDivider}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemContainerStyle>
+                                <Style TargetType="ContentPresenter">
+                                    <Setter Property="lc:RatioCanvas.LeftRatio" Value="{Binding X}"/>
+                                    <Setter Property="lc:RatioCanvas.TopRatio" Value="{Binding Y}"/>
+                                    <Setter Property="lc:RatioCanvas.WidthRatio" Value="{Binding Width}"/>
+                                    <Setter Property="lc:RatioCanvas.HeightRatio" Value="{Binding Height}"/>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <lc:RatioCanvas/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </Border>
+                    <Viewbox x:Name="TargetSize" Stretch="Uniform">
+                        <Grid Width="1" Height="1"/>
+                    </Viewbox>
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <Grid Visibility="{c:Binding Path='!IsListView'}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Style="{DynamicResource MaterialDesignGroupBox}"
+                        Margin="5"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                        BorderThickness="0">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="PlusCircle" Height="32" Width="32" VerticalAlignment="Center"/>
+                            <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="New"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel HorizontalAlignment="Stretch">
+                            <TextBlock Text="Name" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                            <TextBox Margin="0,0,0,10" x:Name="NewName">
+                                <TextBox.Text>
+                                    <Binding Path="NewName" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <vr:NotEmptyValidationRule/>
+                                            <vr:UniqueTemplateNameValidationRule>
+                                                <vr:UniqueTemplateNameValidationRule.TemplatesCollection>
+                                                    <vr:Wrapper Value="{Binding Data.Templates, Source={StaticResource proxy}}"/>
+                                                </vr:UniqueTemplateNameValidationRule.TemplatesCollection>
+                                            </vr:UniqueTemplateNameValidationRule>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <TextBlock Text="Columns" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                            <TextBox x:Name="Columns" Margin="0,0,0,10" Text="{Binding Columns}"/>
+                            <TextBlock Text="Rows" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                            <TextBox x:Name="Rows" Margin="0,0,0,10" Text="{Binding Rows}"/>
+                            <TextBlock Text="Padding" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                            <TextBox x:Name="Padding" Margin="0,0,0,10" Text="{Binding Padding}"/>
+                            <TextBlock Text="Margin" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                            <TextBox x:Name="Margin" Margin="0,0,0,10" Text="{Binding Margin}"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <Border Margin="5" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}" Grid.Row="1"/>
+                    <Button Grid.Row="2"
+                            Command="{Binding CreateNewTemplateCommand}"
+                            Margin="5">
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
+                                <Setter Property="IsEnabled" Value="False"/>
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ElementName=NewName, Path=(Validation.HasError)}" Value="False"/>
+                                            <Condition Binding="{Binding ElementName=Columns, Path=(Validation.HasError)}" Value="False"/>
+                                            <Condition Binding="{Binding ElementName=Rows, Path=(Validation.HasError)}" Value="False"/>
+                                            <Condition Binding="{Binding ElementName=Padding, Path=(Validation.HasError)}" Value="False"/>
+                                            <Condition Binding="{Binding ElementName=Margin, Path=(Validation.HasError)}" Value="False"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="IsEnabled" Value="True"/>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Check" Height="32" Width="32" VerticalAlignment="Center" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                            <TextBlock Text="Save" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Column="1"
+                        Style="{DynamicResource MaterialDesignGroupBox}"
+                        Margin="5"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                        BorderThickness="0">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Image" Height="32" Width="32" VerticalAlignment="Center" />
+                                <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Preview"/>
+                            </StackPanel>
+                            <Grid VerticalAlignment="Center" HorizontalAlignment="Right" MinHeight="32" MinWidth="32">
+                                <materialDesign:PackIcon VerticalAlignment="Center"
+                                                     HorizontalAlignment="Center"
+                                                     Width="32"
+                                                     Height="32"
+                                                     Kind="Close"
+                                                     Cursor="Hand"
+                                                     ToolTip="Exit"
+                                                     commands:CommandBehavior.Command="{Binding DataContext.ChangeViewCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"
+                                                     commands:CommandBehavior.RoutedEventName="PreviewMouseLeftButtonDown">
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{c:Binding Path='DataContext.IsListView', RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"
+                                                             Value="True">
+                                                    <DataTrigger.EnterActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetProperty="Width" To="0" Duration="0:0:0.2">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <CircleEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                                <DoubleAnimation Storyboard.TargetProperty="Height" To="0" Duration="0:0:0.2">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <CircleEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </DataTrigger.EnterActions>
+                                                    <DataTrigger.ExitActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetProperty="Width" To="32" Duration="0:0:0.2">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <CircleEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                                <DoubleAnimation Storyboard.TargetProperty="Height" To="32" Duration="0:0:0.2">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <CircleEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </DataTrigger.ExitActions>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                </materialDesign:PackIcon>
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <Grid VerticalAlignment="Top" Margin="5">
+                    <Border BorderThickness="5"
+                            BorderBrush="{DynamicResource MaterialDesignDivider}"
+                            Width="{Binding ElementName=TargetSize2, Path=ActualWidth}"
+                            Height="{Binding ElementName=TargetSize2, Path=ActualHeight}">
+                        <ItemsControl ItemsSource="{Binding Cells}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderThickness="5" BorderBrush="{DynamicResource MaterialDesignDivider}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemContainerStyle>
+                                <Style TargetType="ContentPresenter">
+                                    <Setter Property="lc:RatioCanvas.LeftRatio" Value="{Binding X}"/>
+                                    <Setter Property="lc:RatioCanvas.TopRatio" Value="{Binding Y}"/>
+                                    <Setter Property="lc:RatioCanvas.WidthRatio" Value="{Binding Width}"/>
+                                    <Setter Property="lc:RatioCanvas.HeightRatio" Value="{Binding Height}"/>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <lc:RatioCanvas/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </Border>
+                    <Viewbox x:Name="TargetSize2" Stretch="Uniform">
+                        <Grid Width="1" Height="1"/>
+                    </Viewbox>
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Page>

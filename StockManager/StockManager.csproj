@@ -115,6 +115,7 @@
     </Compile>
     <Compile Include="Commands\CommandBehavior.cs" />
     <Compile Include="Commands\EventHooker.cs" />
+    <Compile Include="Controls\RatioCanvas.cs" />
     <Compile Include="Migrations\201710221726167_Initial.cs" />
     <Compile Include="Migrations\201710221726167_Initial.Designer.cs">
       <DependentUpon>201710221726167_Initial.cs</DependentUpon>
@@ -154,6 +155,7 @@
     <Compile Include="ValidationRules\ExistingKeywordValidationRule.cs" />
     <Compile Include="ValidationRules\ExistsInCollectionValidationRule.cs" />
     <Compile Include="ValidationRules\NotEmptyValidationRule.cs" />
+    <Compile Include="ValidationRules\UniqueTemplateNameValidationRule.cs" />
     <Compile Include="ValidationRules\Wrapper.cs" />
     <Compile Include="ViewModels\IconViewModel.cs" />
     <Compile Include="Models\Keyword.cs" />
@@ -171,6 +173,7 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
+    <Compile Include="ViewModels\TemplatesPageViewModel.cs" />
     <Compile Include="ViewModels\ThemesPageViewModel.cs" />
     <Compile Include="ViewModels\SelectableListBoxItem.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
@@ -185,6 +188,9 @@
     </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TemplatesPage.xaml.cs">
+      <DependentUpon>TemplatesPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ThemesPage.xaml.cs">
       <DependentUpon>ThemesPage.xaml</DependentUpon>
@@ -259,6 +265,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TemplatesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

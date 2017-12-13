@@ -1,7 +1,6 @@
 ﻿using StockManager.Commands;
 using StockManager.Models;
 using StockManager.Repositories;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -106,13 +105,11 @@ namespace StockManager.ViewModels
                             var theme = new Theme
                             {
                                 Name = SelectedName,
-                                Keywords = new ObservableCollection<Keyword>(keywords)
+                                Keywords = keywords
                             };
 
                             tRepo.Insert(theme);
-                            ThemesList = new ObservableCollection<Theme>(
-                                tRepo.SelectAll()
-                            );
+                            ThemesList = tRepo.SelectAll();
                         }
                         else
                         {
@@ -125,7 +122,7 @@ namespace StockManager.ViewModels
                             }
 
                             SelectedTheme.Name = SelectedName;
-                            SelectedTheme.Keywords = new ObservableCollection<Keyword>(keywords);
+                            SelectedTheme.Keywords = keywords;
                             tRepo.Update(SelectedTheme);
                         }
                     }

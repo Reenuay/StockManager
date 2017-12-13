@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using NLog;
 using StockManager.Models;
-using StockManager.Repositories;
 using StockManager.Utilities;
 
 namespace StockManager.Services
@@ -60,16 +58,14 @@ namespace StockManager.Services
                 repo.ExecuteTransaction(() =>
                 {
                     // Помечаем все иконки с данным путём как удалённые
-                    repo
-                    .Select(i => i.FullPath == e.FullPath)
-                    .ForEach(i =>
+                    foreach (var i in repo.Select(i => i.FullPath == e.FullPath))
                     {
                         if (!i.IsDeleted)
                         {
                             i.IsDeleted = true;
                             repo.Update(i);
                         }
-                    });
+                    }
 
                     // Ищем иконку с полученной чек-суммой
                     Icon icon = repo.Find(i => i.CheckSum == hash);
@@ -109,16 +105,14 @@ namespace StockManager.Services
             repo.ExecuteTransaction(() =>
             {
                 // Помечаем все иконки с данным путём как удалённые
-                repo
-                .Select(i => i.FullPath == e.FullPath)
-                .ForEach(i =>
+                foreach (var i in repo.Select(i => i.FullPath == e.FullPath))
                 {
                     if (!i.IsDeleted)
                     {
                         i.IsDeleted = true;
                         repo.Update(i);
                     }
-                });
+                }
             });
 
             FireSyncCompleted(sender);

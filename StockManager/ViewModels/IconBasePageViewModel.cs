@@ -167,9 +167,7 @@ namespace StockManager.ViewModels
 
         private void RefreshIconList()
         {
-            IconList = new ObservableCollection<Icon>(
-                App.GetRepository<Icon>().SelectAll()
-            );
+            IconList = App.GetRepository<Icon>().SelectAll();
         }
 
         #endregion

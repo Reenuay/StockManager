@@ -97,6 +97,15 @@ namespace StockManager.ViewModels
                 },
                 new MainMenuItemViewModel()
                 {
+                    Name = "Templates",
+                    Icon = PackIconKind.Apps,
+                    Page = new Lazy<Page>(() => new TemplatesPage()
+                    {
+                        DataContext = new TemplatesPageViewModel()
+                    })
+                },
+                new MainMenuItemViewModel()
+                {
                     Name = "Settings",
                     Icon = PackIconKind.Settings,
                     HorizontalAlignment = HorizontalAlignment.Right,
