@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StockManager.Models
@@ -8,6 +9,9 @@ namespace StockManager.Models
     /// </summary>
     public class Composition : Creatable
     {
+        [Required]
+        public string Name { get; set; }
+
         public int SetId { get; set; }
         public int BackgroundId { get; set; }
 
@@ -16,6 +20,9 @@ namespace StockManager.Models
 
         public virtual ObservableCollection<Mapping> Mappings { get; set; }
             = new ObservableCollection<Mapping>();
+
+        public virtual ObservableCollection<Keyword> Keywords { get; set; }
+            = new ObservableCollection<Keyword>();
 
         [NotMapped]
         public Template Template

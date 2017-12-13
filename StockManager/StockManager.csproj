@@ -136,6 +136,10 @@
     <Compile Include="Migrations\201712070954032_Complete.Designer.cs">
       <DependentUpon>201712070954032_Complete.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712131438373_CompositionFix.cs" />
+    <Compile Include="Migrations\201712131438373_CompositionFix.Designer.cs">
+      <DependentUpon>201712131438373_CompositionFix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Background.cs" />
     <Compile Include="Models\Base.cs" />
@@ -225,6 +229,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712070954032_Complete.resx">
       <DependentUpon>201712070954032_Complete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712131438373_CompositionFix.resx">
+      <DependentUpon>201712131438373_CompositionFix.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
