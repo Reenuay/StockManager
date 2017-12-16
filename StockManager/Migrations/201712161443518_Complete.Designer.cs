@@ -7,13 +7,13 @@ namespace StockManager.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class LogEntry : IMigrationMetadata
+    public sealed partial class Complete : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(LogEntry));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Complete));
         
         string IMigrationMetadata.Id
         {
-            get { return "201710232114022_LogEntry"; }
+            get { return "201712161443518_Complete"; }
         }
         
         string IMigrationMetadata.Source

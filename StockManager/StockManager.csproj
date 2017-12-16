@@ -116,33 +116,9 @@
     <Compile Include="Commands\CommandBehavior.cs" />
     <Compile Include="Commands\EventHooker.cs" />
     <Compile Include="Controls\RatioCanvas.cs" />
-    <Compile Include="Migrations\201710221726167_Initial.cs" />
-    <Compile Include="Migrations\201710221726167_Initial.Designer.cs">
-      <DependentUpon>201710221726167_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201710232114022_LogEntry.cs" />
-    <Compile Include="Migrations\201710232114022_LogEntry.Designer.cs">
-      <DependentUpon>201710232114022_LogEntry.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201711051209173_ReorganizeHierarchy.cs" />
-    <Compile Include="Migrations\201711051209173_ReorganizeHierarchy.Designer.cs">
-      <DependentUpon>201711051209173_ReorganizeHierarchy.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201711051300475_Theme.cs" />
-    <Compile Include="Migrations\201711051300475_Theme.Designer.cs">
-      <DependentUpon>201711051300475_Theme.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201712070954032_Complete.cs" />
-    <Compile Include="Migrations\201712070954032_Complete.Designer.cs">
-      <DependentUpon>201712070954032_Complete.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201712131438373_CompositionFix.cs" />
-    <Compile Include="Migrations\201712131438373_CompositionFix.Designer.cs">
-      <DependentUpon>201712131438373_CompositionFix.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201712161228053_NullableBackground.cs" />
-    <Compile Include="Migrations\201712161228053_NullableBackground.Designer.cs">
-      <DependentUpon>201712161228053_NullableBackground.cs</DependentUpon>
+    <Compile Include="Migrations\201712161443518_Complete.cs" />
+    <Compile Include="Migrations\201712161443518_Complete.Designer.cs">
+      <DependentUpon>201712161443518_Complete.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Background.cs" />
@@ -225,26 +201,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Resource Include="Resources\Preview.png" />
-    <EmbeddedResource Include="Migrations\201710221726167_Initial.resx">
-      <DependentUpon>201710221726167_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201710232114022_LogEntry.resx">
-      <DependentUpon>201710232114022_LogEntry.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201711051209173_ReorganizeHierarchy.resx">
-      <DependentUpon>201711051209173_ReorganizeHierarchy.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201711051300475_Theme.resx">
-      <DependentUpon>201711051300475_Theme.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201712070954032_Complete.resx">
-      <DependentUpon>201712070954032_Complete.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201712131438373_CompositionFix.resx">
-      <DependentUpon>201712131438373_CompositionFix.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201712161228053_NullableBackground.resx">
-      <DependentUpon>201712161228053_NullableBackground.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201712161443518_Complete.resx">
+      <DependentUpon>201712161443518_Complete.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
