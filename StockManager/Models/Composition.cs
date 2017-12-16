@@ -13,7 +13,7 @@ namespace StockManager.Models
         public string Name { get; set; }
 
         public int SetId { get; set; }
-        public int BackgroundId { get; set; }
+        public int? BackgroundId { get; set; }
 
         public virtual Set Set { get; set; }
         public virtual Background Background { get; set; }
