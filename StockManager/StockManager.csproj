@@ -152,9 +152,11 @@
     <Compile Include="Models\Set.cs" />
     <Compile Include="Models\Template.cs" />
     <Compile Include="Models\Theme.cs" />
-    <Compile Include="Services\IconSynchronizatorEventArgs.cs" />
-    <Compile Include="Services\IconSynchronizatorEventHandler.cs" />
+    <Compile Include="Services\BackgroundSynchronizator.cs" />
+    <Compile Include="Services\SynchronizatorEventArgs.cs" />
+    <Compile Include="Services\SynchronizatorEventHandler.cs" />
     <Compile Include="Services\SyncState.cs" />
+    <Compile Include="Utilities\BackgroundDirectory.cs" />
     <Compile Include="ValidationRules\BindingProxy.cs" />
     <Compile Include="ValidationRules\ExistingKeywordValidationRule.cs" />
     <Compile Include="ValidationRules\ExistsInCollectionValidationRule.cs" />

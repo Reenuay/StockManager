@@ -8,9 +8,9 @@ using StockManager.Utilities;
 namespace StockManager.Services
 {
     /// <summary>
-    /// Предоставляет сервис автоматической синхронизации базы иконок с папкой.
+    /// Предоставляет сервис автоматической синхронизации базы фонов с папкой.
     /// </summary>
-    static class IconSynchronizator
+    static class BackgroundSynchronizator
     {
         #region Fields
 
@@ -46,34 +46,34 @@ namespace StockManager.Services
 
         private static void OnCreatedOrChanged(object sender, FileSystemEventArgs e)
         {
-            if (!IconDirectory.ExtensionIsAllowed(e.FullPath))
+            if (!BackgroundDirectory.ExtensionIsAllowed(e.FullPath))
                 return;
 
             FireSyncStarted(sender);
 
             if (HashGenerator.TryFileToMD5(e.FullPath, out string hash))
             {
-                var repo = App.GetRepository<Icon>();
+                var repo = App.GetRepository<Background>();
 
                 repo.ExecuteTransaction(() =>
                 {
-                    // Помечаем все иконки с данным путём как удалённые
-                    foreach (var i in repo.Select(i => i.FullPath == e.FullPath))
+                    // Помечаем все фоны с данным путём как удалённые
+                    foreach (var b in repo.Select(b => b.FullPath == e.FullPath))
                     {
-                        if (!i.IsDeleted)
+                        if (!b.IsDeleted)
                         {
-                            i.IsDeleted = true;
-                            repo.Update(i);
+                            b.IsDeleted = true;
+                            repo.Update(b);
                         }
                     }
 
-                    // Ищем иконку с полученной чек-суммой
-                    Icon icon = repo.Find(i => i.CheckSum == hash);
+                    // Ищем фон с полученной чек-суммой
+                    Background background = repo.Find(i => i.CheckSum == hash);
 
-                    if (icon == null)
+                    if (background == null)
                     {
-                        // Добавляем новую
-                        repo.Insert(new Icon
+                        // Добавляем новый
+                        repo.Insert(new Background
                         {
                             FullPath = e.FullPath,
                             CheckSum = hash,
@@ -82,10 +82,10 @@ namespace StockManager.Services
                     }
                     else
                     {
-                        // Или обновляем уже существующую
-                        icon.FullPath = e.FullPath;
-                        icon.IsDeleted = false;
-                        repo.Update(icon);
+                        // Или обновляем уже существующий
+                        background.FullPath = e.FullPath;
+                        background.IsDeleted = false;
+                        repo.Update(background);
                     }
                 });
             }
@@ -95,22 +95,22 @@ namespace StockManager.Services
 
         private static void OnDeleted(object sender, FileSystemEventArgs e)
         {
-            if (!IconDirectory.ExtensionIsAllowed(e.FullPath))
+            if (!BackgroundDirectory.ExtensionIsAllowed(e.FullPath))
                 return;
 
             FireSyncStarted(sender);
 
-            var repo = App.GetRepository<Icon>();
+            var repo = App.GetRepository<Background>();
 
             repo.ExecuteTransaction(() =>
             {
-                // Помечаем все иконки с данным путём как удалённые
-                foreach (var i in repo.Select(i => i.FullPath == e.FullPath))
+                // Помечаем все фоны с данным путём как удалённые
+                foreach (var b in repo.Select(b => b.FullPath == e.FullPath))
                 {
-                    if (!i.IsDeleted)
+                    if (!b.IsDeleted)
                     {
-                        i.IsDeleted = true;
-                        repo.Update(i);
+                        b.IsDeleted = true;
+                        repo.Update(b);
                     }
                 }
             });
@@ -120,28 +120,28 @@ namespace StockManager.Services
 
         private static void OnRenamed(object sender, RenamedEventArgs e)
         {
-            if (!IconDirectory.ExtensionIsAllowed(e.FullPath))
+            if (!BackgroundDirectory.ExtensionIsAllowed(e.FullPath))
                 return;
 
             FireSyncStarted(sender);
 
-            var repo = App.GetRepository<Icon>();
+            var repo = App.GetRepository<Background>();
 
-            Icon icon = repo.Find(i =>
-                i.FullPath == e.OldFullPath
-                && i.IsDeleted == false
+            Background background = repo.Find(b =>
+                b.FullPath == e.OldFullPath
+                && b.IsDeleted == false
             );
 
-            if (icon != null)
+            if (background != null)
             {
-                icon.FullPath = e.FullPath;
-                repo.Update(icon);
+                background.FullPath = e.FullPath;
+                repo.Update(background);
             }
             else
             {
                 logger.Warn(
                     $"File {e.OldFullPath} was renamed to {e.FullPath}"
-                    + " but non-deleted icon with that name does not exists"
+                    + " but non-deleted background with that name does not exists"
                     + " in database."
                 );
             }
@@ -168,14 +168,14 @@ namespace StockManager.Services
         {
             FireSyncStarted(sender);
 
-            var repo = App.GetRepository<Icon>();
+            var repo = App.GetRepository<Background>();
 
             repo.ExecuteTransaction(() =>
             {
                 // Собираем все чек-суммы и пути в один словарь.
                 var pathOf = new Dictionary<string, string>();
 
-                foreach (var fileName in IconDirectory.GetIcons())
+                foreach (var fileName in BackgroundDirectory.GetBackgrounds())
                 {
                     if (HashGenerator.TryFileToMD5(fileName, out string hash))
                     {
@@ -183,34 +183,34 @@ namespace StockManager.Services
                     }
                 }
 
-                // Сверяем иконки в базе со словарём.
-                foreach (var icon in repo.SelectAll())
+                // Сверяем фоны в базе со словарём.
+                foreach (var background in repo.SelectAll())
                 {
-                    if (pathOf.TryGetValue(icon.CheckSum, out string path))
+                    if (pathOf.TryGetValue(background.CheckSum, out string path))
                     {
-                        if (icon.FullPath == path)
+                        if (background.FullPath == path)
                         {
-                            pathOf.Remove(icon.CheckSum);
-                            icon.IsDeleted = false;
-                            repo.Update(icon);
+                            pathOf.Remove(background.CheckSum);
+                            background.IsDeleted = false;
+                            repo.Update(background);
                         }
                         else
                         {
-                            icon.FullPath = path;
-                            repo.Update(icon);
+                            background.FullPath = path;
+                            repo.Update(background);
                         }
                     }
                     else
                     {
-                        icon.IsDeleted = true;
-                        repo.Update(icon);
+                        background.IsDeleted = true;
+                        repo.Update(background);
                     }
                 }
 
                 // Значения, которые остались в словаре - добавляем в базу.
                 foreach (KeyValuePair<string, string> entry in pathOf)
                 {
-                    repo.Insert(new Icon
+                    repo.Insert(new Background
                     {
                         FullPath = entry.Value,
                         CheckSum = entry.Key,
@@ -243,15 +243,15 @@ namespace StockManager.Services
 
         #endregion
 
-        static IconSynchronizator()
+        static BackgroundSynchronizator()
         {
             // Проверяем папку иконок и создаём, если её нет.
-            if (!IconDirectory.Exists())
+            if (!BackgroundDirectory.Exists())
             {
-                IconDirectory.Create();
+                BackgroundDirectory.Create();
                 logger.Debug(
-                    "Directory for icons created at "
-                    + IconDirectory.FullPath
+                    "Directory for backgrounds created at "
+                    + BackgroundDirectory.FullPath
                 );
             }
 
@@ -263,14 +263,14 @@ namespace StockManager.Services
             synchronizator.RunWorkerCompleted += OnSyncCompleted;
 
             // Инициализируем наблюдатель.
-            watcher = IconDirectory.CreateWatcher();
+            watcher = BackgroundDirectory.CreateWatcher();
 
             watcher.Created += OnCreatedOrChanged;
             watcher.Changed += OnCreatedOrChanged;
             watcher.Deleted += OnDeleted;
             watcher.Renamed += OnRenamed;
 
-            // Подгружаем иконки из папки.
+            // Подгружаем фоны из папки.
             RequestSynchronization();
         }
     }

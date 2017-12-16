@@ -2,7 +2,7 @@
 
 namespace StockManager.Services
 {
-    class IconSynchronizatorEventArgs : EventArgs
+    class SynchronizatorEventArgs : EventArgs
     {
         private SyncState state;
 
@@ -14,7 +14,7 @@ namespace StockManager.Services
             }
         }
 
-        public IconSynchronizatorEventArgs(SyncState state)
+        public SynchronizatorEventArgs(SyncState state)
         {
             this.state = state;
         }
