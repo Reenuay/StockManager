@@ -41,9 +41,9 @@ namespace StockManager.ViewModels
                         {
                             if (p is MainMenuItemViewModel item)
                             {
-                                if (CurrentPage != item.Page)
+                                if (CurrentPage.GetType() != item.Page().GetType())
                                 {
-                                    CurrentPage = item.Page;
+                                    CurrentPage = item.Page();
                                     mainMenuItems.ForEach(i =>
                                     {
                                         i.IsSelected = false;
@@ -72,7 +72,7 @@ namespace StockManager.ViewModels
                 {
                     Name = "Home",
                     Icon = PackIconKind.Home,
-                    Page = new HomePage()
+                    Page = () => new HomePage()
                     {
                         DataContext = new HomePageViewModel()
                     }
@@ -81,7 +81,7 @@ namespace StockManager.ViewModels
                 {
                     Name = "Icons",
                     Icon = PackIconKind.ImageMultiple,
-                    Page = new IconBasePage()
+                    Page = () => new IconBasePage()
                     {
                         DataContext = new IconBasePageViewModel()
                     }
@@ -90,7 +90,7 @@ namespace StockManager.ViewModels
                 {
                     Name = "Themes",
                     Icon = PackIconKind.Animation,
-                    Page = new ThemesPage()
+                    Page = () => new ThemesPage()
                     {
                         DataContext = new ThemesPageViewModel()
                     }
@@ -99,7 +99,7 @@ namespace StockManager.ViewModels
                 {
                     Name = "Templates",
                     Icon = PackIconKind.Apps,
-                    Page = new TemplatesPage()
+                    Page = () => new TemplatesPage()
                     {
                         DataContext = new TemplatesPageViewModel()
                     }
@@ -108,7 +108,7 @@ namespace StockManager.ViewModels
                 {
                     Name = "Generator",
                     Icon = PackIconKind.Flash,
-                    Page = new GeneratorPage()
+                    Page = () => new GeneratorPage()
                     {
                         DataContext = new GeneratorPageViewModel()
                     }
@@ -118,7 +118,7 @@ namespace StockManager.ViewModels
                     Name = "Settings",
                     Icon = PackIconKind.Settings,
                     HorizontalAlignment = HorizontalAlignment.Right,
-                    Page = new SettingsPage()
+                    Page = () => new SettingsPage()
                     {
                         DataContext = new SettingsPageViewModel()
                     }
@@ -126,7 +126,7 @@ namespace StockManager.ViewModels
             };
 
             //Переходим на домашнюю страницу
-            CurrentPage = mainMenuItems[0].Page;
+            CurrentPage = mainMenuItems[0].Page();
             mainMenuItems[0].IsSelected = true;
         }
     }

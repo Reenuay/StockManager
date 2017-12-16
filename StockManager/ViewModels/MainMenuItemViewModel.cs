@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using MaterialDesignThemes.Wpf;
 
@@ -11,7 +12,7 @@ namespace StockManager.ViewModels
     {
         public string Name { get; set; }
         public PackIconKind Icon { get; set; }
-        public Page Page { get; set; }
+        public Func<Page> Page { get; set; }
         public HorizontalAlignment HorizontalAlignment { get; set; }
         public bool IsSelected { get; set; }
     }

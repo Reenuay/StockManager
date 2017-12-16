@@ -192,6 +192,8 @@ namespace StockManager.ViewModels
                 }
             };
 
+            RefreshIconList();
+
             ThemesList = new ObservableCollection<SelectableListBoxItem<Theme>>(
                 App.GetRepository<Theme>().SelectAll().Select(
                     t => new SelectableListBoxItem<Theme>(t)
