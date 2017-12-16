@@ -120,6 +120,10 @@
     <Compile Include="Migrations\201712161443518_Complete.Designer.cs">
       <DependentUpon>201712161443518_Complete.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712161536413_CompositionTheme.cs" />
+    <Compile Include="Migrations\201712161536413_CompositionTheme.Designer.cs">
+      <DependentUpon>201712161536413_CompositionTheme.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Background.cs" />
     <Compile Include="Models\Base.cs" />
@@ -203,6 +207,9 @@
     <Resource Include="Resources\Preview.png" />
     <EmbeddedResource Include="Migrations\201712161443518_Complete.resx">
       <DependentUpon>201712161443518_Complete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712161536413_CompositionTheme.resx">
+      <DependentUpon>201712161536413_CompositionTheme.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
