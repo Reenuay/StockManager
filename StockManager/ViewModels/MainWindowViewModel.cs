@@ -106,6 +106,15 @@ namespace StockManager.ViewModels
                 },
                 new MainMenuItemViewModel()
                 {
+                    Name = "Generator",
+                    Icon = PackIconKind.Flash,
+                    Page = new Lazy<Page>(() => new GeneratorPage()
+                    {
+                        DataContext = new GeneratorPageViewModel()
+                    })
+                },
+                new MainMenuItemViewModel()
+                {
                     Name = "Settings",
                     Icon = PackIconKind.Settings,
                     HorizontalAlignment = HorizontalAlignment.Right,
