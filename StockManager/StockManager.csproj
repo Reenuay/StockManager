@@ -91,6 +91,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -124,6 +125,10 @@
     <Compile Include="Migrations\201712161536413_CompositionTheme.Designer.cs">
       <DependentUpon>201712161536413_CompositionTheme.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712201241082_CompositionWasUsed.cs" />
+    <Compile Include="Migrations\201712201241082_CompositionWasUsed.Designer.cs">
+      <DependentUpon>201712201241082_CompositionWasUsed.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Background.cs" />
     <Compile Include="Models\Base.cs" />
@@ -131,12 +136,14 @@
     <Compile Include="Models\Changeable.cs" />
     <Compile Include="Models\Creatable.cs" />
     <Compile Include="Models\Composition.cs" />
+    <Compile Include="Models\IdentityEqualityComparer.cs" />
     <Compile Include="Models\Mapping.cs" />
     <Compile Include="Models\Identity.cs" />
     <Compile Include="Models\Set.cs" />
     <Compile Include="Models\Template.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Services\BackgroundSynchronizator.cs" />
+    <Compile Include="Services\SetGenerator.cs" />
     <Compile Include="Services\SynchronizatorEventArgs.cs" />
     <Compile Include="Services\SynchronizatorEventHandler.cs" />
     <Compile Include="Services\SyncState.cs" />
@@ -210,6 +217,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712161536413_CompositionTheme.resx">
       <DependentUpon>201712161536413_CompositionTheme.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712201241082_CompositionWasUsed.resx">
+      <DependentUpon>201712201241082_CompositionWasUsed.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -31,7 +31,6 @@
         <GroupBox Grid.Column="1"
                   Grid.RowSpan="2"
                   Style="{DynamicResource MaterialDesignGroupBox}"
-                  Margin="5"
                   materialDesign:ShadowAssist.ShadowDepth="Depth3"
                   BorderThickness="0">
             <GroupBox.HeaderTemplate>
@@ -76,7 +75,7 @@
                 </ListBox>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Column="3" Style="{DynamicResource MaterialDesignGroupBox}" Margin="5" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="0">
+        <GroupBox Grid.Column="3" Style="{DynamicResource MaterialDesignGroupBox}" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="0">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <Grid>

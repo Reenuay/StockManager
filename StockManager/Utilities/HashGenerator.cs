@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Security.Cryptography;
@@ -60,6 +61,15 @@ namespace StockManager.Utilities
         {
             var md5Checker = new Regex("[0-9A-F]{32}");
             return md5Checker.IsMatch(hash);
+        }
+
+        public static string TextToMD5(string text)
+        {
+            using (var md5 = MD5.Create())
+            {
+                return BitConverter.ToString(md5.ComputeHash(Encoding.ASCII.GetBytes(text)))
+                    .Replace("-", "");
+            }
         }
     }
 }

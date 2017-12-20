@@ -20,6 +20,28 @@
         <vr:BindingProxy x:Key="proxy" Data="{Binding}"/>
     </Page.Resources>
     <Grid>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Grid.Column="1"
+                  Grid.RowSpan="2"
+                  Style="{DynamicResource MaterialDesignGroupBox}"
+                  materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                  BorderThickness="0">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Settings" Height="32" Width="32" VerticalAlignment="Center"/>
+                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Settings"/>
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <Grid>
+            </Grid>
+        </GroupBox>
     </Grid>
 </Page>
