@@ -75,6 +75,7 @@ namespace StockManager.Services
                         // Добавляем новую
                         repo.Insert(new Icon
                         {
+                            Name = Path.GetFileNameWithoutExtension(e.FullPath),
                             FullPath = e.FullPath,
                             CheckSum = hash,
                             IsDeleted = false
@@ -208,10 +209,11 @@ namespace StockManager.Services
                 }
 
                 // Значения, которые остались в словаре - добавляем в базу.
-                foreach (KeyValuePair<string, string> entry in pathOf)
+                foreach (var entry in pathOf)
                 {
                     repo.Insert(new Icon
                     {
+                        Name = Path.GetFileNameWithoutExtension(entry.Value),
                         FullPath = entry.Value,
                         CheckSum = entry.Key,
                         IsDeleted = false

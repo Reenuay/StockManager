@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using StockManager.Models;
 using StockManager.Repositories;
+using StockManager.Services;
 
 namespace StockManager
 {
@@ -14,6 +16,11 @@ namespace StockManager
         internal static Repository<TEntity> GetRepository<TEntity>() where TEntity: Base
         {
             return new Repository<TEntity>(context);
+        }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            IconSynchronizator.RequestSynchronization();
         }
     }
 }

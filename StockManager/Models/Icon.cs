@@ -10,6 +10,9 @@ namespace StockManager.Models
     /// </summary>
     public class Icon : Changeable
     {
+        [Required]
+        public string Name { get; set; }
+
         [Required, Index(IsUnique = true), MinLength(32), MaxLength(32)]
         public string CheckSum { get; set; }
 
@@ -23,14 +26,5 @@ namespace StockManager.Models
 
         public virtual ObservableCollection<Set> Sets { get; set; }
             = new ObservableCollection<Set>();
-
-        [NotMapped]
-        public string Name
-        {
-            get
-            {
-                return Path.GetFileName(FullPath);
-            }
-        }
     }
 }

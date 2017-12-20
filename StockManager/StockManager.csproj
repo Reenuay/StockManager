@@ -129,6 +129,10 @@
     <Compile Include="Migrations\201712201241082_CompositionWasUsed.Designer.cs">
       <DependentUpon>201712201241082_CompositionWasUsed.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712201329052_IconName.cs" />
+    <Compile Include="Migrations\201712201329052_IconName.Designer.cs">
+      <DependentUpon>201712201329052_IconName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Background.cs" />
     <Compile Include="Models\Base.cs" />
@@ -148,6 +152,7 @@
     <Compile Include="Services\SynchronizatorEventHandler.cs" />
     <Compile Include="Services\SyncState.cs" />
     <Compile Include="Utilities\BackgroundDirectory.cs" />
+    <Compile Include="Utilities\NameGenerator.cs" />
     <Compile Include="ValidationRules\BindingProxy.cs" />
     <Compile Include="ValidationRules\ExistingKeywordValidationRule.cs" />
     <Compile Include="ValidationRules\ExistsInCollectionValidationRule.cs" />
@@ -220,6 +225,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712201241082_CompositionWasUsed.resx">
       <DependentUpon>201712201241082_CompositionWasUsed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712201329052_IconName.resx">
+      <DependentUpon>201712201329052_IconName.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
