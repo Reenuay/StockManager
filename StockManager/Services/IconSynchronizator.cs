@@ -4,6 +4,7 @@ using System.IO;
 using NLog;
 using StockManager.Models;
 using StockManager.Utilities;
+using System.Linq;
 
 namespace StockManager.Services
 {
@@ -18,6 +19,8 @@ namespace StockManager.Services
 
         private static BackgroundWorker synchronizator;
         private static FileSystemWatcher watcher;
+
+        private static Context context = new Context();
 
         #endregion
 
@@ -53,7 +56,7 @@ namespace StockManager.Services
 
             if (HashGenerator.TryFileToMD5(e.FullPath, out string hash))
             {
-                var repo = App.GetRepository<Icon>();
+                var repo = App.GetRepository<Icon>(context);
 
                 repo.ExecuteTransaction(() =>
                 {
@@ -101,18 +104,29 @@ namespace StockManager.Services
 
             FireSyncStarted(sender);
 
-            var repo = App.GetRepository<Icon>();
+            var repo = App.GetRepository<Icon>(context);
 
             repo.ExecuteTransaction(() =>
             {
-                // Помечаем все иконки с данным путём как удалённые
-                foreach (var i in repo.Select(i => i.FullPath == e.FullPath))
+                var icons = repo.Select(i => i.FullPath == e.FullPath);
+                var usedIcons = icons.Where(i =>
+                    i.Sets.Any(s => s.Compositions.Any())
+                );
+
+                // Помечаем все использованные иконки с данным путём как удалённые
+                foreach (var i in usedIcons)
                 {
                     if (!i.IsDeleted)
                     {
                         i.IsDeleted = true;
                         repo.Update(i);
                     }
+                }
+
+                // Удаляем неиспользованные иконки из базы
+                foreach (var i in icons.Except(usedIcons))
+                {
+                    repo.Delete(i);
                 }
             });
 
@@ -126,7 +140,7 @@ namespace StockManager.Services
 
             FireSyncStarted(sender);
 
-            var repo = App.GetRepository<Icon>();
+            var repo = App.GetRepository<Icon>(context);
 
             Icon icon = repo.Find(i =>
                 i.FullPath == e.OldFullPath
@@ -169,7 +183,7 @@ namespace StockManager.Services
         {
             FireSyncStarted(sender);
 
-            var repo = App.GetRepository<Icon>();
+            var repo = App.GetRepository<Icon>(context);
 
             repo.ExecuteTransaction(() =>
             {

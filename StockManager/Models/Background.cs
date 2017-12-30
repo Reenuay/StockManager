@@ -22,7 +22,7 @@ namespace StockManager.Models
         {
             get
             {
-                return Path.GetFileName(FullPath);
+                return Path.GetFileNameWithoutExtension(FullPath);
             }
         }
     }

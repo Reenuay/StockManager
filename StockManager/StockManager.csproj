@@ -140,13 +140,13 @@
     <Compile Include="Models\Changeable.cs" />
     <Compile Include="Models\Creatable.cs" />
     <Compile Include="Models\Composition.cs" />
-    <Compile Include="Models\IdentityEqualityComparer.cs" />
     <Compile Include="Models\Mapping.cs" />
     <Compile Include="Models\Identity.cs" />
     <Compile Include="Models\Set.cs" />
     <Compile Include="Models\Template.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Services\BackgroundSynchronizator.cs" />
+    <Compile Include="Services\IllustratorCaller.cs" />
     <Compile Include="Services\SetGenerator.cs" />
     <Compile Include="Services\SynchronizatorEventArgs.cs" />
     <Compile Include="Services\SynchronizatorEventHandler.cs" />
@@ -157,6 +157,7 @@
     <Compile Include="ValidationRules\ExistingKeywordValidationRule.cs" />
     <Compile Include="ValidationRules\ExistsInCollectionValidationRule.cs" />
     <Compile Include="ValidationRules\NotEmptyValidationRule.cs" />
+    <Compile Include="ValidationRules\NotNullValidationRules.cs" />
     <Compile Include="ValidationRules\UniqueTemplateNameValidationRule.cs" />
     <Compile Include="ValidationRules\Wrapper.cs" />
     <Compile Include="ViewModels\GeneratorPageViewModel.cs" />
@@ -216,6 +217,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="Resources\Generator.js" />
     <Resource Include="Resources\Preview.png" />
     <EmbeddedResource Include="Migrations\201712161443518_Complete.resx">
       <DependentUpon>201712161443518_Complete.cs</DependentUpon>
@@ -284,7 +286,17 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="Illustrator">
+      <Guid>{3271C7D8-D207-4C7C-B2B4-7F3DA9D1A8F9}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="StockManager.ico" />
   </ItemGroup>

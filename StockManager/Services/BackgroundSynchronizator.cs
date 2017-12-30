@@ -19,6 +19,8 @@ namespace StockManager.Services
         private static BackgroundWorker synchronizator;
         private static FileSystemWatcher watcher;
 
+        private static Context context = new Context();
+
         #endregion
 
         #region Events
@@ -53,7 +55,7 @@ namespace StockManager.Services
 
             if (HashGenerator.TryFileToMD5(e.FullPath, out string hash))
             {
-                var repo = App.GetRepository<Background>();
+                var repo = App.GetRepository<Background>(context);
 
                 repo.ExecuteTransaction(() =>
                 {
@@ -100,7 +102,7 @@ namespace StockManager.Services
 
             FireSyncStarted(sender);
 
-            var repo = App.GetRepository<Background>();
+            var repo = App.GetRepository<Background>(context);
 
             repo.ExecuteTransaction(() =>
             {
@@ -125,7 +127,7 @@ namespace StockManager.Services
 
             FireSyncStarted(sender);
 
-            var repo = App.GetRepository<Background>();
+            var repo = App.GetRepository<Background>(context);
 
             Background background = repo.Find(b =>
                 b.FullPath == e.OldFullPath
@@ -168,7 +170,7 @@ namespace StockManager.Services
         {
             FireSyncStarted(sender);
 
-            var repo = App.GetRepository<Background>();
+            var repo = App.GetRepository<Background>(context);
 
             repo.ExecuteTransaction(() =>
             {

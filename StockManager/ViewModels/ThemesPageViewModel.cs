@@ -110,6 +110,8 @@ namespace StockManager.ViewModels
 
                             tRepo.Insert(theme);
                             ThemesList = tRepo.SelectAll();
+                            SelectedName = "";
+                            SelectedKeywords = new ObservableCollection<string>();
                         }
                         else
                         {

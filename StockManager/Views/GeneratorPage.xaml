@@ -28,7 +28,6 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <GroupBox Grid.Column="1"
-                  Grid.RowSpan="2"
                   Style="{DynamicResource MaterialDesignGroupBox}"
                   materialDesign:ShadowAssist.ShadowDepth="Depth3"
                   BorderThickness="0">
@@ -40,7 +39,106 @@
                     </StackPanel>
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
+            <Grid IsEnabled="{c:Binding Path='!IsWorking'}">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel HorizontalAlignment="Stretch">
+                        <TextBlock Text="Theme" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                        <ComboBox x:Name="Theme" Margin="0,0,0,10" ItemsSource="{Binding Themes}" DisplayMemberPath="Name" SelectedItem="{Binding Theme}"/>
+                        <TextBlock Text="Template" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                        <ComboBox x:Name="Template" Margin="0,0,0,10" ItemsSource="{Binding Templates}" DisplayMemberPath="Name" SelectedItem="{Binding Template}"/>
+                        <TextBlock Text="Background" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                        <ComboBox x:Name="Background" Margin="0,0,0,10" ItemsSource="{Binding Backgrounds}" DisplayMemberPath="Name" SelectedItem="{Binding Background}"/>
+                        <TextBlock Text="Percentage" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                        <TextBox x:Name="Percentage" Margin="0,0,0,10" Text="{Binding Percentage}"/>
+                        <TextBlock Text="Maximum" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                        <TextBox x:Name="Maximum" Margin="0,0,0,10" Text="{Binding Maximum}"/>
+                    </StackPanel>
+                </ScrollViewer>
+                <Border Margin="0,5" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}" Grid.Row="1"/>
+                <Button Grid.Row="2"
+                            Command="{Binding StartGenerationCommand}"
+                            Margin="0,5" Height="Auto">
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
+                            <Setter Property="IsEnabled" Value="False"/>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{c:Binding Path='Theme==null'}" Value="False"/>
+                                        <Condition Binding="{c:Binding Path='Template==null'}" Value="False"/>
+                                        <Condition Binding="{c:Binding Path='Background==null'}" Value="False"/>
+                                        <Condition Binding="{Binding ElementName=Percentage, Path=(Validation.HasError)}" Value="False"/>
+                                        <Condition Binding="{Binding ElementName=Maximum, Path=(Validation.HasError)}" Value="False"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Flash" Height="32" Width="32" VerticalAlignment="Center" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                        <TextBlock Text="Start" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="3"
+                  Style="{DynamicResource MaterialDesignGroupBox}"
+                  materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                  BorderThickness="0">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Information" Height="32" Width="32" VerticalAlignment="Center"/>
+                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Info"/>
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Matching Icons" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,0,10" Text="{Binding MatchingIcons}"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="Combinations" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" Text="{Binding Combinations}"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Used Combinations" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,0,10" Text="{Binding UsedCombinations}"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="Unused Combinations" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,0,0,10" Text="{c:Binding 'Combinations - UsedCombinations'}"/>
+                <TextBlock Grid.Row="4" Grid.ColumnSpan="2" Text="Actions Log" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                <ScrollViewer Grid.Row="5" Grid.ColumnSpan="2" HorizontalScrollBarVisibility="Auto">
+                    <TextBlock Margin="0,0,0,10" Text="{Binding Log}"/>
+                </ScrollViewer>
+                <Border Grid.Row="6" Grid.ColumnSpan="2" Margin="0,5" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}"/>
+                <Button Grid.Row="7"
+                        Grid.ColumnSpan="2"
+                        Margin="0,5"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        IsEnabled="{Binding IsWorking}"
+                        Command="{Binding StopGenerationCommand}"
+                        Height="Auto">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="StopCircleOutline" Height="32" Width="32" VerticalAlignment="Center" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                        <TextBlock Text="Stop" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                    </StackPanel>
+                </Button>
             </Grid>
         </GroupBox>
     </Grid>

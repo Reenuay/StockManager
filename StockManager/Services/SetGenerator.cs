@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using NLog;
 using StockManager.Models;
+using StockManager.Properties;
 using StockManager.Utilities;
 
 namespace StockManager.Services
@@ -15,23 +16,36 @@ namespace StockManager.Services
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private static BackgroundWorker generator;
         private static BackgroundWorker recalculator;
-        private static Theme theme;
-        private static Template template;
-        private static Background background;
+        private static bool stopOperation;
+        private static Context context = new Context();
 
-        private static ObservableCollection<Icon> matchingIcons;
+        public static event EventHandler SettingsRecalculationCompleted;
+        public static event EventHandler GenerationStarted;
+        public static event EventHandler GenerationCompleted;
+        public static event EventHandler LogChanged;
 
-        public static EventHandler SettingsRecalculationStarted;
-        public static EventHandler SettingsRecalculationCompleted;
+        public static Theme Theme { get; private set; }
+        public static Template Template { get; private set; }
+        public static Background Background { get; private set; }
+        public static int MaxCombinations { get; private set; }
+        public static int Percentage { get; private set; }
+        public static BigInteger CombinationsCount { get; private set; }
+        public static BigInteger ExistingCombinationsCount { get; private set; }
+        public static ObservableCollection<Icon> MatchingIcons { get; private set; }
+        public static DateTime? StartTime { get; private set; }
+        public static DateTime? FinishTime { get; private set; }
+        public static string ActionLog { get; private set; } = "";
+        public static int Counter { get; private set; }
 
-        public static EventHandler GenerationStarted;
-        public static EventHandler GenerationCompleted;
+        public static bool IsWorking
+        {
+            get
+            {
+                return generator.IsBusy || recalculator.IsBusy;
+            }
+        }
 
-        public static int Percentage { get; private set; } = 50;
-        public static BigInteger CombinationsCount { get; private set; } = 0;
-        public static BigInteger ExistingCombinationsCount { get; private set; } = 0;
-
-        public static void SetSettings(int percentage, Theme theme, Template template, Background background)
+        public static void SetSettingsAndStart(Theme theme, Template template, Background background, int percentage = 50, int maxCombinations = 0)
         {
             if (recalculator.IsBusy || generator.IsBusy)
                 return;
@@ -57,21 +71,30 @@ namespace StockManager.Services
             if (background != null && background.IsDeleted)
                 throw new ArgumentException("Background is deleted", nameof(background));
 
-            SetGenerator.theme = theme;
-            SetGenerator.template = template;
-            SetGenerator.background = background;
-
+            Theme = theme;
+            Template = template;
+            Background = background;
+            MaxCombinations = maxCombinations;
             Percentage = percentage;
+
+            ActionLog = "";
+            Counter = 0;
 
             recalculator.RunWorkerAsync();
         }
 
+        #region Calculation
+
         private static void FindMatchingIcons()
         {
-            matchingIcons = App.GetRepository<Icon>().Select(
+            var keywordIds = Theme.Keywords.Select(k => k.Id);
+
+            MatchingIcons = App.GetRepository<Icon>(context).Select(
                 i => !i.IsDeleted
                     && (
-                        i.Keywords.Intersect(theme.Keywords, new IdentityEqualityComparer<Keyword>()).Count()
+                        i.Keywords.Select(k => k.Id)
+                            .Intersect(keywordIds)
+                            .Count()
                             * 100.0
                             / i.Keywords.Count
                     )
@@ -81,28 +104,36 @@ namespace StockManager.Services
 
         private static void CalculateCombinations()
         {
-            uint iconsCount = (uint)matchingIcons.Count,
-                 cellsCount = (uint)template.Cells.Count;
+            int iconsCount = MatchingIcons.Count,
+                cellsCount = Template.Cells.Count;
 
             if (cellsCount >= iconsCount / 2)
             {
                 CombinationsCount = ProductOfRange(iconsCount, cellsCount)
-                    / ProductOfRange(cellsCount - iconsCount, 0);
+                    / ProductOfRange(cellsCount - iconsCount, 1);
             }
             else
             {
-                CombinationsCount = ProductOfRange(cellsCount, cellsCount - iconsCount)
-                    / ProductOfRange(iconsCount, 0);
+                CombinationsCount = ProductOfRange(iconsCount, iconsCount - cellsCount)
+                    / ProductOfRange(cellsCount, 1);
             }
 
-            ExistingCombinationsCount = App.GetRepository<Set>().Select(
-                s => !s.Icons.Except(matchingIcons, new IdentityEqualityComparer<Icon>()).Any() && s.Compositions.Any()
-            ).Count;
+            // Достаём айдишники для запроса в базу
+            var matchingIconsIds = MatchingIcons.Select(i => i.Id);
+
+            ExistingCombinationsCount = App.GetRepository<Set>(context).Select(
+                s => s.Icons.Any()
+                    && s.Compositions.Any(c => c.WasUsed)
+                    && !s.Icons.Select(i => i.Id)
+                        .Except(matchingIconsIds)
+                        .Any()
+            )
+            .Count;
         }
 
-        private static BigInteger ProductOfRange(uint upper, uint lower)
+        private static BigInteger ProductOfRange(int upper, int lower)
         {
-            if (upper < lower)
+            if (upper <= 0 || lower <= 0 || upper < lower)
                 return 0;
 
             BigInteger product = 1;
@@ -115,31 +146,41 @@ namespace StockManager.Services
             return product;
         }
 
-        public static void StartSetGeneration()
-        {
-            if (generator.IsBusy || recalculator.IsBusy)
-                return;
-
-            if (CombinationsCount - ExistingCombinationsCount == 0)
-                return;
-
-            generator.RunWorkerAsync();
-        }
+        #endregion
 
         private static void Generate()
         {
-            var sets = App.GetRepository<Set>().Select(
-                s => !s.Icons.Except(matchingIcons, new IdentityEqualityComparer<Icon>()).Any()
+            var setsPath = Path.Combine(
+                Environment.CurrentDirectory,
+                Settings.Default.SetsDirectory
+            );
+
+            if (!Directory.Exists(setsPath))
+            {
+                Directory.CreateDirectory(setsPath);
+            }
+
+            // Достаём айдишники для запроса в базу
+            var matchingIconsIds = MatchingIcons.Select(i => i.Id);
+
+            var sets = App.GetRepository<Set>(context).Select(
+                s => s.Icons.Any()
+                    && !s.Icons.Select(i => i.Id)
+                        .Except(matchingIconsIds)
+                        .Any()
             );
 
             var unusedSets = new ObservableCollection<Set>(
-                sets.Where(s => !s.Compositions.Any())
+                sets.Where(s => !s.Compositions.Any(c => c.WasUsed))
             );
 
-            var n = matchingIcons.Count;
-            var k = template.Cells.Count;
+            var n = MatchingIcons.Count;
+            var k = Template.Cells.Count;
             var positions = new int[k];
             var index = k - 1;
+            var stepSize = MaxCombinations == 0
+                ? 1
+                : CombinationsCount / MaxCombinations;
 
             foreach (var i in Enumerable.Range(0, k))
             {
@@ -148,7 +189,7 @@ namespace StockManager.Services
 
             if (sets.Count < CombinationsCount)
             {
-                var setRepo = App.GetRepository<Set>();
+                var setRepo = App.GetRepository<Set>(context);
                 var stop = false;
 
                 setRepo.ExecuteTransaction(() =>
@@ -159,7 +200,7 @@ namespace StockManager.Services
 
                         for (var i = 0; i < k; i++)
                         {
-                            newCombination.Add(matchingIcons[positions[i]]);
+                            newCombination.Add(MatchingIcons[positions[i]]);
                         }
 
                         var snapshot = HashGenerator.TextToMD5(
@@ -180,28 +221,31 @@ namespace StockManager.Services
                             unusedSets.Add(set);
                         }
 
-                        for (var i = k - 1; i >= 0; i--)
+                        for (var step = 0; step < stepSize; step++)
                         {
-                            positions[i]++;
+                            for (var i = k - 1; i >= 0; i--)
+                            {
+                                positions[i]++;
 
-                            if (i < k - 1)
-                            {
-                                for (var j = i + 1; j < k; j++)
+                                if (i < k - 1)
                                 {
-                                    positions[j] = positions[i] + j - i;
+                                    for (var j = i + 1; j < k; j++)
+                                    {
+                                        positions[j] = positions[i] + j - i;
+                                    }
                                 }
-                            }
 
-                            if (positions[i] > i + n - k)
-                            {
-                                if (i == 0)
+                                if (positions[i] > i + n - k)
                                 {
-                                    stop = true;
+                                    if (i == 0)
+                                    {
+                                        stop = true;
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                break;
+                                else
+                                {
+                                    break;
+                                }
                             }
                         }
 
@@ -209,43 +253,131 @@ namespace StockManager.Services
                             break;
                     }
                 });
-
-                var compositionRepo = App.GetRepository<Composition>();
-
-                compositionRepo.ExecuteTransaction(() =>
-                {
-                    foreach (var set in unusedSets)
-                    {
-                        var composition = new Composition
-                        {
-                            Keywords = new ObservableCollection<Keyword>(
-                                set.Icons.SelectMany(i => i.Keywords).Distinct()
-                            ),
-                            Theme = theme,
-                            Background = background,
-                            Mappings = new ObservableCollection<Mapping>(
-                                template.Cells.Join(
-                                    set.Icons,
-                                    c => template.Cells.IndexOf(c),
-                                    i => set.Icons.IndexOf(i),
-                                    (c, i) => new Mapping
-                                    {
-                                        Cell = c,
-                                        Icon = i
-                                    }
-                                )
-                            )
-                        };
-
-                        compositionRepo.Insert(composition);
-                    }
-                });
             }
+
+            WriteToLog("Starting set generation...");
+            var compositionRepo = App.GetRepository<Composition>(context);
+
+            foreach (var set in unusedSets)
+            {
+                if (stopOperation)
+                {
+                    stopOperation = false;
+                    break;
+                }
+
+                var composition = compositionRepo.Find(
+                    c => c.SetId == set.Id && !c.WasUsed
+                );
+
+                if (composition == null)
+                {
+                    composition = new Composition
+                    {
+                        Keywords = new ObservableCollection<Keyword>(
+                            set.Icons.SelectMany(i => i.Keywords).Distinct()
+                        ),
+                        Theme = Theme,
+                        Set = set,
+                        Background = Background,
+                        Mappings = new ObservableCollection<Mapping>(
+                            Template.Cells.Join(
+                                set.Icons,
+                                c => Template.Cells.IndexOf(c),
+                                i => set.Icons.IndexOf(i),
+                                (c, i) => new Mapping
+                                {
+                                    Cell = c,
+                                    Icon = i
+                                }
+                            )
+                        ),
+                    };
+
+                    composition.Name
+                        = NameGenerator.GenerateName(composition);
+
+                    compositionRepo.Insert(composition);
+                }
+
+                var fileName = "";
+                try
+                {
+                    var setStart = DateTime.Now;
+
+                    WriteToLog("Trying to generate a new set...");
+                    WriteToLog($"Started at {setStart}");
+
+                    fileName = IllustratorCaller.CreateComposition(
+                        composition,
+                        composition.Theme.Name,
+                        StartTime.Value.ToString("dd MMMM, yyyy (HH часов mm минут ss секунд)")
+                    );
+
+                    WriteToLog($"Trying to write meta...");
+
+                    IllustratorCaller.WriteMeta(
+                        $"{fileName}.jpg",
+                        composition.Name,
+                        composition.Keywords
+                            .Select(keyword => keyword.Name)
+                    );
+
+                    WriteToLog("Updating database...");
+
+                    composition.WasUsed = true;
+                    compositionRepo.Update(composition);
+                    Counter++;
+
+                    WriteToLog($"New set created: {fileName}.eps");
+                    WriteToLog($"Time elapsed: {(DateTime.Now - setStart).ToString()}");
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex);
+                    WriteToLog("Error creating set:" + ex.Message);
+
+                    try
+                    {
+                        if (File.Exists($"{fileName}.eps"))
+                            File.Delete($"{fileName}.eps");
+
+                        if (File.Exists($"{fileName}.jpg"))
+                            File.Delete($"{fileName}.jpg");
+                    }
+                    catch(Exception inEx)
+                    {
+                        logger.Error(inEx);
+                    }
+                }
+
+                if (stopOperation)
+                {
+                    stopOperation = false;
+                    break;
+                }
+            }
+
+            WriteToLog("Finished set generation.");
         }
+
+        private static void WriteToLog(string message)
+        {
+            ActionLog += "\n" + message;
+            LogChanged?.Invoke(null, new EventArgs());
+        }
+
+        public static void StopOperations()
+        {
+            WriteToLog("Requested operations stop.");
+            stopOperation = true;
+        }
+
+        #region OnEvent
 
         private static void OnSettingsRecalculationStarted(object sender, DoWorkEventArgs e)
         {
-            FireSettingsRecalculationStarted(sender);
+            FireGenerationStarted(sender);
             FindMatchingIcons();
             CalculateCombinations();
         }
@@ -253,38 +385,51 @@ namespace StockManager.Services
         private static void OnSettingsRecalculationCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             FireSettingsRecalculationCompleted(sender);
+
+            if (CombinationsCount - ExistingCombinationsCount == 0)
+                return;
+
+            generator.RunWorkerAsync();
         }
 
         private static void OnGenerationStarted(object sender, DoWorkEventArgs e)
         {
-            FireGenerationStarted(sender);
+            StartTime = DateTime.Now;
+            FinishTime = null;
             Generate();
         }
 
         private static void OnGenerationCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            FinishTime = DateTime.Now;
             FireGenerationCompleted(sender);
         }
 
-        private static void FireSettingsRecalculationStarted(object sender)
-        {
-            SettingsRecalculationStarted?.Invoke(sender, new EventArgs());
-        }
+        #endregion
+
+        #region Fire
 
         private static void FireSettingsRecalculationCompleted(object sender)
         {
+            WriteToLog("Recalculation finished...");
             SettingsRecalculationCompleted?.Invoke(sender, new EventArgs());
         }
 
         private static void FireGenerationStarted(object sender)
         {
+            WriteToLog($"Set generation started at {StartTime}");
             GenerationStarted?.Invoke(sender, new EventArgs());
         }
 
         private static void FireGenerationCompleted(object sender)
         {
+            WriteToLog($"Set generation stopped at {FinishTime}");
+            WriteToLog($"Total set generated: {Counter}");
+            WriteToLog($"Total time elapsed: {(FinishTime - StartTime).ToString()}");
             GenerationCompleted?.Invoke(sender, new EventArgs());
         }
+
+        #endregion
 
         static SetGenerator()
         {
@@ -292,6 +437,8 @@ namespace StockManager.Services
 
             recalculator.DoWork += OnSettingsRecalculationStarted;
             recalculator.RunWorkerCompleted += OnSettingsRecalculationCompleted;
+
+            generator = new BackgroundWorker();
 
             generator.DoWork += OnGenerationStarted;
             generator.RunWorkerCompleted += OnGenerationCompleted;

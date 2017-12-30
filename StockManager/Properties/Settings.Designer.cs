@@ -66,15 +66,59 @@ namespace StockManager.Properties {
             }
         }
         
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Sets")]
+        public string SetsDirectory {
+            get {
+                return ((string)(this["SetsDirectory"]));
+            }
+        }
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string IllustratorDirectory {
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public double DocWidth {
             get {
-                return ((string)(this["IllustratorDirectory"]));
+                return ((double)(this["DocWidth"]));
             }
             set {
-                this["IllustratorDirectory"] = value;
+                this["DocWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public double DocHeight {
+            get {
+                return ((double)(this["DocHeight"]));
+            }
+            set {
+                this["DocHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <string>icon</string>
+  <string>vector</string>
+  <string>illustration</string>
+  <string>set</string>
+  <string>pictogram</string>
+  <string>symbol</string>
+  <string>sign</string>
+  <string>design</string>
+  <string>art</string>
+</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection DefaultKeywords {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["DefaultKeywords"]));
+            }
+            set {
+                this["DefaultKeywords"] = value;
             }
         }
     }

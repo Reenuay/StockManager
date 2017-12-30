@@ -18,9 +18,15 @@ namespace StockManager
             return new Repository<TEntity>(context);
         }
 
+        internal static Repository<TEntity> GetRepository<TEntity>(Context context) where TEntity : Base
+        {
+            return new Repository<TEntity>(context);
+        }
+
         protected override void OnActivated(EventArgs e)
         {
             IconSynchronizator.RequestSynchronization();
+            BackgroundSynchronizator.RequestSynchronization();
         }
     }
 }
