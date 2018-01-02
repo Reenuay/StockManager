@@ -286,6 +286,8 @@ namespace StockManager.Services
             WriteToLog("Starting set generation...");
             var compositionRepo = App.GetRepository<Composition>(context);
 
+            unusedSets = unusedSets.Take(MaxCombinations);
+
             foreach (var set in unusedSets)
             {
                 if (stopOperation)
@@ -345,7 +347,7 @@ namespace StockManager.Services
                     WriteToLog($"Trying to write meta...");
 
                     IllustratorCaller.WriteMeta(
-                        $"{fileName}.jpg",
+                        fileName,
                         composition.Name,
                         composition.Keywords
                             .Select(keyword => keyword.Name)
@@ -369,6 +371,9 @@ namespace StockManager.Services
                     {
                         if (File.Exists($"{fileName}.eps"))
                             File.Delete($"{fileName}.eps");
+
+                        if (File.Exists($"{fileName}.m.jpg"))
+                            File.Delete($"{fileName}.m.jpg");
 
                         if (File.Exists($"{fileName}.jpg"))
                             File.Delete($"{fileName}.jpg");
@@ -420,11 +425,14 @@ namespace StockManager.Services
             {
                 WriteToLog("No combinations available. Canceling...");
                 OnGenerationCompleted(sender, e);
+                return;
             }
 
             if (Settings.Default.NameTemplates.Count == 0)
             {
                 WriteToLog("No name templates provided. Canceling...");
+                OnGenerationCompleted(sender, e);
+                return;
             }
 
             generator.RunWorkerAsync();

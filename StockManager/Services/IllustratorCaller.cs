@@ -167,7 +167,7 @@ namespace StockManager.Services
                 ArtBoardClipping = true,
             };
 
-            targetDoc.Export($"{saveIn}.jpg", AiExportType.aiJPEG, exportOptions);
+            targetDoc.Export($"{saveIn}.m.jpg", AiExportType.aiJPEG, exportOptions);
 
             // Закрываем документ
             targetDoc.Close(AiSaveOptions.aiDoNotSaveChanges);
@@ -176,47 +176,62 @@ namespace StockManager.Services
             return saveIn;
         }
 
-        public static void WriteMeta(string file, string title, IEnumerable<string> keywords)
+        public static void WriteMeta(string fileNameWithoutExtension, string title, IEnumerable<string> keywords)
         {
             // Записываем ключевые слова
-            JpegBitmapDecoder decoder;
-            var originalImage = new FileInfo(file);
+            BitmapDecoder decoder;
+            var originalImage = new FileInfo($"{fileNameWithoutExtension}.m.jpg");
 
             if (originalImage.Exists)
             {
-                using (var inStream = File.Open(file, FileMode.Open))
-                {
-                    decoder = new JpegBitmapDecoder(
-                        inStream,
-                        BitmapCreateOptions.PreservePixelFormat,
-                        BitmapCacheOption.OnLoad
-                    );
-                }
+                var inStream = originalImage.Open(FileMode.Open);
 
-                var frame = decoder.Frames[0];
-                var meta = (BitmapMetadata)frame.Metadata.Clone();
-                meta.Keywords = new ReadOnlyCollection<string>(
-                    keywords.Concat(
-                        Settings.Default.DefaultKeywords.Cast<string>()
-                    )
-                    .ToList()
+                decoder = BitmapDecoder.Create(
+                    inStream,
+                    BitmapCreateOptions.IgnoreColorProfile,
+                    BitmapCacheOption.Default
                 );
-                meta.Title = title;
 
-                var encoder = new JpegBitmapEncoder();
+                var semicolonSeparatedKeywors
+                    = keywords.Aggregate((a, b) => a + ";" + b) + ";";
+
+                var metadata = new BitmapMetadata("jpg");
+                metadata.SetQuery(@"/xmp/dc:title", title);
+                metadata.SetQuery(@"/app1/ifd/{ushort=40091}", title);
+                metadata.SetQuery(@"/app13/irb/8bimiptc/iptc/object name", title);
+                metadata.SetQuery(@"/xmp/dc:description", title);
+                metadata.SetQuery(@"/app1/ifd/{ushort=37510}", title);
+                metadata.SetQuery(@"/app13/irb/8bimiptc/iptc/caption", title);
+                metadata.SetQuery(@"/xmp/dc:subject", semicolonSeparatedKeywors);
+                metadata.SetQuery(@"/app1/ifd/{ushort=40094}", semicolonSeparatedKeywors);
+                metadata.SetQuery(@"/app13/irb/8bimiptc/iptc/keywords", semicolonSeparatedKeywors);
+
+                var frame = BitmapFrame.Create(
+                    decoder.Frames[0],
+                    decoder.Frames[0].Thumbnail,
+                    metadata,
+                    decoder.Frames[0].ColorContexts
+                );
+
+                BitmapEncoder encoder = new JpegBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(
                     frame,
                     frame.Thumbnail,
-                    meta,
+                    metadata,
                     frame.ColorContexts
                 ));
 
-                originalImage.Delete();
-
-                using (var jpegStreamOut = File.Open(file, FileMode.CreateNew, FileAccess.ReadWrite))
+                using (var jpegStreamOut = File.Open(
+                    $"{fileNameWithoutExtension}.jpg",
+                    FileMode.Create,
+                    FileAccess.Write)
+                )
                 {
                     encoder.Save(jpegStreamOut);
                 }
+
+                inStream.Close();
+                originalImage.Delete();
             }
         }
     }
