@@ -17,9 +17,7 @@
     </Setting>
     <Setting Name="NameTemplates" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;string&gt;Vector icon set about [themeLowerCase]&lt;/string&gt;
-&lt;/ArrayOfString&gt;</Value>
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" /&gt;</Value>
     </Setting>
     <Setting Name="SetsDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Sets</Value>
@@ -43,6 +41,20 @@
   &lt;string&gt;design&lt;/string&gt;
   &lt;string&gt;art&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="NameTemplatesInfo" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">For templates there are several patterrns:
+
+theme - Theme name (capitalized)
+themeLowerCase - Theme name (lower case)
+keywords - comma separated keywords
+keywordCount - number of keywords in composition
+icons - comma separated icon names (in database not file names)
+iconCount - number of icons in composition
+keywordsRandom:n - comma separated random keywords - n is for number
+
+All patterns must be enclosed in square brackets. Example:
+Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]</Value>
     </Setting>
   </Settings>
 </SettingsFile>

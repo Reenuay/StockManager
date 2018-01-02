@@ -122,10 +122,15 @@
                 <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,0,10" Text="{Binding UsedCombinations}"/>
                 <TextBlock Grid.Row="2" Grid.Column="1" Text="Unused Combinations" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
                 <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,0,0,10" Text="{c:Binding 'Combinations - UsedCombinations'}"/>
-                <TextBlock Grid.Row="4" Grid.ColumnSpan="2" Text="Actions Log" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
-                <ScrollViewer Grid.Row="5" Grid.ColumnSpan="2" HorizontalScrollBarVisibility="Auto">
-                    <TextBlock Margin="0,0,0,10" Text="{Binding Log}"/>
-                </ScrollViewer>
+                <TextBlock Grid.Row="4" Grid.ColumnSpan="2" Text="Actions Log" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5,0,10"/>
+                <TextBox Grid.Row="5"
+                         Grid.ColumnSpan="2"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Auto"
+                         Margin="0,0,0,10"
+                         Text="{Binding Log, Mode=OneWay}"
+                         IsReadOnly="True"
+                         Style="{StaticResource MaterialDesignTextAreaTextBox}"/>
                 <Border Grid.Row="6" Grid.ColumnSpan="2" Margin="0,5" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}"/>
                 <Button Grid.Row="7"
                         Grid.ColumnSpan="2"

@@ -55,8 +55,7 @@ namespace StockManager.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>Vector icon set about [themeLowerCase]</string>\r\n</ArrayOfString>")]
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" />")]
         public global::System.Collections.Specialized.StringCollection NameTemplates {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["NameTemplates"]));
@@ -119,6 +118,26 @@ namespace StockManager.Properties {
             }
             set {
                 this["DefaultKeywords"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"For templates there are several patterrns:
+
+theme - Theme name (capitalized)
+themeLowerCase - Theme name (lower case)
+keywords - comma separated keywords
+keywordCount - number of keywords in composition
+icons - comma separated icon names (in database not file names)
+iconCount - number of icons in composition
+keywordsRandom:n - comma separated random keywords - n is for number
+
+All patterns must be enclosed in square brackets. Example:
+Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]")]
+        public string NameTemplatesInfo {
+            get {
+                return ((string)(this["NameTemplatesInfo"]));
             }
         }
     }

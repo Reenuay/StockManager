@@ -85,6 +85,8 @@ namespace StockManager.ViewModels
                 return new RelayCommand(
                     o =>
                     {
+                        NewKeywordName = NewKeywordName.ToLower();
+
                         if (!string.IsNullOrEmpty(NewKeywordName))
                         {
                             if (IconInfo.Icon.Keywords.All(k => k.Name != NewKeywordName))

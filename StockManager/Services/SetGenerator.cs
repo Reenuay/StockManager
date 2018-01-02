@@ -71,9 +71,9 @@ namespace StockManager.Services
             if (background != null && background.IsDeleted)
                 throw new ArgumentException("Background is deleted", nameof(background));
 
-            Theme = theme;
-            Template = template;
-            Background = background;
+            Theme = App.GetRepository<Theme>(context).Find(t => t.Id == theme.Id);
+            Template = App.GetRepository<Template>(context).Find(t => t.Id == template.Id);
+            Background = App.GetRepository<Background>(context).Find(b => b.Id == background.Id);
             MaxCombinations = maxCombinations;
             Percentage = percentage;
 
@@ -107,10 +107,29 @@ namespace StockManager.Services
             int iconsCount = MatchingIcons.Count,
                 cellsCount = Template.Cells.Count;
 
+
+            if (iconsCount == 0)
+            {
+                WriteToLog("None icons match given relevance percentage");
+                OnGenerationCompleted(null, null);
+                return;
+            }
+
+            if (iconsCount < cellsCount)
+            {
+                WriteToLog(
+                    $"Not enough icons - {iconsCount}"
+                        + $" for template with cell count - {cellsCount}"
+                        + ". Canceling..."
+                );
+                OnGenerationCompleted(null, null);
+                return;
+            }
+
             if (cellsCount >= iconsCount / 2)
             {
                 CombinationsCount = ProductOfRange(iconsCount, cellsCount)
-                    / ProductOfRange(cellsCount - iconsCount, 1);
+                    / ProductOfRange(iconsCount - cellsCount, 1);
             }
             else
             {
@@ -133,8 +152,11 @@ namespace StockManager.Services
 
         private static BigInteger ProductOfRange(int upper, int lower)
         {
-            if (upper <= 0 || lower <= 0 || upper < lower)
+            if (upper < 0 || lower <= 0 || upper < lower)
                 return 0;
+
+            if (upper == 0)
+                return 1;
 
             BigInteger product = 1;
 
@@ -251,6 +273,12 @@ namespace StockManager.Services
 
                         if (stop)
                             break;
+
+                        if (stopOperation)
+                        {
+                            stopOperation = false;
+                            break;
+                        }
                     }
                 });
             }
@@ -377,6 +405,8 @@ namespace StockManager.Services
 
         private static void OnSettingsRecalculationStarted(object sender, DoWorkEventArgs e)
         {
+            StartTime = DateTime.Now;
+            FinishTime = null;
             FireGenerationStarted(sender);
             FindMatchingIcons();
             CalculateCombinations();
@@ -387,15 +417,21 @@ namespace StockManager.Services
             FireSettingsRecalculationCompleted(sender);
 
             if (CombinationsCount - ExistingCombinationsCount == 0)
-                return;
+            {
+                WriteToLog("No combinations available. Canceling...");
+                OnGenerationCompleted(sender, e);
+            }
+
+            if (Settings.Default.NameTemplates.Count == 0)
+            {
+                WriteToLog("No name templates provided. Canceling...");
+            }
 
             generator.RunWorkerAsync();
         }
 
         private static void OnGenerationStarted(object sender, DoWorkEventArgs e)
         {
-            StartTime = DateTime.Now;
-            FinishTime = null;
             Generate();
         }
 
