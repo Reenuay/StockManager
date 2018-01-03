@@ -203,17 +203,10 @@ namespace StockManager.Services
                 {
                     if (pathOf.TryGetValue(icon.CheckSum, out string path))
                     {
-                        if (icon.FullPath == path)
-                        {
-                            pathOf.Remove(icon.CheckSum);
-                            icon.IsDeleted = false;
-                            repo.Update(icon);
-                        }
-                        else
-                        {
-                            icon.FullPath = path;
-                            repo.Update(icon);
-                        }
+                        pathOf.Remove(icon.CheckSum);
+                        icon.IsDeleted = false;
+                        icon.FullPath = path;
+                        repo.Update(icon);
                     }
                     else
                     {
