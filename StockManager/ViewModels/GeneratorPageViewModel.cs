@@ -22,7 +22,7 @@ namespace StockManager.ViewModels
         public Theme Theme { get; set; }
         public Template Template { get; set; }
         public Background Background { get; set; }
-        public int Percentage { get; set; }
+        public int Percentage { get; set; } = 50;
         public int Maximum { get; set; }
         public bool IsWorking { get; private set; } = SetGenerator.IsWorking;
         public int MatchingIcons { get; private set; }

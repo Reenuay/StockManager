@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Windows.Media.Imaging;
 using Illustrator;
 using StockManager.Models;
 using StockManager.Properties;
-using System.Windows.Media.Imaging;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace StockManager.Services
 {
@@ -141,7 +140,7 @@ namespace StockManager.Services
             var saveIn = Path.Combine(
                 folderFullPath,
                 composition.Mappings
-                    .Select(m => m.IconId.ToString())
+                    .Select(m => m.Icon.Id.ToString())
                     .Aggregate((a, b) => a + "," + b)
             );
 
@@ -176,6 +175,7 @@ namespace StockManager.Services
             return saveIn;
         }
 
+        [STAThread]
         public static void WriteMeta(string fileNameWithoutExtension, string title, IEnumerable<string> keywords)
         {
             // Записываем ключевые слова
@@ -193,7 +193,9 @@ namespace StockManager.Services
                 );
 
                 var semicolonSeparatedKeywors
-                    = keywords.Aggregate((a, b) => a + ";" + b) + ";";
+                    = keywords
+                        .Concat(Settings.Default.DefaultKeywords.Cast<string>())
+                        .Aggregate((a, b) => a + ";" + b) + ";";
 
                 var metadata = new BitmapMetadata("jpg");
                 metadata.SetQuery(@"/xmp/dc:title", title);

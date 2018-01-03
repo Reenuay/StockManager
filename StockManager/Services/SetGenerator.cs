@@ -18,6 +18,7 @@ namespace StockManager.Services
         private static BackgroundWorker recalculator;
         private static bool stopOperation;
         private static Context context = new Context();
+        private static CombinationEnumerator cEnumerator;
 
         public static event EventHandler SettingsRecalculationCompleted;
         public static event EventHandler GenerationStarted;
@@ -66,14 +67,15 @@ namespace StockManager.Services
                 throw new ArgumentException("Positive value expected.", nameof(percentage));
 
             if (percentage > 100)
-                throw new ArgumentException("Value less than 100 expected", nameof(percentage));
+                throw new ArgumentException("Value less than or equal to 100 expected.", nameof(percentage));
 
             if (background != null && background.IsDeleted)
-                throw new ArgumentException("Background is deleted", nameof(background));
+                throw new ArgumentException("Background is deleted.", nameof(background));
 
-            Theme = App.GetRepository<Theme>(context).Find(t => t.Id == theme.Id);
-            Template = App.GetRepository<Template>(context).Find(t => t.Id == template.Id);
-            Background = App.GetRepository<Background>(context).Find(b => b.Id == background.Id);
+            Theme = context.Themes.Find(theme.Id);
+            Template = context.Templates.Find(template.Id);
+            Background = context.Backgrounds.Find(background.Id);
+
             MaxCombinations = maxCombinations;
             Percentage = percentage;
 
@@ -107,10 +109,16 @@ namespace StockManager.Services
             int iconsCount = MatchingIcons.Count,
                 cellsCount = Template.Cells.Count;
 
-
             if (iconsCount == 0)
             {
-                WriteToLog("None icons match given relevance percentage");
+                WriteToLog("None icons match given relevance percentage. Canceling...");
+                OnGenerationCompleted(null, null);
+                return;
+            }
+
+            if (cellsCount == 0)
+            {
+                WriteToLog("Template must have at least 1 cell. Canceling...");
                 OnGenerationCompleted(null, null);
                 return;
             }
@@ -126,46 +134,19 @@ namespace StockManager.Services
                 return;
             }
 
-            if (cellsCount >= iconsCount / 2)
-            {
-                CombinationsCount = ProductOfRange(iconsCount, cellsCount)
-                    / ProductOfRange(iconsCount - cellsCount, 1);
-            }
-            else
-            {
-                CombinationsCount = ProductOfRange(iconsCount, iconsCount - cellsCount)
-                    / ProductOfRange(cellsCount, 1);
-            }
+            cEnumerator = new CombinationEnumerator(iconsCount, cellsCount);
+            CombinationsCount = cEnumerator.Count;
 
             // Достаём айдишники для запроса в базу
             var matchingIconsIds = MatchingIcons.Select(i => i.Id);
 
-            ExistingCombinationsCount = App.GetRepository<Set>(context).Select(
-                s => s.Icons.Any()
-                    && s.Compositions.Any(c => c.WasUsed)
+            ExistingCombinationsCount = context.Sets.LongCount(
+                s => s.Icons.Count == cellsCount
+                    && s.Compositions.Any()
                     && !s.Icons.Select(i => i.Id)
                         .Except(matchingIconsIds)
                         .Any()
-            )
-            .Count;
-        }
-
-        private static BigInteger ProductOfRange(int upper, int lower)
-        {
-            if (upper < 0 || lower <= 0 || upper < lower)
-                return 0;
-
-            if (upper == 0)
-                return 1;
-
-            BigInteger product = 1;
-
-            for (var i = upper; i > lower; i--)
-            {
-                product *= i;
-            }
-
-            return product;
+            );
         }
 
         #endregion
@@ -179,130 +160,69 @@ namespace StockManager.Services
 
             if (!Directory.Exists(setsPath))
             {
+                WriteToLog($"Created sets directory on {setsPath}.");
                 Directory.CreateDirectory(setsPath);
             }
 
-            // Достаём айдишники для запроса в базу
-            var matchingIconsIds = MatchingIcons.Select(i => i.Id);
-
-            var sets = App.GetRepository<Set>(context).Select(
-                s => s.Icons.Any()
-                    && !s.Icons.Select(i => i.Id)
-                        .Except(matchingIconsIds)
-                        .Any()
+            WriteToLog($"Starting set generation on {cEnumerator.N} icons"
+                + $" and {cEnumerator.K} cells..."
             );
 
-            var unusedSets = new ObservableCollection<Set>(
-                sets.Where(s => !s.Compositions.Any(c => c.WasUsed))
-            );
+            var positions = new int[cEnumerator.K];
+            var random = false;
+            var next = false;
 
-            var n = MatchingIcons.Count;
-            var k = Template.Cells.Count;
-            var positions = new int[k];
-            var index = k - 1;
-            var stepSize = MaxCombinations == 0
-                ? 1
-                : CombinationsCount / MaxCombinations;
-
-            foreach (var i in Enumerable.Range(0, k))
+            if (
+                MaxCombinations > 0
+                && MaxCombinations < CombinationsCount - ExistingCombinationsCount
+                && CombinationsCount / 2 > ExistingCombinationsCount
+            )
             {
-                positions[i] = i;
+                random = true;
             }
 
-            if (sets.Count < CombinationsCount)
+            while (true)
             {
-                var setRepo = App.GetRepository<Set>(context);
-                var stop = false;
+                if (random && !next)
+                    positions = cEnumerator.Random;
+                else
+                    positions = cEnumerator.Next;
 
-                setRepo.ExecuteTransaction(() =>
+                // Получаем новую комбинацию.
+                var newCombination = new ObservableCollection<Icon>();
+                for (var i = 0; i < cEnumerator.K; i++)
                 {
-                    while (true)
-                    {
-                        var newCombination = new ObservableCollection<Icon>();
-
-                        for (var i = 0; i < k; i++)
-                        {
-                            newCombination.Add(MatchingIcons[positions[i]]);
-                        }
-
-                        var snapshot = HashGenerator.TextToMD5(
-                            (from i in newCombination select i.CheckSum)
-                                .OrderBy(s => s)
-                                .Aggregate((a, b) => a + b)
-                        );
-
-                        if (sets.All(s => s.Snapshot != snapshot))
-                        {
-                            var set = new Set
-                            {
-                                Snapshot = snapshot,
-                                Icons = newCombination
-                            };
-
-                            setRepo.Insert(set);
-                            unusedSets.Add(set);
-                        }
-
-                        for (var step = 0; step < stepSize; step++)
-                        {
-                            for (var i = k - 1; i >= 0; i--)
-                            {
-                                positions[i]++;
-
-                                if (i < k - 1)
-                                {
-                                    for (var j = i + 1; j < k; j++)
-                                    {
-                                        positions[j] = positions[i] + j - i;
-                                    }
-                                }
-
-                                if (positions[i] > i + n - k)
-                                {
-                                    if (i == 0)
-                                    {
-                                        stop = true;
-                                    }
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (stop)
-                            break;
-
-                        if (stopOperation)
-                        {
-                            stopOperation = false;
-                            break;
-                        }
-                    }
-                });
-            }
-
-            WriteToLog("Starting set generation...");
-            var compositionRepo = App.GetRepository<Composition>(context);
-
-            unusedSets = unusedSets.Take(MaxCombinations);
-
-            foreach (var set in unusedSets)
-            {
-                if (stopOperation)
-                {
-                    stopOperation = false;
-                    break;
+                    newCombination.Add(MatchingIcons[positions[i]]);
                 }
 
-                var composition = compositionRepo.Find(
-                    c => c.SetId == set.Id && !c.WasUsed
+                // Вычисляем её снимок.
+                var snapshot = HashGenerator.TextSequenceToMD5(
+                    from i in newCombination select i.CheckSum
                 );
 
-                if (composition == null)
+                // Ищем в базе сет с таким снимком.
+                var set = context.Sets.SingleOrDefault(s => s.Snapshot == snapshot);
+
+                // Если сет не найден - создаём.
+                if (set == null)
                 {
-                    composition = new Composition
+                    set = new Set
+                    {
+                        Snapshot = snapshot,
+                        Icons = newCombination
+                    };
+
+                    context.Sets.Add(set);
+                    context.SaveChanges();
+                }
+
+                // Если композиций с данным сетом нет в базе.
+                if (!context.Compositions.Any(c => c.SetId == set.Id))
+                {
+                    next = false;
+
+                    // Создаём новую композицию.
+                    var composition = new Composition
                     {
                         Keywords = new ObservableCollection<Keyword>(
                             set.Icons.SelectMany(i => i.Keywords).Distinct()
@@ -327,68 +247,84 @@ namespace StockManager.Services
                     composition.Name
                         = NameGenerator.GenerateName(composition);
 
-                    compositionRepo.Insert(composition);
-                }
-
-                var fileName = "";
-                try
-                {
-                    var setStart = DateTime.Now;
-
-                    WriteToLog("Trying to generate a new set...");
-                    WriteToLog($"Started at {setStart}");
-
-                    fileName = IllustratorCaller.CreateComposition(
-                        composition,
-                        composition.Theme.Name,
-                        StartTime.Value.ToString("dd MMMM, yyyy (HH часов mm минут ss секунд)")
-                    );
-
-                    WriteToLog($"Trying to write meta...");
-
-                    IllustratorCaller.WriteMeta(
-                        fileName,
-                        composition.Name,
-                        composition.Keywords
-                            .Select(keyword => keyword.Name)
-                    );
-
-                    WriteToLog("Updating database...");
-
-                    composition.WasUsed = true;
-                    compositionRepo.Update(composition);
-                    Counter++;
-
-                    WriteToLog($"New set created: {fileName}.eps");
-                    WriteToLog($"Time elapsed: {(DateTime.Now - setStart).ToString()}");
-                }
-                catch (Exception ex)
-                {
-                    logger.Error(ex);
-                    WriteToLog("Error creating set:" + ex.Message);
-
+                    // Пытаемся создать новый сет, записать мету и сохранить композицию в базу.
+                    var fileName = "";
                     try
                     {
-                        if (File.Exists($"{fileName}.eps"))
-                            File.Delete($"{fileName}.eps");
+                        // Дата и время начала генрации сета.
+                        var setStart = DateTime.Now;
 
-                        if (File.Exists($"{fileName}.m.jpg"))
-                            File.Delete($"{fileName}.m.jpg");
+                        WriteToLog("Trying to generate a new set...");
+                        WriteToLog($"Started at {setStart}");
 
-                        if (File.Exists($"{fileName}.jpg"))
-                            File.Delete($"{fileName}.jpg");
+                        // Создаём eps и jpg файлы.
+                        fileName = IllustratorCaller.CreateComposition(
+                            composition,
+                            composition.Theme.Name,
+                            StartTime.Value.ToString("dd MMMM, yyyy (HH часов mm минут ss секунд)")
+                        );
+
+                        WriteToLog($"Trying to write meta...");
+
+                        // Записываем метаданные в jpg.
+                        IllustratorCaller.WriteMeta(
+                            fileName,
+                            composition.Name,
+                            composition.Keywords
+                                .Select(keyword => keyword.Name)
+                        );
+
+                        WriteToLog("Updating database...");
+
+                        // Записываем композицию в базу.
+                        context.Compositions.Add(composition);
+                        context.SaveChanges();
+
+                        Counter++;
+
+                        WriteToLog($"New set created: {fileName}.eps");
+                        WriteToLog($"Time elapsed: {(DateTime.Now - setStart).ToString()}");
                     }
-                    catch(Exception inEx)
+                    catch (Exception ex)
                     {
-                        logger.Error(inEx);
+                        logger.Error(ex);
+                        WriteToLog("Error creating set:" + ex.Message);
+
+                        // При ошибках попытаемся удалить файлы.
+                        try
+                        {
+                            if (File.Exists($"{fileName}.eps"))
+                                File.Delete($"{fileName}.eps");
+
+                            if (File.Exists($"{fileName}.m.jpg"))
+                                File.Delete($"{fileName}.m.jpg");
+
+                            if (File.Exists($"{fileName}.jpg"))
+                                File.Delete($"{fileName}.jpg");
+                        }
+                        catch (Exception inEx)
+                        {
+                            logger.Error(inEx);
+                        }
                     }
                 }
+                else
+                {
+                    next = true;
+                }
 
+                // Юзер запросил окончание
                 if (stopOperation)
                 {
                     stopOperation = false;
                     break;
                 }
+
+                if (MaxCombinations != 0 && Counter >= MaxCombinations)
+                    break;
+
+                if (Counter >= CombinationsCount - ExistingCombinationsCount)
+                    break;
             }
 
             WriteToLog("Finished set generation.");

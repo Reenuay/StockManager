@@ -33,7 +33,10 @@ namespace StockManager.Utilities
         {
             get
             {
-                return Path.GetFullPath(Settings.Default.IconDirectoryName);
+                return Path.Combine(
+                    Environment.CurrentDirectory,
+                    Settings.Default.IconDirectoryName
+                );
             }
         }
 
@@ -61,7 +64,7 @@ namespace StockManager.Utilities
         /// </summary>
         public static void Create()
         {
-            Directory.CreateDirectory(Settings.Default.IconDirectoryName);
+            Directory.CreateDirectory(FullPath);
         }
 
         /// <summary>
@@ -86,7 +89,7 @@ namespace StockManager.Utilities
         /// </summary>
         public static bool Exists()
         {
-            return Directory.Exists(Settings.Default.IconDirectoryName);
+            return Directory.Exists(FullPath);
         }
 
         /// <summary>
@@ -107,7 +110,7 @@ namespace StockManager.Utilities
         public static string[] GetIcons()
         {
             return Directory.GetFiles(
-                Path.GetFullPath(Settings.Default.IconDirectoryName),
+                FullPath,
                 "*.*",
                 SearchOption.AllDirectories
             )

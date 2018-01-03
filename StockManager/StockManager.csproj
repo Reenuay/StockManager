@@ -152,6 +152,7 @@
     <Compile Include="Services\SynchronizatorEventHandler.cs" />
     <Compile Include="Services\SyncState.cs" />
     <Compile Include="Utilities\BackgroundDirectory.cs" />
+    <Compile Include="Utilities\CombinationEnumerator.cs" />
     <Compile Include="Utilities\NameGenerator.cs" />
     <Compile Include="ValidationRules\BindingProxy.cs" />
     <Compile Include="ValidationRules\ExistingKeywordValidationRule.cs" />

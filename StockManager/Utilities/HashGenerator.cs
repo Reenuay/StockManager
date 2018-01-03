@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.IO;
-using System.Security.Cryptography;
 using NLog;
 
 namespace StockManager.Utilities
@@ -69,6 +71,19 @@ namespace StockManager.Utilities
             {
                 return BitConverter.ToString(md5.ComputeHash(Encoding.ASCII.GetBytes(text)))
                     .Replace("-", "");
+            }
+        }
+
+        public static string TextSequenceToMD5(IEnumerable<string> textSequence)
+        {
+            using (var md5 = MD5.Create())
+            {
+                return BitConverter.ToString(md5.ComputeHash(
+                    Encoding.ASCII.GetBytes(
+                        textSequence.OrderBy(s => s).Aggregate((a, b) => a + b)
+                    )
+                ))
+                .Replace("-", "");
             }
         }
     }
