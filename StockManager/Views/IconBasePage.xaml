@@ -208,7 +208,7 @@
                 <Border Margin="0,0,0,10" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}"/>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Relative Path: " Foreground="{StaticResource SecondaryAccentBrush}"/>
-                    <TextBlock Text="{Binding IconInfo.RelativePath}"/>
+                    <TextBlock Text="{Binding IconInfo.FullPath}" ToolTip="{Binding IconInfo.FullPath}"/>
                 </StackPanel>
                 <Border Margin="0,10" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}"/>
                 <StackPanel Orientation="Horizontal">

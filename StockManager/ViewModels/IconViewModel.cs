@@ -17,7 +17,7 @@ namespace StockManager.ViewModels
 
         public Icon Icon { get; private set; }
 
-        public string RelativePath { get; private set; }
+        public string FullPath { get; private set; }
         public string CheckSum { get; private set; }
         public string Size { get; private set; }
         public string Date { get; private set; }
@@ -33,10 +33,7 @@ namespace StockManager.ViewModels
             {
                 Icon = icon;
                 CheckSum = icon.CheckSum;
-                RelativePath = icon.FullPath.Remove(
-                    0,
-                    Environment.CurrentDirectory.Length + 1
-                );
+                FullPath = icon.FullPath;
                 Date = icon.DateCreated.ToString("dd.MM.yyyy");
                 Keywords = icon.Keywords;
 
@@ -59,7 +56,7 @@ namespace StockManager.ViewModels
             else
             {
                 CheckSum = "...";
-                RelativePath = "...";
+                FullPath = "...";
                 Date = "...";
                 Size = "...";
                 Preview = IconDirectory.PreviewImage;
