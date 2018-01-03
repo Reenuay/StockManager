@@ -110,7 +110,7 @@ namespace StockManager.Services
             {
                 var icons = repo.Select(i => i.FullPath == e.FullPath);
                 var usedIcons = icons.Where(i =>
-                    i.Sets.Any(s => s.Compositions.Any())
+                    i.Sets.Any()
                 );
 
                 // Помечаем все использованные иконки с данным путём как удалённые
