@@ -190,17 +190,10 @@ namespace StockManager.Services
                 {
                     if (pathOf.TryGetValue(background.CheckSum, out string path))
                     {
-                        if (background.FullPath == path)
-                        {
-                            pathOf.Remove(background.CheckSum);
-                            background.IsDeleted = false;
-                            repo.Update(background);
-                        }
-                        else
-                        {
-                            background.FullPath = path;
-                            repo.Update(background);
-                        }
+                        pathOf.Remove(background.CheckSum);
+                        background.IsDeleted = false;
+                        background.FullPath = path;
+                        repo.Update(background);
                     }
                     else
                     {
