@@ -39,7 +39,12 @@ namespace StockManager.ViewModels
 
                 if (!icon.IsDeleted)
                 {
-                    using (var image = new MagickImage(icon.FullPath))
+                    var readSettings = new MagickReadSettings
+                    {
+                        Density = new Density(300, 300)
+                    };
+
+                    using (var image = new MagickImage(icon.FullPath, readSettings))
                     {
                         Preview = image.ToBitmapSource();
                     }
