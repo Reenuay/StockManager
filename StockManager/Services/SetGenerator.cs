@@ -171,6 +171,7 @@ namespace StockManager.Services
             var positions = new int[cEnumerator.K];
             var random = false;
             var next = false;
+            var dice = new Random();
 
             if (
                 MaxCombinations > 0
@@ -221,6 +222,17 @@ namespace StockManager.Services
                 {
                     next = false;
 
+                    // Список приоритетов иконок в сортировке
+                    var randomOrders = set.Icons
+                        .Select(p => dice.Next())
+                        .ToArray();
+
+                    // Список, случайно подорбранных, позиций иконок.
+                    var iconPositions = Enumerable
+                        .Range(0, set.Icons.Count)
+                        .OrderBy(i => randomOrders[i])
+                        .ToArray();
+
                     // Создаём новую композицию.
                     var composition = new Composition
                     {
@@ -234,7 +246,7 @@ namespace StockManager.Services
                             Template.Cells.Join(
                                 set.Icons,
                                 c => Template.Cells.IndexOf(c),
-                                i => set.Icons.IndexOf(i),
+                                i => iconPositions[set.Icons.IndexOf(i)],
                                 (c, i) => new Mapping
                                 {
                                     Cell = c,

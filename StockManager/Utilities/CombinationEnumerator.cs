@@ -75,17 +75,18 @@ namespace StockManager.Utilities
         {
             get
             {
-                var positions = new int[k];
+                // Список всех элементов множества.
+                var indexes = Enumerable.Range(0, n).ToArray();
 
-                for (var i = 0; i < k; i++)
-                {
-                    if (i == 0)
-                        positions[i] = dice.Next(i + n - k + 1);
-                    else
-                        positions[i] = dice.Next(positions[i - 1] + 1, i + n - k + 1);
-                }
+                // Список приоритетов элементов множества в сортировке.
+                var randomOrders = indexes.Select(p => dice.Next()).ToArray();
 
-                current = positions;
+                // Отбираем k случайных элементов множества n.
+                current = indexes
+                    .OrderBy(i => randomOrders[i])
+                    .Take(k)
+                    .ToArray();
+
                 return current;
             }
         }
