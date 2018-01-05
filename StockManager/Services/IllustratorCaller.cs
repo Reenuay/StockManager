@@ -139,9 +139,7 @@ namespace StockManager.Services
             // Сохраненям файл
             var saveIn = Path.Combine(
                 folderFullPath,
-                composition.Mappings
-                    .Select(m => m.Icon.Id.ToString())
-                    .Aggregate((a, b) => a + "," + b)
+                composition.Set.Snapshot
             );
 
             var saveOptions = new EPSSaveOptions
