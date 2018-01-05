@@ -51,13 +51,15 @@ namespace StockManager.Services
                 AiDocumentColorSpace.aiDocumentRGBColor
             );
 
-            // Разблокируем все слои
+            // Разблокируем все слои и элементы
             foreach (dynamic layer in background.Layers)
             {
-                if (layer.Locked)
-                {
-                    layer.Locked = false;
-                }
+                layer.Locked = false;
+            }
+
+            foreach (dynamic item in background.PageItems)
+            {
+                item.Locked = false;
             }
 
             // Группируем все элементы
@@ -95,13 +97,15 @@ namespace StockManager.Services
 
                 ai.ActiveDocument = iconDoc;
 
-                // Разблокируем все слои
+                // Разблокируем все слои и элементы
                 foreach (dynamic layer in iconDoc.Layers)
                 {
-                    if (layer.Locked)
-                    {
-                        layer.Locked = false;
-                    }
+                    layer.Locked = false;
+                }
+
+                foreach (dynamic item in iconDoc.PageItems)
+                {
+                    item.Locked = false;
                 }
 
                 // Группируем все элементы
