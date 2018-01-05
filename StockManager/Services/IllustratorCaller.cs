@@ -194,7 +194,11 @@ namespace StockManager.Services
 
                 var semicolonSeparatedKeywors
                     = keywords
-                        .Concat(Settings.Default.DefaultKeywords.Cast<string>())
+                        .Take(
+                            Settings.Default.JpegMaxKeywords
+                                - Settings.Default.RequiredKeywords.Count
+                        )
+                        .Concat(Settings.Default.RequiredKeywords.Cast<string>())
                         .Aggregate((a, b) => a + ";" + b) + ";";
 
                 var metadata = new BitmapMetadata("jpg");

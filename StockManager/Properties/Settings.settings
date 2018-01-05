@@ -28,7 +28,7 @@
     <Setting Name="DocHeight" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1000</Value>
     </Setting>
-    <Setting Name="DefaultKeywords" Type="System.Collections.Specialized.StringCollection" Scope="User">
+    <Setting Name="RequiredKeywords" Type="System.Collections.Specialized.StringCollection" Scope="Application">
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
   &lt;string&gt;icon&lt;/string&gt;
@@ -55,6 +55,9 @@ keywordsRandom:n - comma separated random keywords - n is for number
 
 All patterns must be enclosed in square brackets. Example:
 Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]</Value>
+    </Setting>
+    <Setting Name="JpegMaxKeywords" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">50</Value>
     </Setting>
   </Settings>
 </SettingsFile>

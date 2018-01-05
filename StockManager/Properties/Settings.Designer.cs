@@ -98,7 +98,7 @@ namespace StockManager.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
@@ -112,12 +112,9 @@ namespace StockManager.Properties {
   <string>design</string>
   <string>art</string>
 </ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection DefaultKeywords {
+        public global::System.Collections.Specialized.StringCollection RequiredKeywords {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["DefaultKeywords"]));
-            }
-            set {
-                this["DefaultKeywords"] = value;
+                return ((global::System.Collections.Specialized.StringCollection)(this["RequiredKeywords"]));
             }
         }
         
@@ -138,6 +135,15 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]")]
         public string NameTemplatesInfo {
             get {
                 return ((string)(this["NameTemplatesInfo"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int JpegMaxKeywords {
+            get {
+                return ((int)(this["JpegMaxKeywords"]));
             }
         }
     }
