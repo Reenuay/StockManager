@@ -162,7 +162,7 @@ namespace StockManager.Services
             {
                 AntiAliasing = true,
                 Optimization = true,
-                QualitySetting = 12,
+                QualitySetting = 100,
                 HorizontalScale = 500,
                 VerticalScale = 500,
                 ArtBoardClipping = true,

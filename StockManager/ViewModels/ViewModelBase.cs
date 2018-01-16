@@ -1,10 +1,9 @@
-﻿using NLog;
-using PropertyChanged;
+﻿using System.ComponentModel;
+using NLog;
 
 namespace StockManager.ViewModels
 {
-    [AddINotifyPropertyChangedInterface]
-    abstract class ViewModelBase
+    abstract class ViewModelBase : INotifyPropertyChanged
     {
         private Logger logger;
 
@@ -16,5 +15,7 @@ namespace StockManager.ViewModels
                     ?? (logger = LogManager.GetLogger(GetType().Name));
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

@@ -219,6 +219,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Content Include="Resources\Generator.js" />
+    <Resource Include="What%27sNew.txt" />
     <Resource Include="Resources\Preview.png" />
     <EmbeddedResource Include="Migrations\201712161443518_Complete.resx">
       <DependentUpon>201712161443518_Complete.cs</DependentUpon>

@@ -5,6 +5,8 @@ using System.Windows.Input;
 using StockManager.Commands;
 using StockManager.Models;
 using StockManager.Services;
+using System.Windows.Data;
+using System.ComponentModel;
 
 namespace StockManager.ViewModels
 {
@@ -15,6 +17,8 @@ namespace StockManager.ViewModels
         #region IconList
 
         public ObservableCollection<Icon> IconList { get; private set; }
+        public ICollectionView FilteredIconList { get; private set; }
+        public bool KeywordlessOnly { get; set; }
 
         public int ExistingIconsCount
         {
@@ -201,6 +205,26 @@ namespace StockManager.ViewModels
                     t => new SelectableListBoxItem<Theme>(t)
                 )
             );
+
+            FilteredIconList = CollectionViewSource.GetDefaultView(IconList);
+            FilteredIconList.SortDescriptions.Add(
+                new SortDescription("Name", ListSortDirection.Ascending)
+            );
+
+            PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
+            {
+                if (e.PropertyName == "KeywordlessOnly")
+                {
+                    if (KeywordlessOnly)
+                    {
+                        FilteredIconList.Filter = i => !((Icon)i).Keywords.Any();
+                    }
+                    else
+                    {
+                        FilteredIconList.Filter = null;
+                    }
+                }
+            };
         }
     }
 }

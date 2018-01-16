@@ -170,7 +170,6 @@ namespace StockManager.Services
 
             var positions = new int[cEnumerator.K];
             var random = false;
-            var next = false;
             var dice = new Random();
 
             if (
@@ -184,7 +183,7 @@ namespace StockManager.Services
 
             while (true)
             {
-                if (random && !next)
+                if (random)
                     positions = cEnumerator.Random;
                 else
                     positions = cEnumerator.Next;
@@ -220,8 +219,6 @@ namespace StockManager.Services
                 // Если композиций с данным сетом нет в базе.
                 if (!context.Compositions.Any(c => c.SetId == set.Id))
                 {
-                    next = false;
-
                     // Список приоритетов иконок в сортировке
                     var randomOrders = set.Icons
                         .Select(p => dice.Next())
@@ -319,10 +316,6 @@ namespace StockManager.Services
                             logger.Error(inEx);
                         }
                     }
-                }
-                else
-                {
-                    next = true;
                 }
 
                 // Юзер запросил окончание
