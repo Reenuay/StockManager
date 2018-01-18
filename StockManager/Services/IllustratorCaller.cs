@@ -11,6 +11,8 @@ namespace StockManager.Services
 {
     static class IllustratorCaller
     {
+        private static int Counter;
+
         [STAThread]
         public static string CreateComposition(Composition composition, params string[] folders)
         {
@@ -173,6 +175,17 @@ namespace StockManager.Services
             // Закрываем документ
             targetDoc.Close(AiSaveOptions.aiDoNotSaveChanges);
             targetDoc = null;
+
+            Counter++;
+
+            if (
+                Settings.Default.RestartIllustrator
+                && Counter > 0
+                && Counter % Settings.Default.AfterEachNSets == 0
+            )
+            {
+                ai.Quit();
+            }
 
             return saveIn;
         }

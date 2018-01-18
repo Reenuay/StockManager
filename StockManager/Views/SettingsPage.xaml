@@ -106,6 +106,30 @@
                     </ScrollViewer>
                 </Grid>
             </GroupBox>
+            <GroupBox Style="{DynamicResource MaterialDesignGroupBox}"
+                        Margin="5"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                        BorderThickness="0"
+                        Grid.Column="1">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="VectorCurve" Height="32" Width="32" VerticalAlignment="Center"/>
+                            <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Illustrator"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <CheckBox IsChecked="{Binding Restart}" VerticalAlignment="Center">Restart after each</CheckBox>
+                        <TextBox IsEnabled="{c:Binding Path=Restart}" Text="{Binding SetsCount}" VerticalAlignment="Center" Margin="5,0" MinWidth="8"/>
+                        <TextBlock IsEnabled="{c:Binding Path=Restart}" Text="sets" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
         </Grid>
     </ScrollViewer>
 </Page>

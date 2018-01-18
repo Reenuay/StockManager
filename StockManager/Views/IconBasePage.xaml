@@ -19,11 +19,6 @@
       Title="IconBasePage">
 
     <Page.Resources>
-        <CollectionViewSource x:Key="SortedIconList" Source="{Binding FilteredIconList}">
-            <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription PropertyName="Name"/>
-            </CollectionViewSource.SortDescriptions>
-        </CollectionViewSource>
         <vr:BindingProxy x:Key="proxy" Data="{Binding}"/>
     </Page.Resources>
 
@@ -313,7 +308,7 @@
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
             <Grid>
-                <ListBox ItemsSource="{Binding ThemesList}"
+                <ListBox ItemsSource="{Binding OrderedThemesList}"
                          IsSynchronizedWithCurrentItem="True"
                          SelectionMode="Multiple"
                          Margin="5">

@@ -89,18 +89,23 @@ namespace StockManager.Services
 
         private static void FindMatchingIcons()
         {
-            var keywordIds = Theme.Keywords.Select(k => k.Id);
-
-            MatchingIcons = App.GetRepository<Icon>(context).Select(
-                i => !i.IsDeleted
-                    && (
-                        i.Keywords.Select(k => k.Id)
-                            .Intersect(keywordIds)
-                            .Count()
-                            * 100.0
-                            / i.Keywords.Count
+            MatchingIcons = new ObservableCollection<Icon>(
+                context
+                .Icons
+                .Include("Keywords")
+                .Where(
+                    i => !i.IsDeleted && i.Keywords.Any()
+                )
+                .ToList()
+                .Where(i => (
+                        i.Keywords
+                        .Intersect(Theme.Keywords)
+                        .Count()
+                        * 100.0
+                        / i.Keywords.Count
                     )
                     >= Percentage
+                )
             );
         }
 

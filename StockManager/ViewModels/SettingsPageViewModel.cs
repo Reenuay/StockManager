@@ -64,6 +64,41 @@ namespace StockManager.ViewModels
 
         #endregion
 
+        #region Restart
+
+        public bool Restart
+        {
+            get
+            {
+                return Settings.Default.RestartIllustrator;
+            }
+
+            set
+            {
+                Settings.Default.RestartIllustrator = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public int SetsCount
+        {
+            get
+            {
+                return Settings.Default.AfterEachNSets;
+            }
+
+            set
+            {
+                if (value < 1)
+                    return;
+
+                Settings.Default.AfterEachNSets = value;
+                Settings.Default.Save();
+            }
+        }
+
+        #endregion
+
         public SettingsPageViewModel()
         {
             RefreshNameTemplates();

@@ -146,5 +146,29 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]")]
                 return ((int)(this["JpegMaxKeywords"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RestartIllustrator {
+            get {
+                return ((bool)(this["RestartIllustrator"]));
+            }
+            set {
+                this["RestartIllustrator"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int AfterEachNSets {
+            get {
+                return ((int)(this["AfterEachNSets"]));
+            }
+            set {
+                this["AfterEachNSets"] = value;
+            }
+        }
     }
 }

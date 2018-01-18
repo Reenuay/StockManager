@@ -62,7 +62,7 @@ namespace StockManager.ViewModels
         {
             Themes = App.GetRepository<Theme>().SelectAll();
             Templates = App.GetRepository<Template>().SelectAll();
-            Backgrounds = App.GetRepository<Background>().SelectAll();
+            Backgrounds = App.GetRepository<Background>().Select(b => !b.IsDeleted);
 
             if (Themes.Count > 0)
                 Theme = Themes[0];

@@ -161,11 +161,16 @@ namespace StockManager.ViewModels
 
         #endregion
 
+        #region ThemesList
+
         public ObservableCollection<SelectableListBoxItem<Theme>> ThemesList
         {
             get;
             set;
         }
+        public ICollectionView OrderedThemesList { get; private set; }
+
+        #endregion
 
         #endregion
 
@@ -181,6 +186,12 @@ namespace StockManager.ViewModels
         public IconBasePageViewModel()
         {
             IconList = new ObservableCollection<Icon>();
+            ThemesList = new ObservableCollection<SelectableListBoxItem<Theme>>(
+                App.GetRepository<Theme>().SelectAll().Select(
+                    t => new SelectableListBoxItem<Theme>(t)
+                )
+            );
+
             IconInfo = new IconViewModel();
             IsSyncing = false;
 
@@ -200,15 +211,14 @@ namespace StockManager.ViewModels
 
             RefreshIconList();
 
-            ThemesList = new ObservableCollection<SelectableListBoxItem<Theme>>(
-                App.GetRepository<Theme>().SelectAll().Select(
-                    t => new SelectableListBoxItem<Theme>(t)
-                )
-            );
-
             FilteredIconList = CollectionViewSource.GetDefaultView(IconList);
             FilteredIconList.SortDescriptions.Add(
                 new SortDescription("Name", ListSortDirection.Ascending)
+            );
+
+            OrderedThemesList = CollectionViewSource.GetDefaultView(ThemesList);
+            OrderedThemesList.SortDescriptions.Add(
+                new SortDescription("Item.Name", ListSortDirection.Ascending)
             );
 
             PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
