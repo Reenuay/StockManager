@@ -309,7 +309,8 @@
             </GroupBox.HeaderTemplate>
             <Grid>
                 <ListBox ItemsSource="{Binding OrderedThemesList}"
-                         IsSynchronizedWithCurrentItem="True"
+                         IsSynchronizedWithCurrentItem="False"
+                         SelectedIndex="-1"
                          SelectionMode="Multiple"
                          Margin="5">
                     <ListBox.ItemContainerStyle>
