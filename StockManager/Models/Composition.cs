@@ -16,8 +16,6 @@ namespace StockManager.Models
         public int? BackgroundId { get; set; }
         public int ThemeId { get; set; }
 
-        public bool WasUsed { get; set; }
-
         public virtual Set Set { get; set; }
         public virtual Background Background { get; set; }
         public virtual Theme Theme { get; set; }

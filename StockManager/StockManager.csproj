@@ -133,6 +133,10 @@
     <Compile Include="Migrations\201712201329052_IconName.Designer.cs">
       <DependentUpon>201712201329052_IconName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802031357385_MinusWasUsed.cs" />
+    <Compile Include="Migrations\201802031357385_MinusWasUsed.Designer.cs">
+      <DependentUpon>201802031357385_MinusWasUsed.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Background.cs" />
     <Compile Include="Models\Base.cs" />
@@ -231,6 +235,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712201329052_IconName.resx">
       <DependentUpon>201712201329052_IconName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802031357385_MinusWasUsed.resx">
+      <DependentUpon>201802031357385_MinusWasUsed.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

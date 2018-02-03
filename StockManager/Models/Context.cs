@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using EntityFramework.Triggers;
+using StockManager.Migrations;
 
 namespace StockManager.Models
 {
@@ -19,5 +20,10 @@ namespace StockManager.Models
         public DbSet<Composition> Compositions { get; set; }
 
         public DbSet<LogEntry> LogEntries { get; set; }
+
+        public Context()
+        {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, Configuration>());
+        }
     }
 }
