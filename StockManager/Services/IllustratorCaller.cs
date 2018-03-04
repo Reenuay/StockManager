@@ -214,7 +214,7 @@ namespace StockManager.Services
                                 - Settings.Default.RequiredKeywords.Count
                         )
                         .Concat(Settings.Default.RequiredKeywords.Cast<string>())
-                        .Aggregate((a, b) => a + ";" + b) + ";";
+                        .Aggregate((a, b) => a + ", " + b);
 
                 var metadata = new BitmapMetadata("jpg");
                 metadata.SetQuery(@"/xmp/dc:title", title);
