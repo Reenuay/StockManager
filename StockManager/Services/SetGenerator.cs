@@ -79,7 +79,6 @@ namespace StockManager.Services
             MaxCombinations = maxCombinations;
             Percentage = percentage;
 
-            ActionLog = "";
             Counter = 0;
 
             recalculator.RunWorkerAsync();
@@ -342,7 +341,7 @@ namespace StockManager.Services
 
         private static void WriteToLog(string message)
         {
-            ActionLog += "\n" + message;
+            ActionLog = message;
             LogChanged?.Invoke(null, new EventArgs());
         }
 
@@ -378,6 +377,11 @@ namespace StockManager.Services
             {
                 WriteToLog("No name templates provided. Canceling...");
                 OnGenerationCompleted(sender, e);
+                return;
+            }
+
+            if (Template.Cells.Count > MatchingIcons.Count)
+            {
                 return;
             }
 

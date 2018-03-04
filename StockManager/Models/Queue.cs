@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StockManager.Models
 {
     public class Queue : Changeable
     {
-        public ObservableCollection<Task> Tasks { get; private set; }
+        [Required, Index(IsUnique = true)]
+        public string Name { get; set; }
+
+        public virtual ObservableCollection<Task> Tasks { get; set; }
             = new ObservableCollection<Task>();
     }
 }
