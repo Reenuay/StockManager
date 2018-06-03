@@ -15,6 +15,7 @@ namespace StockManager.Utilities
         private int k;
         private BigInteger count;
         private int[] current;
+        private bool calculated = false;
 
         public int N
         {
@@ -26,7 +27,13 @@ namespace StockManager.Utilities
         }
         public BigInteger Count
         {
-            get { return count; }
+            get {
+                if (!calculated) {
+                    Calculate();
+                    calculated = true;
+                }
+                return count;
+            }
         }
         public int[] Current
         {
@@ -116,8 +123,6 @@ namespace StockManager.Utilities
             {
                 current[i] = i;
             }
-
-            Calculate();
         }
 
         private void Calculate()

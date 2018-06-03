@@ -30,7 +30,6 @@ namespace StockManager.Services
         public static Background Background { get; private set; }
         public static int MaxCombinations { get; private set; }
         public static int Percentage { get; private set; }
-        public static BigInteger CombinationsCount { get; private set; }
         public static BigInteger ExistingCombinationsCount { get; private set; }
         public static ObservableCollection<Icon> MatchingIcons { get; private set; }
         public static DateTime? StartTime { get; private set; }
@@ -134,7 +133,6 @@ namespace StockManager.Services
             }
 
             cEnumerator = new CombinationEnumerator(iconsCount, cellsCount);
-            CombinationsCount = cEnumerator.Count;
 
             // Достаём айдишники для запроса в базу
             var matchingIconsIds = MatchingIcons.Select(i => i.Id);
@@ -171,12 +169,7 @@ namespace StockManager.Services
             var random = false;
             var dice = new Random();
 
-            if (
-                MaxCombinations > 0
-                && MaxCombinations < CombinationsCount - ExistingCombinationsCount
-                && CombinationsCount / 2 > ExistingCombinationsCount
-            )
-            {
+            if (MaxCombinations > 0) {
                 random = true;
             }
 
@@ -326,9 +319,6 @@ namespace StockManager.Services
 
                 if (MaxCombinations != 0 && Counter >= MaxCombinations)
                     break;
-
-                if (Counter >= CombinationsCount - ExistingCombinationsCount)
-                    break;
             }
 
             WriteToLog("Finished set generation.");
@@ -360,13 +350,6 @@ namespace StockManager.Services
         private static void OnSettingsRecalculationCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             FireSettingsRecalculationCompleted(sender);
-
-            if (CombinationsCount - ExistingCombinationsCount == 0)
-            {
-                WriteToLog("No combinations available. Canceling...");
-                OnGenerationCompleted(sender, e);
-                return;
-            }
 
             if (Settings.Default.NameTemplates.Count == 0)
             {

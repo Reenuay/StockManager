@@ -237,12 +237,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Matching Icons" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
                 <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,0,10" Text="{Binding MatchingIcons}"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="Combinations" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" Text="{Binding Combinations}"/>
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Used Combinations" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
                 <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,0,10" Text="{Binding UsedCombinations}"/>
-                <TextBlock Grid.Row="2" Grid.Column="1" Text="Unused Combinations" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
-                <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,0,0,10" Text="{c:Binding 'Combinations - UsedCombinations'}"/>
                 <TextBlock Grid.Row="4" Grid.ColumnSpan="2" Text="Actions Log" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5,0,10"/>
                 <TextBox Grid.Row="5"
                          Grid.ColumnSpan="2"

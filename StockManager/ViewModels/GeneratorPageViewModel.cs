@@ -28,7 +28,6 @@ namespace StockManager.ViewModels
         public int Maximum { get; set; }
         public bool IsWorking { get; private set; } = SetGenerator.IsWorking;
         public int MatchingIcons { get; private set; }
-        public BigInteger Combinations { get; private set; } = SetGenerator.CombinationsCount;
         public BigInteger UsedCombinations { get; private set; } = SetGenerator.ExistingCombinationsCount;
         public string Log { get; private set; }
 
@@ -249,7 +248,6 @@ namespace StockManager.ViewModels
                 MatchingIcons = SetGenerator.MatchingIcons == null
                     ? 0
                     : SetGenerator.MatchingIcons.Count;
-                Combinations = SetGenerator.CombinationsCount;
                 UsedCombinations = SetGenerator.ExistingCombinationsCount;
             };
 
