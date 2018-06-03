@@ -96,14 +96,9 @@ namespace StockManager.Services
                     i => !i.IsDeleted && i.Keywords.Any()
                 )
                 .ToList()
-                .Where(i => (
-                        i.Keywords
-                        .Intersect(Theme.Keywords)
-                        .Count()
-                        * 100.0
-                        / i.Keywords.Count
-                    )
-                    >= Percentage
+                .Where(i => i.Keywords
+                    .Intersect(Theme.Keywords)
+                    .Any()
                 )
             );
         }

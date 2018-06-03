@@ -89,8 +89,7 @@ namespace StockManager.Services
             background = null;
 
             // Для каждого отображения в композиции
-            foreach (var mapping in composition.Mappings)
-            {
+            foreach (var mapping in composition.Mappings) {
                 // Открываем файл иконки
                 var iconDoc = ai.Open(
                     mapping.Icon.FullPath,
@@ -162,7 +161,7 @@ namespace StockManager.Services
             // Экспортируем в jpeg
             var exportOptions = new ExportOptionsJPEG
             {
-                AntiAliasing = true,
+                AntiAliasing = false,
                 Optimization = true,
                 QualitySetting = 100,
                 HorizontalScale = 500,
@@ -207,8 +206,9 @@ namespace StockManager.Services
                     BitmapCacheOption.Default
                 );
 
-                var semicolonSeparatedKeywors
+                var commaSeparatedKeywors
                     = keywords
+                        .Except(Settings.Default.RequiredKeywords.Cast<string>())
                         .Take(
                             Settings.Default.JpegMaxKeywords
                                 - Settings.Default.RequiredKeywords.Count
@@ -223,9 +223,9 @@ namespace StockManager.Services
                 metadata.SetQuery(@"/xmp/dc:description", title);
                 metadata.SetQuery(@"/app1/ifd/{ushort=37510}", title);
                 metadata.SetQuery(@"/app13/irb/8bimiptc/iptc/caption", title);
-                metadata.SetQuery(@"/xmp/dc:subject", semicolonSeparatedKeywors);
-                metadata.SetQuery(@"/app1/ifd/{ushort=40094}", semicolonSeparatedKeywors);
-                metadata.SetQuery(@"/app13/irb/8bimiptc/iptc/keywords", semicolonSeparatedKeywors);
+                metadata.SetQuery(@"/xmp/dc:subject", commaSeparatedKeywors);
+                metadata.SetQuery(@"/app1/ifd/{ushort=40094}", commaSeparatedKeywors);
+                metadata.SetQuery(@"/app13/irb/8bimiptc/iptc/keywords", commaSeparatedKeywors);
 
                 var frame = BitmapFrame.Create(
                     decoder.Frames[0],

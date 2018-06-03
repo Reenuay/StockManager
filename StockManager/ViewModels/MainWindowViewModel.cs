@@ -70,15 +70,6 @@ namespace StockManager.ViewModels
             {
                 new MainMenuItemViewModel()
                 {
-                    Name = "Home",
-                    Icon = PackIconKind.Home,
-                    Page = () => new HomePage()
-                    {
-                        DataContext = new HomePageViewModel()
-                    }
-                },
-                new MainMenuItemViewModel()
-                {
                     Name = "Icons",
                     Icon = PackIconKind.ImageMultiple,
                     Page = () => new IconBasePage()

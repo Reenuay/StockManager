@@ -64,14 +64,37 @@ namespace StockManager.ViewModels
             get
             {
                 return new RelayCommand(
-                    o =>
-                    {
-                        if (o is Icon i)
-                        {
+                    o => {
+                        if (o is Icon i) {
                             IconInfo = new IconViewModel(i);
                         }
                     },
                     o => o is Icon
+                );
+            }
+        }
+
+        public bool AutoKeywordDone { get; set; } = true;
+        public int Progress { get; set; }
+
+        public ICommand AutoKeywordCommand {
+            get {
+                return new RelayCommand(
+                    async o => {
+                        AutoKeywordDone = false;
+
+                        var icons = (
+                            KeywordlessOnly
+                                ? IconList.Where(i => !i.Keywords.Any())
+                                : IconList.Where(i => i.Keywords.Count < 50)
+                        );
+
+                        await AutoKeywordService.DoWork(icons);
+
+                        AutoKeywordDone = true;
+
+                        RefreshIconList();
+                    }
                 );
             }
         }
@@ -176,9 +199,12 @@ namespace StockManager.ViewModels
 
         #region Methods
 
-        private void RefreshIconList()
-        {
-            IconList = App.GetRepository<Icon>().SelectAll();
+        private void RefreshIconList() {
+            IconList = App.GetRepository<Icon>(new Context()).SelectAll();
+            FilteredIconList = CollectionViewSource.GetDefaultView(IconList);
+            FilteredIconList.SortDescriptions.Add(
+                new SortDescription("Name", ListSortDirection.Ascending)
+            );
         }
 
         #endregion
@@ -195,45 +221,37 @@ namespace StockManager.ViewModels
             IconInfo = new IconViewModel();
             IsSyncing = false;
 
-            IconSynchronizator.SyncStateChanged += (sender, e) =>
-            {
+            IconSynchronizator.SyncStateChanged += (sender, e) => {
                 IsSyncing = e.State == SyncState.Started ? true : false;
 
-                if (e.State == SyncState.Started)
-                {
+                if (e.State == SyncState.Started) {
                     IconInfo = new IconViewModel();
                 }
-                else
-                {
+                else {
                     RefreshIconList();
                 }
             };
 
             RefreshIconList();
 
-            FilteredIconList = CollectionViewSource.GetDefaultView(IconList);
-            FilteredIconList.SortDescriptions.Add(
-                new SortDescription("Name", ListSortDirection.Ascending)
-            );
-
             OrderedThemesList = CollectionViewSource.GetDefaultView(ThemesList);
             OrderedThemesList.SortDescriptions.Add(
                 new SortDescription("Item.Name", ListSortDirection.Ascending)
             );
 
-            PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
-            {
-                if (e.PropertyName == "KeywordlessOnly")
-                {
-                    if (KeywordlessOnly)
-                    {
+            PropertyChanged += (object sender, PropertyChangedEventArgs e) => {
+                if (e.PropertyName == "KeywordlessOnly") {
+                    if (KeywordlessOnly) {
                         FilteredIconList.Filter = i => !((Icon)i).Keywords.Any();
                     }
-                    else
-                    {
+                    else {
                         FilteredIconList.Filter = null;
                     }
                 }
+            };
+
+            AutoKeywordService.ProgressChanged += (sender, e) => {
+                Progress = (int)(AutoKeywordService.Progress * 100);
             };
         }
     }

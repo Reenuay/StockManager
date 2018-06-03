@@ -140,9 +140,9 @@ namespace StockManager.ViewModels
             {
                 return new RelayCommand(o =>
                 {
-                    if (o is Queue q)
+                    if (o is SelectableListBoxItem<Queue> q)
                     {
-                        if (q == ProcessingQueue.Item)
+                        if (ProcessingQueue == null || q.Item == ProcessingQueue.Item)
                         {
                             if (IsWorking)
                                 return;
@@ -150,7 +150,7 @@ namespace StockManager.ViewModels
                             ProcessingQueue = null;
                         }
 
-                        App.GetRepository<Queue>().Delete(q);
+                        App.GetRepository<Queue>().Delete(q.Item);
 
                         QueuesList = new ObservableCollection<SelectableListBoxItem<Queue>>(
                             App.GetRepository<Queue>().SelectAll().Select(

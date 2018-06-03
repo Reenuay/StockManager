@@ -70,6 +70,8 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="5" Command="{Binding SyncCommand}" MinHeight="40">
@@ -125,15 +127,35 @@
                     </StackPanel>
                 </Button>
                 <Border Margin="5" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}" Grid.Row="1"/>
-                <StackPanel Grid.Row="2" Orientation="Horizontal">
-                    <CheckBox Margin="5" IsChecked="{Binding KeywordlessOnly}">Keywordless only</CheckBox>
+                <StackPanel Grid.Row="2">
+                    <Button Command="{Binding AutoKeywordCommand}"
+                            Margin="0,5">
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
+                                <Setter Property="IsEnabled" Value="{Binding AutoKeywordDone}"/>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Key" Height="32" Width="32" VerticalAlignment="Center" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                            <TextBlock Text="Auto Keyword" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                        </StackPanel>
+                    </Button>
+                    <ProgressBar Value="{Binding Progress}"
+                                 Visibility="{c:Binding !AutoKeywordDone}"
+                                 Margin="5"
+                                 Foreground="{StaticResource SecondaryAccentBrush}">
+                    </ProgressBar>
                 </StackPanel>
                 <Border Margin="5" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}" Grid.Row="3"/>
+                <StackPanel Grid.Row="4" Orientation="Horizontal">
+                    <CheckBox Margin="5" IsChecked="{Binding KeywordlessOnly}">Keywordless only</CheckBox>
+                </StackPanel>
+                <Border Margin="5" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}" Grid.Row="5"/>
                 <ListBox ItemsSource="{Binding FilteredIconList}"
                          IsSynchronizedWithCurrentItem="True"
                          Margin="5"
                          IsEnabled="{c:Binding Path=!IsSyncing}"
-                         Grid.Row="4">
+                         Grid.Row="6">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

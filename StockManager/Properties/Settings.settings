@@ -65,5 +65,14 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]</Value>
     <Setting Name="AfterEachNSets" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="AutoKeywordFtpHost" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ftp.shutterstock.com</Value>
+    </Setting>
+    <Setting Name="AutoKeywordFtpUser" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="AutoKeywordFtpPass" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>
