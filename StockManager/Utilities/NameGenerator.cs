@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using StockManager.Models;
 using StockManager.Properties;
+using System.IO;
 
 namespace StockManager.Utilities
 {
@@ -62,10 +63,11 @@ namespace StockManager.Utilities
 
                     var keywords = c.Keywords.Select(k => k.Name).ToList();
                     var n = int.Parse(match.Groups[1].Value);
+                    var max = 0;
 
-                    if (n > keywords.Count)
-                    {
+                    if (n > keywords.Count) {
                         n = keywords.Count;
+                        max = n;
                     }
 
                     var s = "";
@@ -78,7 +80,7 @@ namespace StockManager.Utilities
 
                         start = false;
 
-                        if (n == 1)
+                        if (max > 1 && n == 1)
                             s += " and ";
 
                         var index = dice.Next(keywords.Count);
@@ -86,6 +88,64 @@ namespace StockManager.Utilities
                         s += keywords[index];
 
                         keywords.RemoveAt(index);
+
+                        n--;
+                    }
+
+                    t = t.Remove(match.Index, match.Length).Insert(match.Index, s);
+                }
+
+                return t;
+            },
+            (t, c) =>
+            {
+                var r = new Regex(@"\[(i|I)consRandom:(\d+)\]");
+                var rgx = new Regex("[^a-zA-Z]");
+
+                while (true)
+                {
+                    var match = r.Match(t);
+
+                    if (!match.Success)
+                        break;
+
+                    var icons = c.Set.Icons.Select(
+                        i => rgx.Replace(
+                            Path.GetFileNameWithoutExtension(i.FullPath),
+                            " "
+                        ).Trim().ToLower()
+                    ).ToList();
+
+                    var cl = match.Groups[1].Value;
+                    var n = int.Parse(match.Groups[2].Value);
+                    var max = 0;
+
+                    if (n > icons.Count) {
+                        n = icons.Count;
+                        max = n;
+                    }
+
+                    var s = "";
+                    var start = true;
+
+                    while (n > 0)
+                    {
+                        if (!start && n != 1)
+                            s += ", ";
+
+                        start = false;
+
+                        if (max > 1 && n == 1)
+                            s += " and ";
+
+                        var index = dice.Next(icons.Count);
+
+                        s += icons[index];
+
+                        if (n == max && cl == "I")
+                            s = s[0].ToString().ToUpper() + s.Substring(1, s.Length - 1);
+
+                        icons.RemoveAt(index);
 
                         n--;
                     }

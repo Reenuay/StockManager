@@ -52,6 +52,7 @@ keywordCount - number of keywords in composition
 icons - comma separated icon names (in database not file names)
 iconCount - number of icons in composition
 keywordsRandom:n - comma separated random keywords - n is for number
+iconsRandom:n/IconsRandom:n - comma separated random icon names - n is for number
 
 All patterns must be enclosed in square brackets. Example:
 Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]</Value>
