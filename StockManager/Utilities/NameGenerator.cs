@@ -63,13 +63,12 @@ namespace StockManager.Utilities
 
                     var keywords = c.Keywords.Select(k => k.Name).ToList();
                     var n = int.Parse(match.Groups[1].Value);
-                    var max = 0;
 
                     if (n > keywords.Count) {
                         n = keywords.Count;
-                        max = n;
                     }
 
+                    var max = n;
                     var s = "";
                     var start = true;
 
@@ -118,13 +117,12 @@ namespace StockManager.Utilities
 
                     var cl = match.Groups[1].Value;
                     var n = int.Parse(match.Groups[2].Value);
-                    var max = 0;
 
                     if (n > icons.Count) {
                         n = icons.Count;
-                        max = n;
                     }
 
+                    var max = n;
                     var s = "";
                     var start = true;
 
