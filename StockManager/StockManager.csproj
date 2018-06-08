@@ -177,6 +177,10 @@
     <Compile Include="Migrations\201803021817241_TaskFixes.Designer.cs">
       <DependentUpon>201803021817241_TaskFixes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806080818131_TemplatesBackgrounds.cs" />
+    <Compile Include="Migrations\201806080818131_TemplatesBackgrounds.Designer.cs">
+      <DependentUpon>201806080818131_TemplatesBackgrounds.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Background.cs" />
     <Compile Include="Models\Base.cs" />
@@ -293,6 +297,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803021817241_TaskFixes.resx">
       <DependentUpon>201803021817241_TaskFixes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806080818131_TemplatesBackgrounds.resx">
+      <DependentUpon>201806080818131_TemplatesBackgrounds.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

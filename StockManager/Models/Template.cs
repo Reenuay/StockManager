@@ -14,5 +14,8 @@ namespace StockManager.Models
 
         public virtual ObservableCollection<Cell> Cells { get; set; }
             = new ObservableCollection<Cell>();
+
+        public virtual ObservableCollection<Background> Backgrounds { get; set; }
+            = new ObservableCollection<Background>();
     }
 }
