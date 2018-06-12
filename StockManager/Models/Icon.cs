@@ -10,8 +10,12 @@ namespace StockManager.Models
     /// </summary>
     public class Icon : Changeable
     {
-        [Required]
-        public string Name { get; set; }
+        [NotMapped]
+        public string Name {
+            get {
+                return Path.GetFileNameWithoutExtension(FullPath);
+            }
+        }
 
         [Required, Index(IsUnique = true), MinLength(32), MaxLength(32)]
         public string CheckSum { get; set; }

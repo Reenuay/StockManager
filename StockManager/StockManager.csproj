@@ -185,6 +185,14 @@
     <Compile Include="Migrations\201806080828541_RemoveThemes.Designer.cs">
       <DependentUpon>201806080828541_RemoveThemes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806120921079_RemoveQueues.cs" />
+    <Compile Include="Migrations\201806120921079_RemoveQueues.Designer.cs">
+      <DependentUpon>201806120921079_RemoveQueues.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806121234219_RemoveIconName.cs" />
+    <Compile Include="Migrations\201806121234219_RemoveIconName.Designer.cs">
+      <DependentUpon>201806121234219_RemoveIconName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Background.cs" />
     <Compile Include="Models\Base.cs" />
@@ -307,6 +315,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806080828541_RemoveThemes.resx">
       <DependentUpon>201806080828541_RemoveThemes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806120921079_RemoveQueues.resx">
+      <DependentUpon>201806120921079_RemoveQueues.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806121234219_RemoveIconName.resx">
+      <DependentUpon>201806121234219_RemoveIconName.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

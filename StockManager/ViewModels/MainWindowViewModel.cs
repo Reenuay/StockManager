@@ -79,29 +79,11 @@ namespace StockManager.ViewModels
                 },
                 new MainMenuItemViewModel()
                 {
-                    Name = "Themes",
-                    Icon = PackIconKind.Animation,
-                    Page = () => new ThemesPage()
-                    {
-                        DataContext = new ThemesPageViewModel()
-                    }
-                },
-                new MainMenuItemViewModel()
-                {
                     Name = "Templates",
                     Icon = PackIconKind.Apps,
                     Page = () => new TemplatesPage()
                     {
                         DataContext = new TemplatesPageViewModel()
-                    }
-                },
-                new MainMenuItemViewModel()
-                {
-                    Name = "Generator",
-                    Icon = PackIconKind.Flash,
-                    Page = () => new GeneratorPage()
-                    {
-                        DataContext = new GeneratorPageViewModel()
                     }
                 },
                 new MainMenuItemViewModel()

@@ -78,7 +78,6 @@ namespace StockManager.Services
                         // Добавляем новую
                         repo.Insert(new Icon
                         {
-                            Name = Path.GetFileNameWithoutExtension(e.FullPath),
                             FullPath = e.FullPath,
                             CheckSum = hash,
                             IsDeleted = false
@@ -220,7 +219,6 @@ namespace StockManager.Services
                 {
                     repo.Insert(new Icon
                     {
-                        Name = Path.GetFileNameWithoutExtension(entry.Value),
                         FullPath = entry.Value,
                         CheckSum = entry.Key,
                         IsDeleted = false

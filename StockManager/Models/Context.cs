@@ -17,7 +17,6 @@ namespace StockManager.Models
         public DbSet<Background> Backgrounds { get; set; }
         public DbSet<Mapping> Mappings { get; set; }
         public DbSet<Composition> Compositions { get; set; }
-        public DbSet<Task> Tasks { get; set; }
 
         public DbSet<LogEntry> LogEntries { get; set; }
 
