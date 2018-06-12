@@ -53,8 +53,8 @@ namespace StockManager.Services
             if (theme == null)
                 throw new ArgumentNullException(nameof(theme));
 
-            if (theme.Keywords.Count == 0)
-                throw new ArgumentException("Theme is empty.", nameof(theme));
+            //if (theme.Keywords.Count == 0)
+            //    throw new ArgumentException("Theme is empty.", nameof(theme));
 
             if (template == null)
                 throw new ArgumentNullException(nameof(template));
@@ -71,7 +71,7 @@ namespace StockManager.Services
             if (background != null && background.IsDeleted)
                 throw new ArgumentException("Background is deleted.", nameof(background));
 
-            Theme = context.Themes.Find(theme.Id);
+            //Theme = context.Themes.Find(theme.Id);
             Template = context.Templates.Find(template.Id);
             Background = context.Backgrounds.Find(background.Id);
 
@@ -87,6 +87,7 @@ namespace StockManager.Services
 
         private static void FindMatchingIcons()
         {
+            /*
             MatchingIcons = new ObservableCollection<Icon>(
                 context
                 .Icons
@@ -100,6 +101,7 @@ namespace StockManager.Services
                     .Any()
                 )
             );
+            */
         }
 
         private static void CalculateCombinations()
@@ -228,7 +230,7 @@ namespace StockManager.Services
                         Keywords = new ObservableCollection<Keyword>(
                             set.Icons.SelectMany(i => i.Keywords).Distinct()
                         ),
-                        Theme = Theme,
+                        //Theme = Theme,
                         Set = set,
                         Background = Background,
                         Mappings = new ObservableCollection<Mapping>(
@@ -261,7 +263,7 @@ namespace StockManager.Services
                         // Создаём eps и jpg файлы.
                         fileName = IllustratorCaller.CreateComposition(
                             composition,
-                            composition.Theme.Name,
+                            //composition.Theme.Name,
                             StartTime.Value.ToString("dd MMMM, yyyy (HH часов mm минут ss секунд)")
                         );
 

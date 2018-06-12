@@ -11,7 +11,6 @@ namespace StockManager.Models
     {
         public DbSet<Icon> Icons { get; set; }
         public DbSet<Keyword> Keywords { get; set; }
-        public DbSet<Theme> Themes { get; set; }
         public DbSet<Set> Sets { get; set; }
         public DbSet<Template> Templates { get; set; }
         public DbSet<Cell> Cells { get; set; }

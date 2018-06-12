@@ -11,8 +11,5 @@ namespace StockManager.Models
     {
         [Required, Index(IsUnique = true)]
         public string Name { get; set; }
-
-        public virtual ObservableCollection<Keyword> Keywords { get; set; }
-            = new ObservableCollection<Keyword>();
     }
 }

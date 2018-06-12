@@ -139,14 +139,6 @@ namespace StockManager.ViewModels
                                     }
 
                                     keyword.Icons.Add(IconInfo.Icon);
-
-                                    foreach (var theme in ThemesList.Where(t => t.IsSelected).Select(t => t.Item))
-                                    {
-                                        if (!theme.Keywords.Contains(keyword))
-                                        {
-                                            theme.Keywords.Add(keyword);
-                                        }
-                                    }
                                 });
                             }
                         }

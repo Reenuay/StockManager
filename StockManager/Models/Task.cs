@@ -9,7 +9,6 @@ namespace StockManager.Models
     /// </summary>
     public class Task : Creatable
     {
-        public int ThemeId { get; set; }
         public int TemplateId { get; set; }
         public int? BackgroundId { get; set; }
         public int QueueId { get; set; }
@@ -20,7 +19,6 @@ namespace StockManager.Models
         [Range(0, int.MaxValue)]
         public int Maximum { get; set; }
 
-        public virtual Theme Theme { get; set; }
         public virtual Template Template { get; set; }
         public virtual Background Background { get; set; }
         public virtual Queue Queue { get; set; }
@@ -30,7 +28,7 @@ namespace StockManager.Models
         {
             get
             {
-                return $"{Theme.Name} - {Template.Name} - {Background?.Name} - {Percentage} % - {Maximum} max";
+                return $"{Template.Name} - {Background?.Name} - {Percentage} % - {Maximum} max";
             }
         }
     }

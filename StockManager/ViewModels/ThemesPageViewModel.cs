@@ -30,7 +30,7 @@ namespace StockManager.ViewModels
                             SelectedName = t.Name;
                             SelectedKeywords
                                 = new ObservableCollection<string>(
-                                    t.Keywords.Select(k => k.Name)
+                                    //t.Keywords.Select(k => k.Name)
                                 );
                         }
                     },
@@ -105,7 +105,7 @@ namespace StockManager.ViewModels
                             var theme = new Theme
                             {
                                 Name = SelectedName,
-                                Keywords = keywords
+                                //Keywords = keywords
                             };
 
                             tRepo.Insert(theme);
@@ -124,7 +124,7 @@ namespace StockManager.ViewModels
                             }
 
                             SelectedTheme.Name = SelectedName;
-                            SelectedTheme.Keywords = keywords;
+                            //SelectedTheme.Keywords = keywords;
                             tRepo.Update(SelectedTheme);
                         }
                     }

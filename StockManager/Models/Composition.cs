@@ -14,11 +14,9 @@ namespace StockManager.Models
 
         public int SetId { get; set; }
         public int? BackgroundId { get; set; }
-        public int ThemeId { get; set; }
 
         public virtual Set Set { get; set; }
         public virtual Background Background { get; set; }
-        public virtual Theme Theme { get; set; }
 
         public virtual ObservableCollection<Mapping> Mappings { get; set; }
             = new ObservableCollection<Mapping>();

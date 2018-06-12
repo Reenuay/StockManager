@@ -68,7 +68,7 @@ namespace StockManager.ViewModels
                         bool can_pass()
                         {
                             return t != null
-                                && t.Theme.Keywords.Count > 0
+                                //&& t.Theme.Keywords.Count > 0
                                 && t.Template.Cells.Count > 0;
                         }
 
@@ -86,7 +86,7 @@ namespace StockManager.ViewModels
                                 Log = "";
 
                             SetGenerator.SetSettingsAndStart(
-                                t.Theme,
+                                /*t.Theme*/null,
                                 t.Template,
                                 t.Background,
                                 t.Percentage,
@@ -187,7 +187,7 @@ namespace StockManager.ViewModels
 
                     App.GetRepository<Task>().Insert(new Task
                     {
-                        Theme = Theme,
+                        //Theme = Theme,
                         Template = Template,
                         Background = Background,
                         Percentage = Percentage,
