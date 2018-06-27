@@ -79,6 +79,16 @@ namespace StockManager.ViewModels
                 },
                 new MainMenuItemViewModel()
                 {
+                    Name = "Backgrounds",
+                    Icon = PackIconKind.Image,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Page = () => new BackgroundPage()
+                    {
+                        DataContext = new BackgroundPageViewModel()
+                    }
+                },
+                new MainMenuItemViewModel()
+                {
                     Name = "Templates",
                     Icon = PackIconKind.Apps,
                     Page = () => new TemplatesPage()
@@ -95,7 +105,7 @@ namespace StockManager.ViewModels
                     {
                         DataContext = new SettingsPageViewModel()
                     }
-                }
+                },
             };
 
             //Переходим на домашнюю страницу

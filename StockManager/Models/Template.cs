@@ -12,6 +12,8 @@ namespace StockManager.Models
         [Required, Index(IsUnique = true)]
         public string Name { get; set; }
 
+        public bool IsHidden { get; set; }
+
         public virtual ObservableCollection<Cell> Cells { get; set; }
             = new ObservableCollection<Cell>();
 

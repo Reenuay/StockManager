@@ -2,13 +2,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace StockManager.Models
-{
+namespace StockManager.Models {
     /// <summary>
     /// Являет собой уникальное ключевове слово.
     /// </summary>
-    public class Keyword : Creatable
-    {
+    public class Keyword : Creatable {
         [Required, Index(IsUnique = true)]
         public string Name { get; set; }
 

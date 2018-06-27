@@ -18,6 +18,9 @@ namespace StockManager.Models {
         public virtual ObservableCollection<Template> Templates { get; set; }
             = new ObservableCollection<Template>();
 
+        public virtual ObservableCollection<Color> Colors { get; set; }
+            = new ObservableCollection<Color>();
+
         [NotMapped]
         public string Name {
             get {

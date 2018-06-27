@@ -128,6 +128,24 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -193,11 +211,20 @@
     <Compile Include="Migrations\201806121234219_RemoveIconName.Designer.cs">
       <DependentUpon>201806121234219_RemoveIconName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806171215016_TemplateHidden.cs" />
+    <Compile Include="Migrations\201806171215016_TemplateHidden.Designer.cs">
+      <DependentUpon>201806171215016_TemplateHidden.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806171434112_Colors.cs" />
+    <Compile Include="Migrations\201806171434112_Colors.Designer.cs">
+      <DependentUpon>201806171434112_Colors.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Background.cs" />
     <Compile Include="Models\Base.cs" />
     <Compile Include="Models\Cell.cs" />
     <Compile Include="Models\Changeable.cs" />
+    <Compile Include="Models\Color.cs" />
     <Compile Include="Models\Creatable.cs" />
     <Compile Include="Models\Composition.cs" />
     <Compile Include="Models\Mapping.cs" />
@@ -224,6 +251,8 @@
     <Compile Include="ValidationRules\NotNullValidationRules.cs" />
     <Compile Include="ValidationRules\UniqueTemplateNameValidationRule.cs" />
     <Compile Include="ValidationRules\Wrapper.cs" />
+    <Compile Include="ViewModels\BackgroundPageViewModel.cs" />
+    <Compile Include="ViewModels\BackgroundViewModel.cs" />
     <Compile Include="ViewModels\GeneratorPageViewModel.cs" />
     <Compile Include="ViewModels\IconViewModel.cs" />
     <Compile Include="Models\Keyword.cs" />
@@ -245,6 +274,9 @@
     <Compile Include="ViewModels\ThemesPageViewModel.cs" />
     <Compile Include="ViewModels\SelectableListBoxItem.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\BackgroundPage.xaml.cs">
+      <DependentUpon>BackgroundPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\GeneratorPage.xaml.cs">
       <DependentUpon>GeneratorPage.xaml</DependentUpon>
     </Compile>
@@ -256,6 +288,9 @@
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewGeneratorPage.xaml.cs">
+      <DependentUpon>NewGeneratorPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -322,6 +357,12 @@
     <EmbeddedResource Include="Migrations\201806121234219_RemoveIconName.resx">
       <DependentUpon>201806121234219_RemoveIconName.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806171215016_TemplateHidden.resx">
+      <DependentUpon>201806171215016_TemplateHidden.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806171434112_Colors.resx">
+      <DependentUpon>201806171434112_Colors.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -348,6 +389,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\BackgroundPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\GeneratorPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -363,6 +408,10 @@
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NewGeneratorPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SettingsPage.xaml">
       <SubType>Designer</SubType>

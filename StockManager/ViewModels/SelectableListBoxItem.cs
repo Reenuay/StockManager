@@ -8,9 +8,9 @@ namespace StockManager.ViewModels
 
         public bool IsSelected { get; set; }
 
-        public SelectableListBoxItem(T theme, bool isSelected = false)
+        public SelectableListBoxItem(T item, bool isSelected = false)
         {
-            Item = theme;
+            Item = item;
             IsSelected = isSelected;
         }
     }
