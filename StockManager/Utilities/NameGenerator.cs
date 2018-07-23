@@ -16,11 +16,11 @@ namespace StockManager.Utilities
         {
             (t, c) =>
             {
-                return new Regex(@"\[theme\]").Replace(t, "");
+                return new Regex(@"\[theme\]").Replace(t, c.Theme.Name);
             },
             (t, c) =>
             {
-                return new Regex(@"\[themeLowerCase\]").Replace(t, "");
+                return new Regex(@"\[themeLowerCase\]").Replace(t, c.Theme.Name.ToLower());
             },
             (t, c) =>
             {
