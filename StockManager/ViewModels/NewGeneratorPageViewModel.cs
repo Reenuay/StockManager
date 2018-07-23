@@ -672,12 +672,17 @@ namespace StockManager.ViewModels {
             worker.DoWork += DoWork;
             worker.RunWorkerCompleted += OnWorkCompleted;
 
+            var setsPath = Path.Combine(
+                Environment.CurrentDirectory,
+                Settings.Default.SetsDirectory
+            );
+
+            if (!Directory.Exists(setsPath))
+                Directory.CreateDirectory(setsPath);
+
             watcher = new FileSystemWatcher {
                 NotifyFilter = NotifyFilters.FileName,
-                Path = Path.Combine(
-                    Environment.CurrentDirectory,
-                    Settings.Default.SetsDirectory
-                ),
+                Path = setsPath,
                 IncludeSubdirectories = true,
                 EnableRaisingEvents = true,
             };
