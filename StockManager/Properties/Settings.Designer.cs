@@ -265,5 +265,17 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]")]
                 this["WaitForFileTriesNumber"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3000")]
+        public int WaitForIllustratorSavesFile {
+            get {
+                return ((int)(this["WaitForIllustratorSavesFile"]));
+            }
+            set {
+                this["WaitForIllustratorSavesFile"] = value;
+            }
+        }
     }
 }

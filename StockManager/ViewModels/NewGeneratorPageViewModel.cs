@@ -638,7 +638,7 @@ namespace StockManager.ViewModels {
 
         private void OnCreated(object sender, FileSystemEventArgs e) {
             if (waitForFileName == e.FullPath) {
-                Thread.Sleep(3000);
+                Thread.Sleep(Settings.Default.WaitForIllustratorSavesFile);
                 WaitForFile(
                     waitForFileName,
                     Settings.Default.WaitForFileTriesNumber,
