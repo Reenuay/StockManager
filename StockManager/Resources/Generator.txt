@@ -1,0 +1,188 @@
+var epsName = "{{epsName}}";
+var jpegName = "{{jpegName}}";
+var backgroundPath = "{{backgroundPath}}";
+var color = "{{color}}";
+var useColor = {{useColor}};
+var icons = {{{icons}}};
+
+var width = 1000;
+var height = 1000;
+var hexes = {
+    0: 0,
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 4,
+    5: 5,
+    6: 6,
+    7: 7,
+    8: 8,
+    9: 9,
+    'A': 10,
+    'B': 11,
+    'C': 12,
+    'D': 13,
+    'E': 14,
+    'F': 15,
+};
+
+var newColor;
+
+if (useColor && color) {
+	newColor = new RGBColor();
+	newColor.red = hexes[ color[0] ] * 16 + hexes[ color[1] ];
+	newColor.green = hexes[ color[2] ] * 16 + hexes[ color[3] ];
+	newColor.blue = hexes[ color[4] ] * 16 + hexes[ color[5] ];
+}
+
+var preset = new DocumentPreset();
+preset.width = width;
+preset.height = height;
+preset.units = RulerUnits.Pixels;
+preset.colorMode = DocumentColorSpace.RGB;
+
+var targetDoc = app.documents.addDocument(
+    "IconSet",
+    preset
+);
+
+var background = app.open(
+    new File(backgroundPath),
+    DocumentColorSpace.RGB
+);
+
+for (var layer in background.layers)
+{
+    background.layers[layer].locked = false;
+}
+
+for (var item in background.pageItems)
+{
+    background.pageItems[item].locked = false;
+}
+
+executeMenuCommand("selectall");
+executeMenuCommand("group");
+
+var backGroup = activeDocument.selection[0].duplicate(
+    targetDoc,
+    ElementPlacement.PLACEATEND
+);
+
+var percentage = backGroup.Width >= backGroup.Height
+    ? targetDoc.width / backGroup.width
+    : targetDoc.height / backGroup.height
+    ;
+
+backGroup.width *= percentage;
+backGroup.height *= percentage;
+
+backGroup.left = 0;
+backGroup.top = targetDoc.height;
+
+background.close(SaveOptions.DONOTSAVECHANGES);
+
+for (var index in icons) {
+    var icon = icons[index];
+
+    var iconDoc = app.open(
+        new File(icon.icon),
+        DocumentColorSpace.RGB
+    );
+
+    app.activeDocument = iconDoc;
+
+    for (var layer in iconDoc.layers) {
+        iconDoc.layers[layer].locked = false;
+    }
+
+    for (var item in iconDoc.pageItems) {
+        iconDoc.pageItems[item].locked = false;
+    }
+
+    executeMenuCommand("selectall");
+    executeMenuCommand("group");
+
+    var newGroup = app.activeDocument.selection[0].duplicate(
+        targetDoc,
+        ElementPlacement.PLACEATBEGINNING
+    );
+
+	if (useColor)
+		setColor(newGroup, newColor);
+
+    var x = targetDoc.width * icon.x / 100,
+        y = targetDoc.height * icon.y / 100,
+        w = targetDoc.width * icon.w / 100,
+        h = targetDoc.height * icon.h / 100;
+
+    var gw = newGroup.width,
+        gh = newGroup.height;
+
+    percentage = gw >= gh ? w / gw : h / gh;
+
+    newGroup.width *= percentage;
+    newGroup.height *= percentage;
+
+    newGroup.left = x + (w - newGroup.width) / 2;
+    newGroup.top = y + h - (h - newGroup.height) / 2;
+
+    iconDoc.close(SaveOptions.DONOTSAVECHANGES);
+}
+
+clipScan(targetDoc);
+
+var saveOptions = new EPSSaveOptions();
+saveOptions.preview = EPSPreview.TRANSPARENTCOLORTIFF;
+saveOptions.compatibility = Compatibility.ILLUSTRATOR10;
+saveOptions.embedAllFonts = true;
+saveOptions.cmykPostScript = true;
+saveOptions.embedLinkedFiles = true;
+
+targetDoc.saveAs(new File(epsName), saveOptions);
+
+var exportOptions = new ExportOptionsJPEG();
+exportOptions.antiAliasing = false;
+exportOptions.optimization = true;
+exportOptions.qualitySetting = 100;
+exportOptions.horizontalScale = 500;
+exportOptions.verticalScale = 500;
+exportOptions.artBoardClipping = true;
+
+targetDoc.exportFile(new File(jpegName), ExportType.JPEG, exportOptions);
+
+targetDoc.close(SaveOptions.DONOTSAVECHANGES);
+
+
+function clipScan(docRef) {
+    for (i=docRef.pageItems.length-1;i>=0;i--) {
+        if (docRef.pageItems[i].clipping == true){
+            docRef.pageItems[i].remove();
+        }
+    }
+}
+
+function setColor(el, newColor) {
+    switch (el.typename) {
+        case "PathItem":
+            if (el.filled) {
+                el.fillColor = newColor;
+            }
+            break;
+        case "CompoundPathItem":
+            for (k = el.pathItems.length - 1; k > -1; k--) {
+                if (el.pathItems[k].filled) {
+                    el.pathItems[k].fillColor = newColor;
+                }
+            }
+            break;
+        case "GroupItem":
+            var j;
+            for (j = el.pageItems.length - 1; j > -1; j--) {
+                setColor(el.pageItems[j], newColor);
+            }
+            break;
+        default:
+            break;
+    }
+}

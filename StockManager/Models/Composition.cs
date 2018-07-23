@@ -13,9 +13,13 @@ namespace StockManager.Models
         public string Name { get; set; }
 
         public int SetId { get; set; }
+        public int? ThemeId { get; set; }
+        public int? ColorId { get; set; }
         public int? BackgroundId { get; set; }
 
         public virtual Set Set { get; set; }
+        public virtual Keyword Theme { get; set; }
+        public virtual Color Color { get; set; }
         public virtual Background Background { get; set; }
 
         public virtual ObservableCollection<Mapping> Mappings { get; set; }

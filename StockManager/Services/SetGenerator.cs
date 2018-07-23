@@ -134,7 +134,8 @@ namespace StockManager.Services
                 return;
             }
 
-            cEnumerator = new CombinationEnumerator(iconsCount, cellsCount);
+            cEnumerator = new CombinationEnumerator();
+            cEnumerator.ChangeValues(iconsCount, cellsCount);
 
             // Достаём айдишники для запроса в базу
             var matchingIconsIds = MatchingIcons.Select(i => i.Id);

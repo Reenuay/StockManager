@@ -2,13 +2,11 @@
 using EntityFramework.Triggers;
 using StockManager.Migrations;
 
-namespace StockManager.Models
-{
+namespace StockManager.Models {
     /// <summary>
     /// Являет собой контекст базы данных приложения.
     /// </summary>
-    class Context : DbContextWithTriggers
-    {
+    class Context : DbContextWithTriggers {
         public DbSet<Icon> Icons { get; set; }
         public DbSet<Keyword> Keywords { get; set; }
         public DbSet<Set> Sets { get; set; }
@@ -21,9 +19,22 @@ namespace StockManager.Models
 
         public DbSet<LogEntry> LogEntries { get; set; }
 
-        public Context()
-        {
+        public Context() {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, Configuration>());
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder) {
+            modelBuilder
+                .Entity<Keyword>()
+                .HasMany(k => k.ThemeCompositions)
+                .WithOptional(c => c.Theme);
+
+            modelBuilder
+                .Entity<Keyword>()
+                .HasMany(k => k.Compositions)
+                .WithMany(c => c.Keywords);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

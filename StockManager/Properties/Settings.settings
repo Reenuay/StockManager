@@ -75,5 +75,11 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]</Value>
     <Setting Name="AutoKeywordFtpPass" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="GeneratorKeywords" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="IllustratorPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Program Files\Adobe\Adobe Illustrator CC 2017\Support Files\Contents\Windows\Illustrator.exe</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

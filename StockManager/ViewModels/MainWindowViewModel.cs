@@ -98,6 +98,15 @@ namespace StockManager.ViewModels
                 },
                 new MainMenuItemViewModel()
                 {
+                    Name = "Generator",
+                    Icon = PackIconKind.Flash,
+                    Page = () => new NewGeneratorPage()
+                    {
+                        DataContext = NewGeneratorPageViewModel.Singleton
+                    }
+                },
+                new MainMenuItemViewModel()
+                {
                     Name = "Settings",
                     Icon = PackIconKind.Settings,
                     HorizontalAlignment = HorizontalAlignment.Right,

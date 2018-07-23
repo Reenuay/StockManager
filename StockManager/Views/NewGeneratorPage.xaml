@@ -17,5 +17,162 @@
       TextOptions.TextRenderingMode="Auto"
       FontFamily="{DynamicResource MaterialDesignFont}">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Grid.Column="0"
+                  Style="{DynamicResource MaterialDesignGroupBox}"
+                  materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                  BorderThickness="0"
+                  Margin="5">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Settings" Height="32" Width="32" VerticalAlignment="Center"/>
+                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Settings"/>
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid IsEnabled="{c:Binding !IsGenerating}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Maximum" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                    <TextBox Grid.Row="1" Margin="0,0,0,10" Text="{Binding Maximum}"/>
+                    <TextBlock Grid.Row="2" Text="Templates" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                    <ListBox ItemsSource="{Binding TemplateList}"
+                             IsSynchronizedWithCurrentItem="False"
+                             SelectedIndex="-1"
+                             Grid.Row="3"
+                             Margin="0,0,0,10">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="commands:CommandBehavior.Command" Value="{Binding DataContext.SelectTemplateCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
+                                <Setter Property="commands:CommandBehavior.CommandParameter" Value="{Binding }"/>
+                                <Setter Property="commands:CommandBehavior.RoutedEventName" Value="PreviewMouseLeftButtonDown"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid HorizontalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Item.Name}"/>
+                                    <materialDesign:PackIcon HorizontalAlignment="Right"
+                                                             Kind="Check"
+                                                             Cursor="Hand"
+                                                             ToolTip="Checked"
+                                                             Visibility="{c:Binding IsSelected}"
+                                                             Margin="5,0"
+                                                             Grid.Column="1"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <TextBlock Grid.Row="4" Text="Keywords" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                    <TextBox Grid.Row="5"
+                             Margin="0,0,0,10"
+                             Text="{Binding Keywords}"
+                             Style="{StaticResource MaterialDesignTextAreaTextBox}"
+                             VerticalScrollBarVisibility="Auto"
+                             HorizontalScrollBarVisibility="Auto"
+                             AcceptsReturn="True"/>
+                    <TextBlock Grid.Row="6" Text="Use colors" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                    <CheckBox Grid.Row="7" Margin="0,0,0,10" IsChecked="{Binding UseColors}"/>
+                    <TextBlock Grid.Row="8" Text="Use Range" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                    <Grid Grid.Row="9">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox IsChecked="{Binding UseRange}" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" IsEnabled="{c:Binding UseRange}" VerticalAlignment="Center">
+                            <TextBlock Text="Generate From" Margin="5,0" VerticalAlignment="Center"/>
+                            <TextBox Text="{Binding From}" VerticalAlignment="Center" MinWidth="8"/>
+                            <TextBlock Text="To" Margin="5,0" VerticalAlignment="Center"/>
+                            <TextBox Text="{Binding To}" VerticalAlignment="Center" MinWidth="8"/>
+                            <TextBlock Text="sets for each keyword" Margin="5,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+                <Border Margin="0,5"
+                        BorderThickness="0,1,0,0"
+                        BorderBrush="{DynamicResource MaterialDesignDivider}"
+                        Grid.Row="1"/>
+                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                        Grid.Row="2"
+                        Command="{Binding StartGenerationCommand}"
+                        Visibility="{c:Binding !IsGenerating}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Play" Height="32" Width="32" VerticalAlignment="Center" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                        <TextBlock Text="Start" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                        Grid.Row="2"
+                        Command="{Binding StopGenerationCommand}"
+                        Visibility="{c:Binding IsGenerating}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Stop" Height="32" Width="32" VerticalAlignment="Center" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                        <TextBlock Text="Stop" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="1"
+                  Style="{DynamicResource MaterialDesignGroupBox}"
+                  materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                  BorderThickness="0"
+                  Margin="5">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Information" Height="32" Width="32" VerticalAlignment="Center"/>
+                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Info"/>
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Total" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                <TextBlock Grid.Row="1" Margin="0,0,0,10" Text="{Binding Total}"/>
+                <TextBlock Grid.Row="2" Text="Time Elapsed" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                <TextBlock Grid.Row="3" Margin="0,0,0,10" Text="{Binding TimeElapsed}"/>
+                <TextBlock Grid.Row="4" Text="Messages" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                <TextBox Grid.Row="5"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Auto"
+                         Margin="0,0,0,10"
+                         Text="{Binding Message, Mode=OneWay}"
+                         IsReadOnly="True"
+                         Style="{StaticResource MaterialDesignTextAreaTextBox}"/>
+            </Grid>
+        </GroupBox>
     </Grid>
 </Page>

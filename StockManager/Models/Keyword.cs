@@ -15,5 +15,8 @@ namespace StockManager.Models {
 
         public virtual ObservableCollection<Composition> Compositions { get; set; }
             = new ObservableCollection<Composition>();
+
+        public virtual ObservableCollection<Composition> ThemeCompositions { get; set; }
+            = new ObservableCollection<Composition>();
     }
 }

@@ -9,22 +9,14 @@ namespace StockManager.Utilities
 {
     class CombinationEnumerator
     {
-        private Random dice = new Random();
-
-        private int n;
-        private int k;
+        private Random dice;
         private BigInteger count;
-        private int[] current;
-        private bool calculated = false;
+        private bool calculated;
 
-        public int N
-        {
-            get { return n; }
-        }
-        public int K
-        {
-            get { return k; }
-        }
+        public int N { get; private set; }
+        public int K { get; private set; }
+        public int[] Current { get; private set; }
+
         public BigInteger Count
         {
             get {
@@ -35,34 +27,31 @@ namespace StockManager.Utilities
                 return count;
             }
         }
-        public int[] Current
-        {
-            get { return current; }
-        }
+
         public int[] Next
         {
             get
             {
-                var positions = new int[k];
-                current.CopyTo(positions, 0);
+                var positions = new int[K];
+                Current.CopyTo(positions, 0);
 
-                for (var i = k - 1; i >= 0; i--)
+                for (var i = K - 1; i >= 0; i--)
                 {
                     positions[i]++;
 
-                    if (i < k - 1)
+                    if (i < K - 1)
                     {
-                        for (var j = i + 1; j < k; j++)
+                        for (var j = i + 1; j < K; j++)
                         {
                             positions[j] = positions[i] + j - i;
                         }
                     }
 
-                    if (positions[i] > i + n - k)
+                    if (positions[i] > i + N - K)
                     {
                         if (i == 0)
                         {
-                            for (var j = 0; j < k; j++)
+                            for (var j = 0; j < K; j++)
                             {
                                 positions[j] = j;
                             }
@@ -74,8 +63,8 @@ namespace StockManager.Utilities
                     }
                 }
 
-                current = positions;
-                return current;
+                Current = positions;
+                return Current;
             }
         }
         public int[] Random
@@ -83,60 +72,71 @@ namespace StockManager.Utilities
             get
             {
                 // Список всех элементов множества.
-                var indexes = Enumerable.Range(0, n).ToArray();
+                var indexes = Enumerable.Range(0, N).ToArray();
 
                 // Список приоритетов элементов множества в сортировке.
-                var randomOrders = indexes.Select(p => dice.Next()).ToArray();
+                var randomOrders = indexes.Select(RandomNumber).ToArray();
 
                 // Отбираем k случайных элементов множества n.
-                current = indexes
+                Current = indexes
                     .OrderBy(i => randomOrders[i])
-                    .Take(k)
+                    .Take(K)
                     .ToArray();
 
-                return current;
+                return Current;
             }
         }
 
-        public CombinationEnumerator(int n, int k)
+        public CombinationEnumerator(int n = 0, int k = 0)
         {
-            if (n <= 0)
-                throw new ArgumentException(
-                    $"{nameof(n)} can not be less than or equal to zero."
-                );
+            dice = new Random();
+            ChangeValues(n, k);
+        }
 
-            if (k <= 0)
-                throw new ArgumentException(
-                    $"{nameof(k)} can not be less than or equal to zero."
-                );
+        public void ChangeValues(int n, int k) {
+            calculated = false;
+            count = 0;
 
             if (n < k)
                 throw new ArgumentException(
                     $"{nameof(n)} can not be less than {nameof(k)}."
                 );
 
-            this.n = n;
-            this.k = k;
+            N = n;
+            K = k;
 
-            current = new int[k];
-            for (var i = 0; i < k; i++)
-            {
-                current[i] = i;
+            Current = new int[k];
+            for (var i = 0; i < k; i++) {
+                Current[i] = i;
             }
         }
 
         private void Calculate()
         {
-            if (k == 1)
-                count = n;
+            if (K == 0) {
+                count = 0;
+                return;
+            }
 
-            if (k == n)
+            if (N == 0) {
+                count = 0;
+                return;
+            }
+
+            if (K == 1) {
+                count = N;
+                return;
+            }
+
+            if (K == N) {
                 count = 1;
+                return;
+            }
 
-            if (k >= n / 2)
-                count = ProductOfRange(n, k) / ProductOfRange(n - k, 1);
+            if (K >= N / 2)
+                count = ProductOfRange(N, K) / ProductOfRange(N - K, 1);
             else
-                count = ProductOfRange(n, n - k) / ProductOfRange(k, 1);
+                count = ProductOfRange(N, N - K) / ProductOfRange(K, 1);
         }
 
         private BigInteger ProductOfRange(int from, int to)
@@ -149,6 +149,10 @@ namespace StockManager.Utilities
             }
 
             return product;
+        }
+
+        private int RandomNumber(int n) {
+            return dice.Next();
         }
     }
 }

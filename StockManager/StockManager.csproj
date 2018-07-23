@@ -90,6 +90,12 @@
     <Reference Include="MaterialDesignThemes.Wpf, Version=2.3.1.953, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.2.3.1.953\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Mustachio, Version=1.0.26.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mustachio.1.1.26\lib\net45\Mustachio.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
     </Reference>
@@ -219,6 +225,10 @@
     <Compile Include="Migrations\201806171434112_Colors.Designer.cs">
       <DependentUpon>201806171434112_Colors.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807141002131_CompositionThemeAndColors.cs" />
+    <Compile Include="Migrations\201807141002131_CompositionThemeAndColors.Designer.cs">
+      <DependentUpon>201807141002131_CompositionThemeAndColors.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Background.cs" />
     <Compile Include="Models\Base.cs" />
@@ -269,6 +279,7 @@
     <Compile Include="ViewModels\MainMenuItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="ViewModels\NewGeneratorPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="ViewModels\TemplatesPageViewModel.cs" />
     <Compile Include="ViewModels\ThemesPageViewModel.cs" />
@@ -316,7 +327,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Content Include="Resources\Generator.js" />
+    <None Include="Resources\Generator.txt" />
     <Resource Include="Resources\Preview.png" />
     <EmbeddedResource Include="Migrations\201712161443518_Complete.resx">
       <DependentUpon>201712161443518_Complete.cs</DependentUpon>
@@ -362,6 +373,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806171434112_Colors.resx">
       <DependentUpon>201806171434112_Colors.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807141002131_CompositionThemeAndColors.resx">
+      <DependentUpon>201807141002131_CompositionThemeAndColors.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

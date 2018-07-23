@@ -22,5 +22,8 @@ namespace StockManager.Models {
 
         public virtual ObservableCollection<Background> Backgrounds { get; set; }
             = new ObservableCollection<Background>();
+
+        public virtual ObservableCollection<Composition> Compositions { get; set; }
+            = new ObservableCollection<Composition>();
     }
 }

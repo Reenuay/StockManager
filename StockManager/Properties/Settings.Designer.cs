@@ -204,5 +204,30 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]")]
                 this["AutoKeywordFtpPass"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GeneratorKeywords {
+            get {
+                return ((string)(this["GeneratorKeywords"]));
+            }
+            set {
+                this["GeneratorKeywords"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\Adobe\\Adobe Illustrator CC 2017\\Support Files\\Contents\\Windows\\I" +
+            "llustrator.exe")]
+        public string IllustratorPath {
+            get {
+                return ((string)(this["IllustratorPath"]));
+            }
+            set {
+                this["IllustratorPath"] = value;
+            }
+        }
     }
 }
