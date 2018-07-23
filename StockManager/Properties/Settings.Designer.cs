@@ -244,13 +244,25 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]")]
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Параметр {
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public int WaitForFileInterval {
             get {
-                return ((string)(this["Параметр"]));
+                return ((int)(this["WaitForFileInterval"]));
             }
             set {
-                this["Параметр"] = value;
+                this["WaitForFileInterval"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int WaitForFileTriesNumber {
+            get {
+                return ((int)(this["WaitForFileTriesNumber"]));
+            }
+            set {
+                this["WaitForFileTriesNumber"] = value;
             }
         }
     }

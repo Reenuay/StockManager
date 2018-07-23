@@ -84,8 +84,11 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]</Value>
     <Setting Name="WaitForIllustrator" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">120000</Value>
     </Setting>
-    <Setting Name="Параметр" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="WaitForFileInterval" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">500</Value>
+    </Setting>
+    <Setting Name="WaitForFileTriesNumber" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
     </Setting>
   </Settings>
 </SettingsFile>

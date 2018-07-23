@@ -622,8 +622,48 @@ namespace StockManager.ViewModels {
         private void OnCreated(object sender, FileSystemEventArgs e) {
             if (waitForFileName == e.FullPath) {
                 Thread.Sleep(3000);
+                WaitForFile(waitForFileName);
                 generatorHandle.Set();
             }
+        }
+
+        private bool WaitForFile(string fullPath) {
+            var numTries = 0;
+            while (true) {
+                ++numTries;
+                try {
+                    using (
+                        var fs = new FileStream(
+                            fullPath,
+                            FileMode.Open,
+                            FileAccess.ReadWrite,
+                            FileShare.None,
+                            100
+                        )
+                    ) {
+                        fs.ReadByte();
+                        break;
+                    }
+                }
+                catch (Exception ex) {
+                    AddMessage(
+                       $"WaitForFile {fullPath} failed to get"
+                       + $" an exclusive lock: {ex.ToString()}"
+                    );
+
+                    if (numTries > Settings.Default.WaitForFileTriesNumber) {
+                        return false;
+                    }
+
+                    Thread.Sleep(Settings.Default.WaitForFileInterval);
+                }
+            }
+
+            AddMessage(
+                $"WaitForFile {fullPath} returning true after {numTries} tries"
+            );
+
+            return true;
         }
 
         public NewGeneratorPageViewModel() {
