@@ -40,6 +40,7 @@ namespace StockManager.ViewModels {
         private EventWaitHandle generatorHandle
             = new EventWaitHandle(false, EventResetMode.AutoReset);
         private string waitForFileName;
+        private string waitForFileNameWithoutExtension;
 
         public ObservableCollection<SelectableListBoxItem<Template>> TemplateList { get; private set; }
         public int Maximum {
@@ -491,6 +492,11 @@ namespace StockManager.ViewModels {
                             $"{composition.Set.Snapshot}.m.jpg"
                         );
 
+                        waitForFileNameWithoutExtension = Path.Combine(
+                            newSetPath,
+                            composition.Set.Snapshot
+                        );
+
                         var mustachioTemplate
                             = Mustachio.Parser.Parse(Resources.Generator);
 
@@ -594,6 +600,17 @@ namespace StockManager.ViewModels {
                     }
                 }
                 catch (Exception ex) {
+
+                    foreach(var ext in new[] { ".jpg", ".m.jpg", ".eps"} ) {
+                        var fileName
+                            = $"{waitForFileNameWithoutExtension}{ext}";
+
+                        if (File.Exists(fileName)) {
+                            if (WaitForFile(fileName, 5, 500))
+                                File.Delete(fileName);
+                        }
+                    }
+
                     Logger.Error(ex);
                     LogException(ex);
                     AddMessage("------------------ERROR-------------------");
@@ -622,12 +639,16 @@ namespace StockManager.ViewModels {
         private void OnCreated(object sender, FileSystemEventArgs e) {
             if (waitForFileName == e.FullPath) {
                 Thread.Sleep(3000);
-                WaitForFile(waitForFileName);
+                WaitForFile(
+                    waitForFileName,
+                    Settings.Default.WaitForFileTriesNumber,
+                    Settings.Default.WaitForFileInterval
+                );
                 generatorHandle.Set();
             }
         }
 
-        private bool WaitForFile(string fullPath) {
+        private bool WaitForFile(string fullPath, int tries, int interval) {
             var numTries = 0;
             while (true) {
                 ++numTries;
@@ -651,11 +672,11 @@ namespace StockManager.ViewModels {
                        + $" an exclusive lock: {ex.ToString()}"
                     );
 
-                    if (numTries > Settings.Default.WaitForFileTriesNumber) {
+                    if (numTries > tries) {
                         return false;
                     }
 
-                    Thread.Sleep(Settings.Default.WaitForFileInterval);
+                    Thread.Sleep(interval);
                 }
             }
 
