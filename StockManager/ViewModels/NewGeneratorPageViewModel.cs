@@ -620,8 +620,6 @@ namespace StockManager.ViewModels {
         }
 
         private void OnCreated(object sender, FileSystemEventArgs e) {
-            AddMessage($"Event fired - {e.FullPath}");
-
             if (waitForFileName == e.FullPath) {
                 Thread.Sleep(3000);
                 generatorHandle.Set();
