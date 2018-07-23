@@ -4,6 +4,7 @@ var backgroundPath = "{{backgroundPath}}";
 var color = "{{color}}";
 var useColor = {{useColor}};
 var icons = {{{icons}}};
+var quitIllustrator = {{quitIllustrator}};
 
 var width = 1000;
 var height = 1000;
@@ -152,6 +153,9 @@ exportOptions.artBoardClipping = true;
 targetDoc.exportFile(new File(jpegName), ExportType.JPEG, exportOptions);
 
 targetDoc.close(SaveOptions.DONOTSAVECHANGES);
+
+if (quitIllustrator)
+	app.quit();
 
 
 function clipScan(docRef) {

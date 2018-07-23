@@ -507,6 +507,13 @@ namespace StockManager.ViewModels {
                         model.color = colorHEX;
                         model.useColor = colorHEX == null ? 0 : 1;
                         model.icons = iconJson;
+                        model.quitIllustrator = (
+                            Settings.Default.RestartIllustrator
+                            && Total > 0
+                            && Total / Settings.Default.AfterEachNSets == 0
+                        )
+                        .ToString()
+                        .ToLower();
 
                         AddMessage("Creating script...");
 
@@ -535,7 +542,7 @@ namespace StockManager.ViewModels {
 
                         process.Start();
 
-                        generatorHandle.WaitOne();
+                        generatorHandle.WaitOne(Settings.Default.WaitForIllustrator);
 
                         if (File.Exists(waitForFileName)) {
                             AddMessage("Writing Meta...");

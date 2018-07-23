@@ -229,5 +229,29 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]")]
                 this["IllustratorPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120000")]
+        public int WaitForIllustrator {
+            get {
+                return ((int)(this["WaitForIllustrator"]));
+            }
+            set {
+                this["WaitForIllustrator"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Параметр {
+            get {
+                return ((string)(this["Параметр"]));
+            }
+            set {
+                this["Параметр"] = value;
+            }
+        }
     }
 }
