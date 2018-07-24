@@ -102,6 +102,10 @@ namespace StockManager.ViewModels {
             get {
                 return message.ToString();
             }
+
+            set {
+                message.Append(value);
+            }
         }
 
         public ICommand SelectTemplateCommand {
@@ -158,11 +162,12 @@ namespace StockManager.ViewModels {
         }
 
         private void AddMessage(string message = "") {
-            this.message.Append(message + "\n");
+            Message = message + "\n";
         }
 
         private void ClearMessages() {
             message.Clear();
+            Message = "";
         }
 
         private void Refresh() {
