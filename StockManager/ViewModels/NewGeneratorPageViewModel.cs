@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Windows.Input;
 using Newtonsoft.Json;
@@ -95,7 +96,13 @@ namespace StockManager.ViewModels {
                     To = to;
             }
         }
-        public string Message { get; private set; } = "";
+
+        private StringBuilder message = new StringBuilder("");
+        public string Message {
+            get {
+                return message.ToString();
+            }
+        }
 
         public ICommand SelectTemplateCommand {
             get {
@@ -130,8 +137,7 @@ namespace StockManager.ViewModels {
                                 0,
                                 1000
                             );
-                            Message = "";
-
+                            ClearMessages();
                             worker.RunWorkerAsync();
                         }
                     }
@@ -152,7 +158,11 @@ namespace StockManager.ViewModels {
         }
 
         private void AddMessage(string message = "") {
-            Message += message + "\n";
+            this.message.Append(message + "\n");
+        }
+
+        private void ClearMessages() {
+            message.Clear();
         }
 
         private void Refresh() {

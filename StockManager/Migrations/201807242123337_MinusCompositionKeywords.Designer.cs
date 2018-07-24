@@ -13,7 +13,7 @@ namespace StockManager.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201807242027561_MinusCompositionKeywords"; }
+            get { return "201807242123337_MinusCompositionKeywords"; }
         }
         
         string IMigrationMetadata.Source
