@@ -125,7 +125,9 @@ namespace StockManager.ViewModels {
 
         private void RefreshBackroundList() {
             BackgroundList = new ObservableCollection<Background>(
-                context.Backgrounds.ToList()
+                context.Backgrounds
+                    .Where(b => !b.IsDeleted)
+                    .ToList()
             );
         }
 
