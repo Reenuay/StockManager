@@ -522,7 +522,7 @@ namespace StockManager.ViewModels {
                         model.quitIllustrator = (
                             Settings.Default.RestartIllustrator
                             && Total > 0
-                            && Total / Settings.Default.AfterEachNSets == 0
+                            && Total % Settings.Default.AfterEachNSets == 0
                         )
                         .ToString()
                         .ToLower();
