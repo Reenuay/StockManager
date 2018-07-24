@@ -50,6 +50,7 @@ namespace StockManager.Utilities
                 return new Regex(@"\[icons\]")
                     .Replace(t, c.Set.Icons
                         .Select(i => i.Name)
+                        .Distinct()
                         .Aggregate(
                             (a,b) => a + ", " + b
                         )
