@@ -114,6 +114,7 @@ namespace StockManager.Utilities
             {
                 var r = new Regex(@"\[(i|I)consRandom:(\d+)\]");
                 var rgx = new Regex("[^a-zA-Z]");
+                var spaceRgx = new Regex(@"\s{2,}", RegexOptions.None);
 
                 while (true)
                 {
@@ -122,12 +123,21 @@ namespace StockManager.Utilities
                     if (!match.Success)
                         break;
 
-                    var icons = c.Set.Icons.Select(
-                        i => rgx.Replace(
-                            Path.GetFileNameWithoutExtension(i.FullPath),
-                            " "
-                        ).Trim().ToLower()
-                    ).ToList();
+                    var icons = c.Set.Icons
+                        .Select(
+                            i => spaceRgx.Replace(
+                                rgx.Replace(
+                                    Path.GetFileNameWithoutExtension(
+                                        i.FullPath
+                                    ),
+                                    " "
+                                ).Trim(),
+                                " "
+                            )
+                            .ToLower()
+                        )
+                        .Distinct()
+                        .ToList();
 
                     var cl = match.Groups[1].Value;
                     var n = int.Parse(match.Groups[2].Value);
