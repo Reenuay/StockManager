@@ -44,6 +44,7 @@ namespace StockManager.ViewModels {
         private string waitForFileNameWithoutExtension;
 
         public ObservableCollection<SelectableListBoxItem<Template>> TemplateList { get; private set; }
+        public ObservableCollection<SelectableListBoxItem<string>> NameTemplateList { get; set; }
         public int Maximum {
             get {
                 return maximum;
@@ -125,6 +126,23 @@ namespace StockManager.ViewModels {
             }
         }
 
+        public ICommand SelectNameTemplateCommand {
+            get {
+                return new RelayCommand(
+                    o => {
+                        if (o is SelectableListBoxItem<string> nt) {
+                            if (nt.IsSelected) {
+                                nt.IsSelected = false;
+                            }
+                            else {
+                                nt.IsSelected = true;
+                            }
+                        }
+                    }
+                );
+            }
+        }
+
         public ICommand StartGenerationCommand {
             get {
                 return new RelayCommand(
@@ -171,28 +189,52 @@ namespace StockManager.ViewModels {
         }
 
         private void Refresh() {
-            var selecteds = new Dictionary<int, bool>();
-            if (TemplateList != null) {
-                foreach (var t in TemplateList) {
-                    selecteds[t.Item.Id] = t.IsSelected;
+            {
+                var selecteds = new Dictionary<int, bool>();
+                if (TemplateList != null) {
+                    foreach (var t in TemplateList) {
+                        selecteds[t.Item.Id] = t.IsSelected;
+                    }
                 }
+
+                TemplateList = new ObservableCollection<SelectableListBoxItem<Template>>(
+                    context
+                    .Templates
+                    .Include("Cells")
+                    .Where(t => !t.IsHidden && t.Cells.Any())
+                    .AsEnumerable()
+                    .Select(t =>
+                        new SelectableListBoxItem<Template>(
+                            t,
+                            selecteds.ContainsKey(t.Id)
+                                ? selecteds[t.Id]
+                                : false
+                        )
+                    )
+                );
             }
 
-            TemplateList = new ObservableCollection<SelectableListBoxItem<Template>>(
-                context
-                .Templates
-                .Include("Cells")
-                .Where(t => !t.IsHidden && t.Cells.Any())
-                .AsEnumerable()
-                .Select(t =>
-                    new SelectableListBoxItem<Template>(
-                        t,
-                        selecteds.ContainsKey(t.Id)
-                            ? selecteds[t.Id]
-                            : false
-                    )
-                )
-            );
+            {
+                var selecteds = new Dictionary<string, bool>();
+                if (NameTemplateList != null) {
+                    foreach (var nt in NameTemplateList) {
+                        selecteds[nt.Item] = nt.IsSelected;
+                    }
+                }
+
+                NameTemplateList = new ObservableCollection<SelectableListBoxItem<string>>(
+                    Settings.Default.NameTemplates
+                        .Cast<string>()
+                        .Select(nt =>
+                            new SelectableListBoxItem<string>(
+                                nt,
+                                selecteds.ContainsKey(nt)
+                                    ? selecteds[nt]
+                                    : false
+                            )
+                        )
+                );
+            }
         }
 
         private void DoWork(object sender, DoWorkEventArgs e) {
@@ -261,6 +303,16 @@ namespace StockManager.ViewModels {
 
             if (selectedTemplates.Count == 0) {
                 AddMessage("Error: No templates provided");
+                return;
+            }
+
+            var selectedNameTemplates = NameTemplateList
+                .Where(nt => nt.IsSelected)
+                .Select(nt => nt.Item)
+                .ToList();
+
+            if (selectedNameTemplates.Count == 0) {
+                AddMessage("Error: No name templates provided");
                 return;
             }
 
@@ -484,8 +536,12 @@ namespace StockManager.ViewModels {
                             }
                         }
 
-                        composition.Name
-                            = NameGenerator.GenerateName(composition);
+                        composition.Name = NameGenerator.GenerateName(
+                            selectedNameTemplates.ElementAt(
+                                dice.Next(selectedNameTemplates.Count)
+                            ),
+                            composition
+                        );
 
                         AddMessage("New composition-----------------");
                         AddMessage($"Name - {composition.Name}");

@@ -6,10 +6,8 @@ using StockManager.Models;
 using StockManager.Properties;
 using System.IO;
 
-namespace StockManager.Utilities
-{
-    static class NameGenerator
-    {
+namespace StockManager.Utilities {
+    static class NameGenerator {
         private static Random dice = new Random();
 
         private static List<Func<string, Composition, string>> handlers = new List<Func<string, Composition, string>>
@@ -151,8 +149,7 @@ namespace StockManager.Utilities
                     var s = "";
                     var start = true;
 
-                    while (n > 0)
-                    {
+                    while (n > 0) {
                         if (!start && n != 1)
                             s += ", ";
 
@@ -180,20 +177,14 @@ namespace StockManager.Utilities
             },
         };
 
-        public static string GenerateName(Composition composition)
-        {
+        public static string GenerateName(string nameTemplate, Composition composition) {
+            if (nameTemplate == null)
+                throw new ArgumentNullException(nameof(nameTemplate));
+
             if (composition == null)
                 throw new ArgumentNullException(nameof(composition));
 
-            if (Settings.Default.NameTemplates.Count == 0)
-                return "";
-
-            var tepmlateString
-                = Settings.Default.NameTemplates[
-                    dice.Next(Settings.Default.NameTemplates.Count)
-                ];
-
-            return handlers.Aggregate(tepmlateString, (s, h) => h(s, composition));
+            return handlers.Aggregate(nameTemplate, (s, h) => h(s, composition));
         }
     }
 }

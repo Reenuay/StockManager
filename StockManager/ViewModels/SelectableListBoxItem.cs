@@ -2,7 +2,7 @@
 
 namespace StockManager.ViewModels
 {
-    class SelectableListBoxItem<T> : ViewModelBase where T : Base
+    class SelectableListBoxItem<T> : ViewModelBase
     {
         public T Item { get; private set; }
 
