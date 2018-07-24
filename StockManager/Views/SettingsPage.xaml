@@ -122,11 +122,46 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Orientation="Horizontal" Margin="5">
+                    <DockPanel Grid.Row="0" Margin="5">
+                        <TextBlock DockPanel.Dock="Left" Text="Illustrator.exe path" VerticalAlignment="Center"/>
+                        <TextBox DockPanel.Dock="Left" Text="{Binding IllustratorPath}" VerticalAlignment="Center" Margin="5,0" MinWidth="8"/>
+                    </DockPanel>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
                         <CheckBox IsChecked="{Binding Restart}" VerticalAlignment="Center">Restart after each</CheckBox>
                         <TextBox IsEnabled="{c:Binding Path=Restart}" Text="{Binding SetsCount}" VerticalAlignment="Center" Margin="5,0" MinWidth="8"/>
                         <TextBlock IsEnabled="{c:Binding Path=Restart}" Text="sets" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="Wait maximum" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding WaitForIllustrator}" VerticalAlignment="Center" Margin="5,0" MinWidth="8"/>
+                        <TextBlock Text="milliseconds (" VerticalAlignment="Center"/>
+                        <TextBlock Text="{c:Binding 'WaitForIllustrator / 1000'}" VerticalAlignment="Center"/>
+                        <TextBlock Text="seconds) for set" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="Wait maximum" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding WaitForIllustratorSavesFile}" VerticalAlignment="Center" Margin="5,0" MinWidth="8"/>
+                        <TextBlock Text="milliseconds (" VerticalAlignment="Center"/>
+                        <TextBlock Text="{c:Binding 'WaitForIllustratorSavesFile / 1000'}" VerticalAlignment="Center"/>
+                        <TextBlock Text="seconds) for file save" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="Try to access jpg file maximum" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding WaitForFileTriesNumber}" VerticalAlignment="Center" Margin="5,0" MinWidth="8"/>
+                        <TextBlock Text="times" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="Wait" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding WaitForFileInterval}" VerticalAlignment="Center" Margin="5,0" MinWidth="8"/>
+                        <TextBlock Text="milliseconds (" VerticalAlignment="Center"/>
+                        <TextBlock Text="{c:Binding 'WaitForFileInterval / 1000.0'}" VerticalAlignment="Center"/>
+                        <TextBlock Text="seconds) between jpg file access" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Grid>
             </GroupBox>

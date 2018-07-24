@@ -181,6 +181,12 @@ namespace StockManager.ViewModels {
         }
 
         private void DoWork(object sender, DoWorkEventArgs e) {
+
+            if (!File.Exists(Settings.Default.IllustratorPath)) {
+                AddMessage("Please provide correct Illustrator.exe path.");
+                return;
+            }
+
             var processStartTime = DateTime.Now;
             AddMessage($"Started process at {processStartTime}");
             AddMessage("Processing keywords...");

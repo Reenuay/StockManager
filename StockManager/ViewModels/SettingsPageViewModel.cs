@@ -4,8 +4,7 @@ using System.Windows.Input;
 using StockManager.Commands;
 using StockManager.Properties;
 
-namespace StockManager.ViewModels
-{
+namespace StockManager.ViewModels {
     class SettingsPageViewModel : ViewModelBase
     {
         #region NameTemplates
@@ -80,19 +79,83 @@ namespace StockManager.ViewModels
             }
         }
 
-        public int SetsCount
-        {
-            get
-            {
+        public int SetsCount {
+            get {
                 return Settings.Default.AfterEachNSets;
             }
 
-            set
-            {
+            set {
                 if (value < 1)
                     return;
 
                 Settings.Default.AfterEachNSets = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public int WaitForIllustrator {
+            get {
+                return Settings.Default.WaitForIllustrator;
+            }
+
+            set {
+                if (value < 1000)
+                    return;
+
+                Settings.Default.WaitForIllustrator = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public int WaitForIllustratorSavesFile {
+            get {
+                return Settings.Default.WaitForIllustratorSavesFile;
+            }
+
+            set {
+                if (value < 1000)
+                    return;
+
+                Settings.Default.WaitForIllustratorSavesFile = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public int WaitForFileTriesNumber {
+            get {
+                return Settings.Default.WaitForFileTriesNumber;
+            }
+
+            set {
+                if (value < 1)
+                    return;
+
+                Settings.Default.WaitForFileTriesNumber = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public int WaitForFileInterval {
+            get {
+                return Settings.Default.WaitForFileInterval;
+            }
+
+            set {
+                if (value < 100)
+                    return;
+
+                Settings.Default.WaitForFileInterval = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public string IllustratorPath {
+            get {
+                return Settings.Default.IllustratorPath;
+            }
+
+            set {
+                Settings.Default.IllustratorPath = value;
                 Settings.Default.Save();
             }
         }
