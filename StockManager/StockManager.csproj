@@ -243,15 +243,11 @@
     <Compile Include="Models\Composition.cs" />
     <Compile Include="Models\Mapping.cs" />
     <Compile Include="Models\Identity.cs" />
-    <Compile Include="Models\Queue.cs" />
     <Compile Include="Models\Set.cs" />
-    <Compile Include="Models\Task.cs" />
     <Compile Include="Models\Template.cs" />
-    <Compile Include="Models\Theme.cs" />
     <Compile Include="Services\AutoKeywordService.cs" />
     <Compile Include="Services\BackgroundSynchronizator.cs" />
     <Compile Include="Services\IllustratorCaller.cs" />
-    <Compile Include="Services\SetGenerator.cs" />
     <Compile Include="Services\SynchronizatorEventArgs.cs" />
     <Compile Include="Services\SynchronizatorEventHandler.cs" />
     <Compile Include="Services\SyncState.cs" />
@@ -267,7 +263,6 @@
     <Compile Include="ValidationRules\Wrapper.cs" />
     <Compile Include="ViewModels\BackgroundPageViewModel.cs" />
     <Compile Include="ViewModels\BackgroundViewModel.cs" />
-    <Compile Include="ViewModels\GeneratorPageViewModel.cs" />
     <Compile Include="ViewModels\IconViewModel.cs" />
     <Compile Include="Models\Keyword.cs" />
     <Compile Include="Models\Context.cs" />
@@ -286,14 +281,10 @@
     <Compile Include="ViewModels\NewGeneratorPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="ViewModels\TemplatesPageViewModel.cs" />
-    <Compile Include="ViewModels\ThemesPageViewModel.cs" />
     <Compile Include="ViewModels\SelectableListBoxItem.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\BackgroundPage.xaml.cs">
       <DependentUpon>BackgroundPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\GeneratorPage.xaml.cs">
-      <DependentUpon>GeneratorPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
@@ -312,9 +303,6 @@
     </Compile>
     <Compile Include="Views\TemplatesPage.xaml.cs">
       <DependentUpon>TemplatesPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ThemesPage.xaml.cs">
-      <DependentUpon>ThemesPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -414,10 +402,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\GeneratorPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -439,10 +423,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\TemplatesPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ThemesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
