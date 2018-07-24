@@ -68,6 +68,7 @@ namespace StockManager.ViewModels {
         public bool UseColors { get; set; } = true;
         public bool IsGenerating { get; set; }
         public int Total { get; set; }
+        public double Average { get; set; }
         public DateTime Now { get; set; } = DateTime.Now;
         public string TimeElapsed {
             get {
@@ -151,6 +152,7 @@ namespace StockManager.ViewModels {
                             IsGenerating = true;
                             startTime = DateTime.Now;
                             Total = 0;
+                            Average = 0;
                             timer = new Timer(
                                 new TimerCallback((arg) => {
                                     Now = DateTime.Now;
@@ -200,7 +202,6 @@ namespace StockManager.ViewModels {
                 TemplateList = new ObservableCollection<SelectableListBoxItem<Template>>(
                     context
                     .Templates
-                    .Include("Cells")
                     .Where(t => !t.IsHidden && t.Cells.Any())
                     .AsEnumerable()
                     .Select(t =>
@@ -272,7 +273,6 @@ namespace StockManager.ViewModels {
 
             var keywords = context
                 .Keywords
-                .Include("Icons")
                 .Where(k => selectedKeywords.Any(kw => kw == k.Name) && k.Icons.Any())
                 .ToList();
 
@@ -668,8 +668,12 @@ namespace StockManager.ViewModels {
                         AddMessage();
 
                         if (!skipped) {
+                            Average = (
+                                Average * Total
+                                + (endTime - startTime).TotalSeconds
+                            )
+                            / (++Total);
                             index++;
-                            Total++;
                         }
                     }
 

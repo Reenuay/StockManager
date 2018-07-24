@@ -197,15 +197,22 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
                 <TextBlock Text="Total" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
-                <TextBlock Grid.Row="1" Margin="0,0,0,10" Text="{Binding Total}"/>
-                <TextBlock Grid.Row="2" Text="Time Elapsed" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
-                <TextBlock Grid.Row="3" Margin="0,0,0,10" Text="{Binding TimeElapsed}"/>
-                <TextBlock Grid.Row="4" Text="Messages" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                <TextBlock Grid.Row="1" Margin="5" Text="{Binding Total}"/>
+                <TextBlock Grid.Row="2" Text="Time Elapsed" Foreground="{StaticResource SecondaryAccentBrush}" Margin="5"/>
+                <TextBlock Grid.Row="3" Margin="5" Text="{Binding TimeElapsed}"/>
+                <TextBlock Text="Average Time (in seconds)" Grid.Row="2" Grid.Column="1" Foreground="{StaticResource SecondaryAccentBrush}" Margin="5"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Margin="5" Text="{Binding Average}"/>
+                <TextBlock Grid.Row="4" Text="Messages" Foreground="{StaticResource SecondaryAccentBrush}" Margin="5"/>
                 <TextBox Grid.Row="5"
+                         Grid.ColumnSpan="2"
                          VerticalScrollBarVisibility="Auto"
                          HorizontalScrollBarVisibility="Auto"
-                         Margin="0,0,0,10"
+                         Margin="5"
                          Text="{Binding Message, Mode=OneWay}"
                          IsReadOnly="True"
                          Style="{StaticResource MaterialDesignTextAreaTextBox}"/>
