@@ -395,17 +395,13 @@ namespace StockManager.ViewModels {
 
                     var keyword = keywordTemplates
                         .Keys
-                        .Skip(dice.Next(0, keywordTemplates.Keys.Count))
-                        .Take(1)
-                        .Single();
+                        .ElementAt(dice.Next(keywordTemplates.Keys.Count));
 
                     AddMessage($"Keyword selected: {keyword.Name}");
                     AddMessage($"Icons count: {keyword.Icons.Count}");
 
                     var template = keywordTemplates[keyword]
-                        .Skip(dice.Next(0, keywordTemplates[keyword].Count))
-                        .Take(1)
-                        .Single();
+                        .ElementAt(dice.Next(keywordTemplates[keyword].Count));
 
                     AddMessage($"Template selected: {template.Name}");
                     AddMessage($"Cells count: {template.Cells.Count}");
@@ -422,6 +418,8 @@ namespace StockManager.ViewModels {
                         if (stopRequested) {
                             break;
                         }
+
+                        var skipped = false;
 
                         AddMessage();
                         AddMessage("------------------START-------------------");
@@ -645,7 +643,8 @@ namespace StockManager.ViewModels {
                             context.SaveChanges();
                         }
                         else {
-                            AddMessage("Skipped...");
+                            AddMessage("jpg file not found.");
+                            skipped = true;
                         }
 
                         if (File.Exists(jsFilePath)) {
@@ -653,21 +652,25 @@ namespace StockManager.ViewModels {
                             File.Delete(jsFilePath);
                         }
 
-                        AddMessage("Ending...");
-
                         var endTime = DateTime.Now;
 
+                        AddMessage($"{(skipped ? "Skipping" : "Ending" )}...");
                         AddMessage(
-                            $"Set {index + 1} of {currentAmount} ended at {endTime}"
+                            $"Set {index + 1} of {currentAmount}"
+                            + $" {(skipped ? "skipped" : "ended")} at {endTime}"
                         );
-
                         AddMessage($"Time elapsed {(endTime - startTime).ToString()}");
-
-                        AddMessage("------------------FINISH------------------");
+                        AddMessage(
+                            "----------------"
+                            + $"--{(skipped ? "SKIP" : "FINISH" )}---"
+                            + "---------------"
+                        );
                         AddMessage();
 
-                        index++;
-                        Total++;
+                        if (!skipped) {
+                            index++;
+                            Total++;
+                        }
                     }
 
                     if (stopRequested) {
