@@ -228,9 +228,6 @@ namespace StockManager.Services
                     // Создаём новую композицию.
                     var composition = new Composition
                     {
-                        Keywords = new ObservableCollection<Keyword>(
-                            set.Icons.SelectMany(i => i.Keywords).Distinct()
-                        ),
                         //Theme = Theme,
                         Set = set,
                         Background = Background,
@@ -274,7 +271,9 @@ namespace StockManager.Services
                         IllustratorCaller.WriteMeta(
                             fileName,
                             composition.Name,
-                            composition.Keywords
+                            composition.Set.Icons
+                                .SelectMany(i => i.Keywords)
+                                .Distinct()
                                 .Select(keyword => keyword.Name)
                         );
 

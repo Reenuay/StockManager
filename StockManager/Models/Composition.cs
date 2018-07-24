@@ -25,9 +25,6 @@ namespace StockManager.Models
         public virtual ObservableCollection<Mapping> Mappings { get; set; }
             = new ObservableCollection<Mapping>();
 
-        public virtual ObservableCollection<Keyword> Keywords { get; set; }
-            = new ObservableCollection<Keyword>();
-
         [NotMapped]
         public Template Template
         {

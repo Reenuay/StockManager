@@ -22,19 +22,5 @@ namespace StockManager.Models {
         public Context() {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, Configuration>());
         }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder) {
-            modelBuilder
-                .Entity<Keyword>()
-                .HasMany(k => k.ThemeCompositions)
-                .WithOptional(c => c.Theme);
-
-            modelBuilder
-                .Entity<Keyword>()
-                .HasMany(k => k.Compositions)
-                .WithMany(c => c.Keywords);
-
-            base.OnModelCreating(modelBuilder);
-        }
     }
 }

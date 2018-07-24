@@ -229,6 +229,10 @@
     <Compile Include="Migrations\201807141002131_CompositionThemeAndColors.Designer.cs">
       <DependentUpon>201807141002131_CompositionThemeAndColors.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807242027561_MinusCompositionKeywords.cs" />
+    <Compile Include="Migrations\201807242027561_MinusCompositionKeywords.Designer.cs">
+      <DependentUpon>201807242027561_MinusCompositionKeywords.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Background.cs" />
     <Compile Include="Models\Base.cs" />
@@ -376,6 +380,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807141002131_CompositionThemeAndColors.resx">
       <DependentUpon>201807141002131_CompositionThemeAndColors.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807242027561_MinusCompositionKeywords.resx">
+      <DependentUpon>201807242027561_MinusCompositionKeywords.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

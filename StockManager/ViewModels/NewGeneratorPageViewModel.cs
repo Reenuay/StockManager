@@ -431,9 +431,6 @@ namespace StockManager.ViewModels {
                             .ToArray();
 
                         var composition = new Composition {
-                            Keywords = new ObservableCollection<Keyword>(
-                                set.Icons.SelectMany(i => i.Keywords).Distinct()
-                            ),
                             Theme = keyword,
                             Set = set,
                             Background = template.Backgrounds.Any(b => !b.IsDeleted)
@@ -565,7 +562,9 @@ namespace StockManager.ViewModels {
                                     composition.Set.Snapshot
                                 ),
                                 composition.Name,
-                                composition.Keywords
+                                composition.Set.Icons
+                                    .SelectMany(i => i.Keywords)
+                                    .Distinct()
                                     .Select(k => k.Name)
                             );
 
