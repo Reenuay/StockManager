@@ -24,27 +24,32 @@ namespace StockManager.ViewModels {
                 return new RelayCommand(
                     o => {
                         if (NewColor.HasValue) {
-                            var color = NewColor.Value.ToString().Substring(3, 6);
+                            var hex = NewColor.Value.ToString().Substring(3, 6);
 
-                            if (!context.Colors.Any(c => c.HEX == color)) {
-                                var c = new Color {
-                                    HEX = color,
+                            var color = context.Colors
+                                .Where(c => c.HEX == hex)
+                                .SingleOrDefault();
+
+                            if (color == null) {
+                                color = new Color {
+                                    HEX = hex,
                                 };
 
                                 if (BackgroundInfo != null) {
-                                    c.Backgrounds.Add(BackgroundInfo.Background);
+                                    color.Backgrounds.Add(
+                                        BackgroundInfo.Background
+                                    );
+                                    context.Colors.Add(color);
+                                    context.SaveChanges();
+                                    RefreshColorList();
                                 }
-
-                                context.Colors.Add(c);
-                                context.SaveChanges();
-
-                                var item = new SelectableListBoxItem<Color>(c);
-
+                            }
+                            else {
                                 if (BackgroundInfo != null) {
-                                    item.IsSelected = true;
+                                    color.Backgrounds.Add(BackgroundInfo.Background);
+                                    context.SaveChanges();
+                                    RefreshColorList();
                                 }
-
-                                ColorList.Add(item);
                             }
                         }
                     }
@@ -131,6 +136,23 @@ namespace StockManager.ViewModels {
             );
         }
 
+        public void RefreshColorList() {
+            ColorList = new ObservableCollection<SelectableListBoxItem<Color>>(
+                context
+                .Colors
+                .OrderBy(c => c.HEX)
+                .AsEnumerable()
+                .Select(c => new SelectableListBoxItem<Color>(
+                    c,
+                    BackgroundInfo != null && BackgroundInfo.Background != null
+                        ? BackgroundInfo.Background
+                            .Colors
+                            .Any(bc => bc.HEX == c.HEX)
+                        : false
+                ))
+            );
+        }
+
         public BackgroundPageViewModel() {
             RefreshBackroundList();
             TemplateList = new ObservableCollection<SelectableListBoxItem<Template>>(
@@ -139,13 +161,7 @@ namespace StockManager.ViewModels {
                 .AsEnumerable()
                 .Select(t => new SelectableListBoxItem<Template>(t))
             );
-
-            ColorList = new ObservableCollection<SelectableListBoxItem<Color>>(
-                context
-                .Colors
-                .AsEnumerable()
-                .Select(c => new SelectableListBoxItem<Color>(c))
-            );
+            RefreshColorList();
         }
     }
 }

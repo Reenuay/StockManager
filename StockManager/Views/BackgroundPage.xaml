@@ -226,43 +226,55 @@
                     </StackPanel>
                 </Button>
                 <Border Grid.Row="2" Margin="5" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}"/>
-                <ListBox ItemsSource="{Binding ColorList}"
-                         IsSynchronizedWithCurrentItem="False"
-                         SelectedIndex="-1"
-                         Margin="5"
-                         Grid.Row="3">
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            <Setter Property="commands:CommandBehavior.Command" Value="{Binding DataContext.BindColorCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
-                            <Setter Property="commands:CommandBehavior.CommandParameter" Value="{Binding }"/>
-                            <Setter Property="commands:CommandBehavior.RoutedEventName" Value="PreviewMouseLeftButtonDown"/>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid HorizontalAlignment="Stretch">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Rectangle Width="20"
-                                           Height="20"
-                                           HorizontalAlignment="Left"
-                                           Fill="{Binding Item.AsBrush}"
-                                           Stroke="{DynamicResource MaterialDesignDivider}"
-                                           StrokeThickness="5"/>
-                                <materialDesign:PackIcon HorizontalAlignment="Right"
-                                                         Kind="Check"
-                                                         Cursor="Hand"
-                                                         ToolTip="Checked"
-                                                         Visibility="{c:Binding IsSelected}"
-                                                         Margin="5,0"
-                                                         Grid.Column="1"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              Height="Auto"
+                              Margin="5"
+                              Grid.Row="3">
+                    <ItemsControl ItemsSource="{Binding ColorList}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5">
+                                    <Rectangle Width="20"
+                                               Height="20"
+                                               Fill="{Binding Item.AsBrush}"
+                                               ToolTip="{c:Binding \'#\' + Item.HEX}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center">
+                                        <Rectangle.Style>
+                                            <Style TargetType="Rectangle">
+                                                <Setter Property="commands:CommandBehavior.Command" Value="{Binding DataContext.BindColorCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"/>
+                                                <Setter Property="commands:CommandBehavior.CommandParameter" Value="{Binding }"/>
+                                                <Setter Property="commands:CommandBehavior.RoutedEventName" Value="PreviewMouseLeftButtonDown"/>
+                                                <Setter Property="StrokeThickness" Value="1"/>
+                                            </Style>
+                                        </Rectangle.Style>
+                                    </Rectangle>
+                                    <Rectangle Width="20"
+                                               Height="20"
+                                               Stroke="LightGray"
+                                               StrokeThickness="1"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Visibility="{c:Binding IsSelected}">
+                                    </Rectangle>
+                                    <Rectangle Width="18"
+                                               Height="18"
+                                               Stroke="Black"
+                                               StrokeThickness="1"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Visibility="{c:Binding IsSelected}">
+                                    </Rectangle>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel HorizontalAlignment="Stretch"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
             </Grid>
         </GroupBox>
     </Grid>
