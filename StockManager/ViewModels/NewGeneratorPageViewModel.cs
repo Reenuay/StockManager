@@ -254,6 +254,19 @@ namespace StockManager.ViewModels {
                 Settings.Default.SetsDirectory
             );
 
+            var scriptsPath = Path.Combine(
+                Environment.CurrentDirectory,
+                Settings.Default.ScriptsDirectory
+            );
+
+            var scriptsDirectory = new DirectoryInfo(scriptsPath);
+
+            if (scriptsDirectory.Exists) {
+                foreach (var file in scriptsDirectory.GetFiles()) {
+                    file.Delete();
+                }
+            }
+
             var selectedKeywords = Keywords
                 .Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(k => k.Trim())
@@ -597,10 +610,14 @@ namespace StockManager.ViewModels {
 
                         var content = mustachioTemplate(model);
 
+                        if (!scriptsDirectory.Exists) {
+                            scriptsDirectory.Create();
+                        }
+
                         var jsFilePath = Path.GetFullPath(
                             Path.Combine(
-                                Environment.CurrentDirectory,
-                                "script.js"
+                                scriptsPath,
+                                $"{set.Snapshot}.js"
                             )
                         );
 

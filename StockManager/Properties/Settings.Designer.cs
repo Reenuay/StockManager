@@ -277,5 +277,14 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]")]
                 this["WaitForIllustratorSavesFile"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Scripts")]
+        public string ScriptsDirectory {
+            get {
+                return ((string)(this["ScriptsDirectory"]));
+            }
+        }
     }
 }

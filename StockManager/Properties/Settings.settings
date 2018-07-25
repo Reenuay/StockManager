@@ -93,5 +93,8 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]</Value>
     <Setting Name="WaitForIllustratorSavesFile" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3000</Value>
     </Setting>
+    <Setting Name="ScriptsDirectory" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Scripts</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

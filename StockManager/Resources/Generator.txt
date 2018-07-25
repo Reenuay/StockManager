@@ -47,88 +47,49 @@ var targetDoc = app.documents.addDocument(
     preset
 );
 
-var background = app.open(
-    new File(backgroundPath),
-    DocumentColorSpace.RGB
-);
+var background = targetDoc.placedItems.add();
+background.file = new File(backgroundPath);
+background.layer = targetDoc.currentLayer;
+background.top = targetDoc.height;
+background.left = 0;
 
-for (var layer in background.layers)
-{
-    background.layers[layer].locked = false;
-}
-
-for (var item in background.pageItems)
-{
-    background.pageItems[item].locked = false;
-}
-
-executeMenuCommand("selectall");
-executeMenuCommand("group");
-
-var backGroup = activeDocument.selection[0].duplicate(
-    targetDoc,
-    ElementPlacement.PLACEATEND
-);
-
-var percentage = backGroup.Width >= backGroup.Height
-    ? targetDoc.width / backGroup.width
-    : targetDoc.height / backGroup.height
+var percentage = background.width >= background.height
+    ? targetDoc.width / background.width
+    : targetDoc.height / background.height
     ;
 
-backGroup.width *= percentage;
-backGroup.height *= percentage;
+background.width *= percentage;
+background.height *= percentage;
 
-backGroup.left = 0;
-backGroup.top = targetDoc.height;
-
-background.close(SaveOptions.DONOTSAVECHANGES);
+background.embed();
 
 for (var index in icons) {
-    var icon = icons[index];
+    var iconObj = icons[index];
 
-    var iconDoc = app.open(
-        new File(icon.icon),
-        DocumentColorSpace.RGB
-    );
-
-    app.activeDocument = iconDoc;
-
-    for (var layer in iconDoc.layers) {
-        iconDoc.layers[layer].locked = false;
-    }
-
-    for (var item in iconDoc.pageItems) {
-        iconDoc.pageItems[item].locked = false;
-    }
-
-    executeMenuCommand("selectall");
-    executeMenuCommand("group");
-
-    var newGroup = app.activeDocument.selection[0].duplicate(
-        targetDoc,
-        ElementPlacement.PLACEATBEGINNING
-    );
+	var icon = targetDoc.placedItems.add();
+	icon.file = new File(iconObj.icon);
+	icon.layer = targetDoc.currentLayer;
 
 	if (useColor)
-		setColor(newGroup, newColor);
+		setColor(icon, newColor);
 
-    var x = targetDoc.width * icon.x / 100,
-        y = targetDoc.height * icon.y / 100,
-        w = targetDoc.width * icon.w / 100,
-        h = targetDoc.height * icon.h / 100;
+    var x = targetDoc.width * iconObj.x / 100,
+        y = targetDoc.height * iconObj.y / 100,
+        w = targetDoc.width * iconObj.w / 100,
+        h = targetDoc.height * iconObj.h / 100;
 
-    var gw = newGroup.width,
-        gh = newGroup.height;
+    var gw = icon.width,
+        gh = icon.height;
 
     percentage = gw >= gh ? w / gw : h / gh;
 
-    newGroup.width *= percentage;
-    newGroup.height *= percentage;
+    icon.width *= percentage;
+    icon.height *= percentage;
 
-    newGroup.left = x + (w - newGroup.width) / 2;
-    newGroup.top = y + h - (h - newGroup.height) / 2;
+    icon.left = x + (w - icon.width) / 2;
+    icon.top = y + h - (h - icon.height) / 2;
 
-    iconDoc.close(SaveOptions.DONOTSAVECHANGES);
+	icon.embed();
 }
 
 clipScan(targetDoc);
