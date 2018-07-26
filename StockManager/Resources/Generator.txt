@@ -47,9 +47,7 @@ var targetDoc = app.documents.addDocument(
     preset
 );
 
-var background = targetDoc.placedItems.add();
-background.file = new File(backgroundPath);
-background.layer = targetDoc.currentLayer;
+var background = targetDoc.groupItems.createFromFile(new File(backgroundPath));
 background.top = targetDoc.height;
 background.left = 0;
 
@@ -61,17 +59,10 @@ var percentage = background.width >= background.height
 background.width *= percentage;
 background.height *= percentage;
 
-background.embed();
-
 for (var index in icons) {
     var iconObj = icons[index];
 
-	var icon = targetDoc.placedItems.add();
-	icon.file = new File(iconObj.icon);
-	icon.layer = targetDoc.currentLayer;
-
-	if (useColor)
-		setColor(icon, newColor);
+	var icon = targetDoc.groupItems.createFromFile(new File(iconObj.icon));
 
     var x = targetDoc.width * iconObj.x / 100,
         y = targetDoc.height * iconObj.y / 100,
@@ -89,7 +80,8 @@ for (var index in icons) {
     icon.left = x + (w - icon.width) / 2;
     icon.top = y + h - (h - icon.height) / 2;
 
-	icon.embed();
+	if (useColor)
+		setColor(icon, newColor);
 }
 
 clipScan(targetDoc);
@@ -142,6 +134,12 @@ function setColor(el, newColor) {
             }
             break;
         case "GroupItem":
+            var j;
+            for (j = el.pageItems.length - 1; j > -1; j--) {
+                setColor(el.pageItems[j], newColor);
+            }
+            break;
+		case "PlacedItem":
             var j;
             for (j = el.pageItems.length - 1; j > -1; j--) {
                 setColor(el.pageItems[j], newColor);
