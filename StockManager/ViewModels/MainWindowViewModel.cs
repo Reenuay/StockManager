@@ -100,9 +100,9 @@ namespace StockManager.ViewModels
                 {
                     Name = "Generator",
                     Icon = PackIconKind.Flash,
-                    Page = () => new NewGeneratorPage()
+                    Page = () => new GeneratorPage()
                     {
-                        DataContext = NewGeneratorPageViewModel.Singleton
+                        DataContext = GeneratorPageViewModel.Singleton
                     }
                 },
                 new MainMenuItemViewModel()

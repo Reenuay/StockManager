@@ -5,9 +5,9 @@ var color = "{{color}}";
 var useColor = {{useColor}};
 var icons = {{{icons}}};
 var quitIllustrator = {{quitIllustrator}};
+var docSize = {{docSize}};
+var jpegSize = {{jpegSize}};
 
-var width = 1000;
-var height = 1000;
 var hexes = {
     0: 0,
     1: 1,
@@ -37,8 +37,8 @@ if (useColor && color) {
 }
 
 var preset = new DocumentPreset();
-preset.width = width;
-preset.height = height;
+preset.width = docSize;
+preset.height = docSize;
 preset.units = RulerUnits.Pixels;
 preset.colorMode = DocumentColorSpace.RGB;
 
@@ -99,8 +99,8 @@ var exportOptions = new ExportOptionsJPEG();
 exportOptions.antiAliasing = false;
 exportOptions.optimization = true;
 exportOptions.qualitySetting = 100;
-exportOptions.horizontalScale = 500;
-exportOptions.verticalScale = 500;
+exportOptions.horizontalScale = jpegSize / targetDoc.width * 100;
+exportOptions.verticalScale = jpegSize / targetDoc.height * 100;
 exportOptions.artBoardClipping = true;
 
 targetDoc.exportFile(new File(jpegName), ExportType.JPEG, exportOptions);

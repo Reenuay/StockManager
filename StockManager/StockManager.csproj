@@ -278,7 +278,7 @@
     <Compile Include="ViewModels\MainMenuItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="ViewModels\NewGeneratorPageViewModel.cs" />
+    <Compile Include="ViewModels\GeneratorPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="ViewModels\TemplatesPageViewModel.cs" />
     <Compile Include="ViewModels\SelectableListBoxItem.cs" />
@@ -295,8 +295,8 @@
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NewGeneratorPage.xaml.cs">
-      <DependentUpon>NewGeneratorPage.xaml</DependentUpon>
+    <Compile Include="Views\GeneratorPage.xaml.cs">
+      <DependentUpon>GeneratorPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -414,7 +414,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\NewGeneratorPage.xaml">
+    <Page Include="Views\GeneratorPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -426,17 +426,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="Illustrator">
-      <Guid>{3271C7D8-D207-4C7C-B2B4-7F3DA9D1A8F9}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="StockManager.ico" />

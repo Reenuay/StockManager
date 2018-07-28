@@ -22,10 +22,7 @@
     <Setting Name="SetsDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Sets</Value>
     </Setting>
-    <Setting Name="DocWidth" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">1000</Value>
-    </Setting>
-    <Setting Name="DocHeight" Type="System.Double" Scope="User">
+    <Setting Name="DocumentSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1000</Value>
     </Setting>
     <Setting Name="RequiredKeywords" Type="System.Collections.Specialized.StringCollection" Scope="Application">
@@ -66,15 +63,6 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]</Value>
     <Setting Name="AfterEachNSets" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="AutoKeywordFtpHost" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">ftp.shutterstock.com</Value>
-    </Setting>
-    <Setting Name="AutoKeywordFtpUser" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="AutoKeywordFtpPass" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="GeneratorKeywords" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -95,6 +83,9 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]</Value>
     </Setting>
     <Setting Name="ScriptsDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Scripts</Value>
+    </Setting>
+    <Setting Name="JpegSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5000</Value>
     </Setting>
   </Settings>
 </SettingsFile>

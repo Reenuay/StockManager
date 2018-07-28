@@ -160,6 +160,34 @@ namespace StockManager.ViewModels {
             }
         }
 
+        public int DocumentSize {
+            get {
+                return Settings.Default.DocumentSize;
+            }
+
+            set {
+                if (value < 100)
+                    return;
+
+                Settings.Default.DocumentSize = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public int JpegSize {
+            get {
+                return Settings.Default.JpegSize;
+            }
+
+            set {
+                if (value < 2000)
+                    return;
+
+                Settings.Default.JpegSize = value;
+                Settings.Default.Save();
+            }
+        }
+
         #endregion
 
         public SettingsPageViewModel()

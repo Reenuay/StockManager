@@ -17,8 +17,8 @@ namespace StockManager.Views {
     /// <summary>
     /// Логика взаимодействия для NewGeneratorPage.xaml
     /// </summary>
-    public partial class NewGeneratorPage : Page {
-        public NewGeneratorPage() {
+    public partial class GeneratorPage : Page {
+        public GeneratorPage() {
             InitializeComponent();
         }
     }

@@ -18,11 +18,11 @@ using StockManager.Services;
 using StockManager.Utilities;
 
 namespace StockManager.ViewModels {
-    class NewGeneratorPageViewModel : ViewModelBase {
-        private static Lazy<NewGeneratorPageViewModel> singleton
-            = new Lazy<NewGeneratorPageViewModel>();
+    class GeneratorPageViewModel : ViewModelBase {
+        private static Lazy<GeneratorPageViewModel> singleton
+            = new Lazy<GeneratorPageViewModel>();
 
-        public static NewGeneratorPageViewModel Singleton {
+        public static GeneratorPageViewModel Singleton {
             get {
                 singleton.Value.Refresh();
                 return singleton.Value;
@@ -605,6 +605,8 @@ namespace StockManager.ViewModels {
                         )
                         .ToString()
                         .ToLower();
+                        model.docSize = Settings.Default.DocumentSize;
+                        model.jpegSize = Settings.Default.JpegSize;
 
                         AddMessage("Creating script...");
 
@@ -787,7 +789,7 @@ namespace StockManager.ViewModels {
             return true;
         }
 
-        public NewGeneratorPageViewModel() {
+        public GeneratorPageViewModel() {
             Refresh();
 
             worker.DoWork += DoWork;

@@ -77,24 +77,12 @@ namespace StockManager.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1000")]
-        public double DocWidth {
+        public int DocumentSize {
             get {
-                return ((double)(this["DocWidth"]));
+                return ((int)(this["DocumentSize"]));
             }
             set {
-                this["DocWidth"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
-        public double DocHeight {
-            get {
-                return ((double)(this["DocHeight"]));
-            }
-            set {
-                this["DocHeight"] = value;
+                this["DocumentSize"] = value;
             }
         }
         
@@ -169,39 +157,6 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]")]
             }
             set {
                 this["AfterEachNSets"] = value;
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ftp.shutterstock.com")]
-        public string AutoKeywordFtpHost {
-            get {
-                return ((string)(this["AutoKeywordFtpHost"]));
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AutoKeywordFtpUser {
-            get {
-                return ((string)(this["AutoKeywordFtpUser"]));
-            }
-            set {
-                this["AutoKeywordFtpUser"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AutoKeywordFtpPass {
-            get {
-                return ((string)(this["AutoKeywordFtpPass"]));
-            }
-            set {
-                this["AutoKeywordFtpPass"] = value;
             }
         }
         
@@ -284,6 +239,18 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]")]
         public string ScriptsDirectory {
             get {
                 return ((string)(this["ScriptsDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5000")]
+        public int JpegSize {
+            get {
+                return ((int)(this["JpegSize"]));
+            }
+            set {
+                this["JpegSize"] = value;
             }
         }
     }
