@@ -10,8 +10,8 @@ namespace StockManager.Models {
         [Required, Index(IsUnique = true)]
         public string Name { get; set; }
 
-        public virtual ObservableCollection<Icon> Icons { get; set; }
-            = new ObservableCollection<Icon>();
+        public virtual ObservableCollection<IconKeyword> IconKeywords { get; set; }
+            = new ObservableCollection<IconKeyword>();
 
         public virtual ObservableCollection<Composition> ThemeCompositions { get; set; }
             = new ObservableCollection<Composition>();

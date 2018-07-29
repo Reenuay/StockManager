@@ -279,7 +279,7 @@ namespace StockManager.ViewModels {
 
             var keywords = context
                 .Keywords
-                .Where(k => selectedKeywords.Any(kw => kw == k.Name) && k.Icons.Any())
+                .Where(k => selectedKeywords.Any(kw => kw == k.Name) && k.IconKeywords.Any())
                 .ToList();
 
             if (keywords.Count == 0) {
@@ -328,7 +328,7 @@ namespace StockManager.ViewModels {
                 var temps = new List<Template>();
 
                 foreach (var template in selectedTemplates) {
-                    if (keyword.Icons.Count >= template.Cells.Count) {
+                    if (keyword.IconKeywords.Count >= template.Cells.Count) {
                         temps.Add(template);
                     }
                 }
@@ -345,7 +345,7 @@ namespace StockManager.ViewModels {
                 }
                 else {
                     AddMessage(
-                        $"Keyword {keyword.Name} doesn't have enough icons - {keyword.Icons.Count} and will be excluded"
+                        $"Keyword {keyword.Name} doesn't have enough icons - {keyword.IconKeywords.Count} and will be excluded"
                     );
                 }
             }
@@ -404,7 +404,7 @@ namespace StockManager.ViewModels {
                         .ElementAt(dice.Next(keywordTemplates.Keys.Count));
 
                     AddMessage($"Keyword selected: {keyword.Name}");
-                    AddMessage($"Icons count: {keyword.Icons.Count}");
+                    AddMessage($"Icons count: {keyword.IconKeywords.Count}");
 
                     var template = keywordTemplates[keyword]
                         .ElementAt(dice.Next(keywordTemplates[keyword].Count));
@@ -412,10 +412,10 @@ namespace StockManager.ViewModels {
                     AddMessage($"Template selected: {template.Name}");
                     AddMessage($"Cells count: {template.Cells.Count}");
 
-                    enumerator.ChangeValues(keyword.Icons.Count, template.Cells.Count);
+                    enumerator.ChangeValues(keyword.IconKeywords.Count, template.Cells.Count);
 
                     AddMessage(
-                        $"Possible combinations count on {keyword.Icons.Count}"
+                        $"Possible combinations count on {keyword.IconKeywords.Count}"
                         + $" icons and {template.Cells.Count} cells"
                         + $" is {enumerator.Count}"
                     );
@@ -443,11 +443,11 @@ namespace StockManager.ViewModels {
                         var combination = new ObservableCollection<Icon>();
 
                         for (var i = 0; i < enumerator.K; i++) {
-                            var icon = keyword.Icons[positions[i]];
+                            var iconKeyword = keyword.IconKeywords[positions[i]];
 
-                            combination.Add(icon);
+                            combination.Add(iconKeyword.Icon);
 
-                            AddMessage($" - {icon.Name}");
+                            AddMessage($" - {iconKeyword.Icon.Name}");
                         }
 
                         var snapshot = HashGenerator.TextSequenceToMD5(
@@ -644,9 +644,9 @@ namespace StockManager.ViewModels {
                                 ),
                                 composition.Name,
                                 composition.Set.Icons
-                                    .SelectMany(i => i.Keywords)
+                                    .SelectMany(i => i.IconKeywords)
                                     .Distinct()
-                                    .Select(k => k.Name)
+                                    .Select(k => k.Keyword.Name)
                             );
 
                             AddMessage("Saving changes to database...");

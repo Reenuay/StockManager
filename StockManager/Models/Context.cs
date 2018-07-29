@@ -9,6 +9,7 @@ namespace StockManager.Models {
     class Context : DbContextWithTriggers {
         public DbSet<Icon> Icons { get; set; }
         public DbSet<Keyword> Keywords { get; set; }
+        public DbSet<IconKeyword> IconKeywords { get; set; }
         public DbSet<Set> Sets { get; set; }
         public DbSet<Template> Templates { get; set; }
         public DbSet<Cell> Cells { get; set; }
@@ -21,14 +22,6 @@ namespace StockManager.Models {
 
         public Context() {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, Configuration>());
-        }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder) {
-            modelBuilder.Entity<Icon>()
-                .HasMany(i => i.Keywords)
-                .WithMany(k => k.Icons);
-
-            base.OnModelCreating(modelBuilder);
         }
     }
 }

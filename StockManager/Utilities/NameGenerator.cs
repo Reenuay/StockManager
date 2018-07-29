@@ -24,9 +24,9 @@ namespace StockManager.Utilities {
             {
                 return new Regex(@"\[keywords\]")
                     .Replace(t, c.Set.Icons
-                        .SelectMany(i => i.Keywords)
+                        .SelectMany(i => i.IconKeywords)
+                        .Select(ik => ik.Keyword.Name)
                         .Distinct()
-                        .Select(k => k.Name)
                         .Aggregate(
                             (a,b) => a + ", " + b
                         )
@@ -37,7 +37,7 @@ namespace StockManager.Utilities {
                 return new Regex(@"\[keywordCount\]").Replace(
                     t,
                     c.Set.Icons
-                        .SelectMany(i => i.Keywords)
+                        .SelectMany(i => i.IconKeywords)
                         .Distinct()
                         .Count()
                         .ToString()
@@ -70,9 +70,9 @@ namespace StockManager.Utilities {
                         break;
 
                     var keywords = c.Set.Icons
-                        .SelectMany(i => i.Keywords)
+                        .SelectMany(i => i.IconKeywords)
+                        .Select(ik => ik.Keyword.Name)
                         .Distinct()
-                        .Select(k => k.Name)
                         .ToList();
 
                     var n = int.Parse(match.Groups[1].Value);

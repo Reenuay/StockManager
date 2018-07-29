@@ -70,15 +70,6 @@ namespace StockManager.ViewModels
             {
                 new MainMenuItemViewModel()
                 {
-                    Name = "Icons",
-                    Icon = PackIconKind.ImageMultiple,
-                    Page = () => new IconBasePage()
-                    {
-                        DataContext = new IconBasePageViewModel()
-                    }
-                },
-                new MainMenuItemViewModel()
-                {
                     Name = "Backgrounds",
                     Icon = PackIconKind.Image,
                     HorizontalAlignment = HorizontalAlignment.Left,

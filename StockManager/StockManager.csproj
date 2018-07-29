@@ -233,6 +233,10 @@
     <Compile Include="Migrations\201807242123337_MinusCompositionKeywords.Designer.cs">
       <DependentUpon>201807242123337_MinusCompositionKeywords.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807291419409_IconKeywordsWithPriorities.cs" />
+    <Compile Include="Migrations\201807291419409_IconKeywordsWithPriorities.Designer.cs">
+      <DependentUpon>201807291419409_IconKeywordsWithPriorities.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Background.cs" />
     <Compile Include="Models\Base.cs" />
@@ -241,6 +245,7 @@
     <Compile Include="Models\Color.cs" />
     <Compile Include="Models\Creatable.cs" />
     <Compile Include="Models\Composition.cs" />
+    <Compile Include="Models\IconKeyword.cs" />
     <Compile Include="Models\Mapping.cs" />
     <Compile Include="Models\Identity.cs" />
     <Compile Include="Models\Set.cs" />
@@ -264,7 +269,6 @@
     <Compile Include="ValidationRules\Wrapper.cs" />
     <Compile Include="ViewModels\BackgroundPageViewModel.cs" />
     <Compile Include="ViewModels\BackgroundViewModel.cs" />
-    <Compile Include="ViewModels\IconViewModel.cs" />
     <Compile Include="Models\Keyword.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\Icon.cs" />
@@ -275,7 +279,6 @@
     <Compile Include="Utilities\HashGenerator.cs" />
     <Compile Include="Utilities\IconDirectory.cs" />
     <Compile Include="ViewModels\HomePageViewModel.cs" />
-    <Compile Include="ViewModels\IconBasePageViewModel.cs" />
     <Compile Include="ViewModels\MainMenuItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
@@ -289,9 +292,6 @@
     </Compile>
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\IconBasePage.xaml.cs">
-      <DependentUpon>IconBasePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -373,6 +373,9 @@
     <EmbeddedResource Include="Migrations\201807242123337_MinusCompositionKeywords.resx">
       <DependentUpon>201807242123337_MinusCompositionKeywords.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807291419409_IconKeywordsWithPriorities.resx">
+      <DependentUpon>201807291419409_IconKeywordsWithPriorities.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -404,10 +407,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HomePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\IconBasePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

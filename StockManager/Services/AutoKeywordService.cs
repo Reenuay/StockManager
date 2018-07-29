@@ -72,8 +72,13 @@ namespace StockManager.Services {
                                 context.Keywords.Add(keyword);
                             }
 
-                            if (!keyword.Icons.Any(i => i.Id == icon.Id))
-                                keyword.Icons.Add(context.Icons.Find(icon.Id));
+                            if (!keyword.IconKeywords.Any(ik => ik.IconId == icon.Id))
+                                context.IconKeywords.Add(
+                                    new IconKeyword {
+                                        IconId = icon.Id,
+                                        KeywordId = keyword.Id,
+                                    }
+                                );
                         }
 
                         try {

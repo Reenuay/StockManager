@@ -25,8 +25,8 @@ namespace StockManager.Models
 
         public bool IsDeleted { get; set; }
 
-        public virtual ObservableCollection<Keyword> Keywords { get; set; }
-            = new ObservableCollection<Keyword>();
+        public virtual ObservableCollection<IconKeyword> IconKeywords { get; set; }
+            = new ObservableCollection<IconKeyword>();
 
         public virtual ObservableCollection<Set> Sets { get; set; }
             = new ObservableCollection<Set>();
