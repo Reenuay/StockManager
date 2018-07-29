@@ -278,20 +278,21 @@
     <Compile Include="Services\IconSynchronizator.cs" />
     <Compile Include="Utilities\HashGenerator.cs" />
     <Compile Include="Utilities\IconDirectory.cs" />
-    <Compile Include="ViewModels\HomePageViewModel.cs" />
+    <Compile Include="ViewModels\KeyworderPageViewModel.cs" />
     <Compile Include="ViewModels\MainMenuItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="ViewModels\GeneratorPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
+    <Compile Include="ViewModels\SingletonViewModelBase.cs" />
     <Compile Include="ViewModels\TemplatesPageViewModel.cs" />
     <Compile Include="ViewModels\SelectableListBoxItem.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\BackgroundPage.xaml.cs">
       <DependentUpon>BackgroundPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\HomePage.xaml.cs">
-      <DependentUpon>HomePage.xaml</DependentUpon>
+    <Compile Include="Views\KeyworderPage.xaml.cs">
+      <DependentUpon>KeyworderPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -406,7 +407,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\HomePage.xaml">
+    <Page Include="Views\KeyworderPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -13,15 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace StockManager.Views
-{
+namespace StockManager.Views {
     /// <summary>
-    /// Логика взаимодействия для HomePage.xaml
+    /// Логика взаимодействия для KeyworderPage.xaml
     /// </summary>
-    public partial class HomePage : Page
-    {
-        public HomePage()
-        {
+    public partial class KeyworderPage : Page {
+        public KeyworderPage() {
             InitializeComponent();
         }
     }

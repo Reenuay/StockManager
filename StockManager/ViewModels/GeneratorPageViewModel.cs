@@ -17,10 +17,7 @@ using StockManager.Services;
 using StockManager.Utilities;
 
 namespace StockManager.ViewModels {
-    class GeneratorPageViewModel : ViewModelBase {
-        private static Lazy<GeneratorPageViewModel> singleton
-            = new Lazy<GeneratorPageViewModel>();
-
+    class GeneratorPageViewModel : SingletonViewModelBase<GeneratorPageViewModel> {
         private int from = 1;
         private int to = 10;
         private int maximum = 0;
@@ -34,13 +31,6 @@ namespace StockManager.ViewModels {
             = new EventWaitHandle(false, EventResetMode.AutoReset);
         private Context context = new Context();
         private DateTime startTime = DateTime.Now;
-
-        public static GeneratorPageViewModel Singleton {
-            get {
-                singleton.Value.Refresh();
-                return singleton.Value;
-            }
-        }
 
         public int Total { get; set; }
         public bool UseRange { get; set; }
@@ -183,7 +173,7 @@ namespace StockManager.ViewModels {
             Message = "";
         }
 
-        private void Refresh() {
+        public override void Refresh() {
             {
                 var selecteds = new Dictionary<int, bool>();
                 if (TemplateList != null) {

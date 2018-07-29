@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StockManager.ViewModels
-{
-    class HomePageViewModel : ViewModelBase
-    {
+namespace StockManager.ViewModels {
+    class KeyworderPageViewModel : SingletonViewModelBase<KeyworderPageViewModel> {
     }
 }

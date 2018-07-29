@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -7,13 +6,11 @@ using MaterialDesignThemes.Wpf;
 using StockManager.Commands;
 using StockManager.Views;
 
-namespace StockManager.ViewModels
-{
+namespace StockManager.ViewModels {
     /// <summary>
     /// Реализует логику взаимодействия вида окна и промежуточных данных.
     /// </summary>
-    class MainWindowViewModel : ViewModelBase
-    {
+    class MainWindowViewModel : ViewModelBase {
         #region Fields
 
         private List<MainMenuItemViewModel> mainMenuItems;
@@ -23,29 +20,21 @@ namespace StockManager.ViewModels
 
         #region Properties
 
-        public MainMenuItemViewModel[] MainMenuItems
-        {
-            get
-            {
+        public MainMenuItemViewModel[] MainMenuItems {
+            get {
                 return mainMenuItems.ToArray();
             }
         }
 
-        public ICommand ChangePageCommand
-        {
-            get
-            {
+        public ICommand ChangePageCommand {
+            get {
                 changePageCommand = changePageCommand
                     ?? new RelayCommand(
-                        p =>
-                        {
-                            if (p is MainMenuItemViewModel item)
-                            {
-                                if (CurrentPage.GetType() != item.Page().GetType())
-                                {
+                        p => {
+                            if (p is MainMenuItemViewModel item) {
+                                if (CurrentPage.GetType() != item.Page().GetType()) {
                                     CurrentPage = item.Page();
-                                    mainMenuItems.ForEach(i =>
-                                    {
+                                    mainMenuItems.ForEach(i => {
                                         i.IsSelected = false;
                                     });
                                     item.IsSelected = true;
@@ -63,9 +52,7 @@ namespace StockManager.ViewModels
 
         #endregion
 
-        public MainWindowViewModel()
-        {
-            //Создаём список элементов меню
+        public MainWindowViewModel() {
             mainMenuItems = new List<MainMenuItemViewModel>
             {
                 new MainMenuItemViewModel()
@@ -85,6 +72,15 @@ namespace StockManager.ViewModels
                     Page = () => new TemplatesPage()
                     {
                         DataContext = new TemplatesPageViewModel()
+                    }
+                },
+                new MainMenuItemViewModel()
+                {
+                    Name = "Keyworder",
+                    Icon = PackIconKind.Key,
+                    Page = () => new KeyworderPage()
+                    {
+                        DataContext = KeyworderPageViewModel.Singleton
                     }
                 },
                 new MainMenuItemViewModel()
