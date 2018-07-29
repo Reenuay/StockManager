@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Input;
 using Newtonsoft.Json;
@@ -22,6 +21,20 @@ namespace StockManager.ViewModels {
         private static Lazy<GeneratorPageViewModel> singleton
             = new Lazy<GeneratorPageViewModel>();
 
+        private int from = 1;
+        private int to = 10;
+        private int maximum = 0;
+        private bool stopRequested = false;
+        private string waitForFileName;
+        private string waitForFileNameWithoutExtension;
+        private Timer timer;
+        private BackgroundWorker worker = new BackgroundWorker();
+        private FileSystemWatcher watcher;
+        private EventWaitHandle generatorHandle
+            = new EventWaitHandle(false, EventResetMode.AutoReset);
+        private Context context = new Context();
+        private DateTime startTime = DateTime.Now;
+
         public static GeneratorPageViewModel Singleton {
             get {
                 singleton.Value.Refresh();
@@ -29,22 +42,16 @@ namespace StockManager.ViewModels {
             }
         }
 
-        private Context context = new Context();
-        private DateTime startTime = DateTime.Now;
-        private Timer timer;
-        private int from = 1;
-        private int to = 10;
-        private int maximum = 0;
-        private bool stopRequested = false;
-        private BackgroundWorker worker = new BackgroundWorker();
-        private FileSystemWatcher watcher;
-        private EventWaitHandle generatorHandle
-            = new EventWaitHandle(false, EventResetMode.AutoReset);
-        private string waitForFileName;
-        private string waitForFileNameWithoutExtension;
-
+        public int Total { get; set; }
+        public bool UseRange { get; set; }
+        public bool UseColors { get; set; } = true;
+        public bool IsGenerating { get; set; }
+        public double Average { get; set; }
+        public string Message { get; set; }
+        public DateTime Now { get; set; } = DateTime.Now;
         public ObservableCollection<SelectableListBoxItem<Template>> TemplateList { get; private set; }
         public ObservableCollection<SelectableListBoxItem<string>> NameTemplateList { get; set; }
+
         public int Maximum {
             get {
                 return maximum;
@@ -56,6 +63,7 @@ namespace StockManager.ViewModels {
                     Maximum = maximum;
             }
         }
+
         public string Keywords {
             get {
                 return Settings.Default.GeneratorKeywords;
@@ -65,17 +73,13 @@ namespace StockManager.ViewModels {
                 Settings.Default.Save();
             }
         }
-        public bool UseColors { get; set; } = true;
-        public bool IsGenerating { get; set; }
-        public int Total { get; set; }
-        public double Average { get; set; }
-        public DateTime Now { get; set; } = DateTime.Now;
+
         public string TimeElapsed {
             get {
                 return (Now - startTime).ToString(@"dd\:hh\:mm\:ss");
             }
         }
-        public bool UseRange { get; set; }
+
         public int From {
             get {
                 return from;
@@ -96,17 +100,6 @@ namespace StockManager.ViewModels {
                     to = value;
                 else
                     To = to;
-            }
-        }
-
-        private StringBuilder message = new StringBuilder("");
-        public string Message {
-            get {
-                return message.ToString();
-            }
-
-            set {
-                message.Append(value);
             }
         }
 
@@ -182,11 +175,11 @@ namespace StockManager.ViewModels {
         }
 
         private void AddMessage(string message = "") {
-            Message = message + "\n";
+            Message = Message.TakeLastLines(300);
+            Message += message + "\n";
         }
 
         private void ClearMessages() {
-            message.Clear();
             Message = "";
         }
 

@@ -254,6 +254,7 @@
     <Compile Include="Utilities\BackgroundDirectory.cs" />
     <Compile Include="Utilities\CombinationEnumerator.cs" />
     <Compile Include="Utilities\NameGenerator.cs" />
+    <Compile Include="Utilities\StringFunctions.cs" />
     <Compile Include="ValidationRules\BindingProxy.cs" />
     <Compile Include="ValidationRules\ExistingKeywordValidationRule.cs" />
     <Compile Include="ValidationRules\ExistsInCollectionValidationRule.cs" />
