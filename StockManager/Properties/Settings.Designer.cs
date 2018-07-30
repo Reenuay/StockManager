@@ -253,5 +253,17 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]")]
                 this["JpegSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
+        public int MinimumCombinationsWithoutCheck {
+            get {
+                return ((int)(this["MinimumCombinationsWithoutCheck"]));
+            }
+            set {
+                this["MinimumCombinationsWithoutCheck"] = value;
+            }
+        }
     }
 }

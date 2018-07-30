@@ -87,5 +87,8 @@ Icon set about [themeLowerCase] with keywords: [keywordsRandom:6]</Value>
     <Setting Name="JpegSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5000</Value>
     </Setting>
+    <Setting Name="MinimumCombinationsWithoutCheck" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

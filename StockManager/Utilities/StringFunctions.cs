@@ -24,5 +24,23 @@ namespace StockManager.Utilities {
 
             return lines.Aggregate((a, b) => a + "\n" + b);
         }
+
+        public static string TakeFirstLines(this string text, int count) {
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
+
+            var lines = new List<string>();
+            var match = Regex.Match(
+                text, "^.*$",
+                RegexOptions.Multiline
+            );
+
+            while (match.Success && lines.Count < count) {
+                lines.Add(match.Value);
+                match = match.NextMatch();
+            }
+
+            return lines.Aggregate((a, b) => a + "\n" + b);
+        }
     }
 }

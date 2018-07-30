@@ -21,6 +21,7 @@ namespace StockManager.ViewModels {
         private int from = 1;
         private int to = 10;
         private int maximum = 0;
+        private int maximumSkips = 5;
         private bool stopRequested = false;
         private string waitForFileName;
         private string waitForFileNameWithoutExtension;
@@ -49,8 +50,16 @@ namespace StockManager.ViewModels {
             set {
                 if (value >= 0)
                     maximum = value;
-                else
-                    Maximum = maximum;
+            }
+        }
+
+        public int MaximumSkips {
+            get {
+                return maximumSkips;
+            }
+            set {
+                if (value >= 1)
+                    maximumSkips = value;
             }
         }
 
@@ -77,8 +86,6 @@ namespace StockManager.ViewModels {
             set {
                 if (value <= To && value > 0)
                     from = value;
-                else
-                    From = from;
             }
         }
         public int To {
@@ -88,8 +95,6 @@ namespace StockManager.ViewModels {
             set {
                 if (value >= From && value > 0)
                     to = value;
-                else
-                    To = to;
             }
         }
 
@@ -165,8 +170,11 @@ namespace StockManager.ViewModels {
         }
 
         private void AddMessage(string message = "") {
-            Message = Message.TakeLastLines(300);
-            Message += message + "\n";
+            Message = Message.TakeFirstLines(299);
+            Message = message + "\n" + Message;
+
+            if (!string.IsNullOrEmpty(message))
+                Logger.Debug(message);
         }
 
         private void ClearMessages() {
@@ -185,7 +193,7 @@ namespace StockManager.ViewModels {
                 TemplateList = new ObservableCollection<SelectableListBoxItem<Template>>(
                     context
                     .Templates
-                    .Where(t => !t.IsHidden && t.Cells.Any())
+                    .Where(t => !t.IsHidden && t.Cells.Count > 1)
                     .AsEnumerable()
                     .Select(t =>
                         new SelectableListBoxItem<Template>(
@@ -410,6 +418,8 @@ namespace StockManager.ViewModels {
                         + $" is {enumerator.Count}"
                     );
 
+                    var skippedCopiesCount = 0;
+
                     while (index < currentAmount) {
                         if (stopRequested) {
                             break;
@@ -478,6 +488,34 @@ namespace StockManager.ViewModels {
 
                             AddMessage("------------------SKIP--------------------");
                             AddMessage();
+
+                            if (++skippedCopiesCount > MaximumSkips) {
+
+                                AddMessage("Too much skips. Removing template...");
+
+                                keywordTemplates[keyword].Remove(template);
+
+                                AddMessage(
+                                    $"Template {template.Name} was "
+                                    + $"removed from list of {keyword.Name} keyword"
+                                );
+
+                                if (keywordTemplates[keyword].Count == 0) {
+
+                                    AddMessage($"Keyword {keyword.Name} has no templates any more.");
+
+                                    keywordTemplates.Remove(keyword);
+
+                                    AddMessage($"Keyword {keyword.Name} was removed.");
+
+                                    if (keywordTemplates.Count == 0) {
+                                        AddMessage("No keywords left. Ending generation...");
+                                        stopRequested = true;
+                                    }
+                                }
+
+                                break;
+                            }
 
                             continue;
                         }

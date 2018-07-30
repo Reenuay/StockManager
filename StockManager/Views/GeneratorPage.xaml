@@ -136,20 +136,21 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                     <TextBlock Grid.Row="6" Text="Use Range" Foreground="{StaticResource SecondaryAccentBrush}" Margin="5"/>
-                    <Grid Grid.Row="7" Grid.ColumnSpan="2">
+                    <Grid Grid.Row="7">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <CheckBox IsChecked="{Binding UseRange}" VerticalAlignment="Center"/>
                         <StackPanel Grid.Column="1" Orientation="Horizontal" IsEnabled="{c:Binding UseRange}" VerticalAlignment="Center">
-                            <TextBlock Text="Generate From" Margin="5,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="From" Margin="5,0" VerticalAlignment="Center"/>
                             <TextBox Text="{Binding From}" VerticalAlignment="Center" MinWidth="8"/>
                             <TextBlock Text="To" Margin="5,0" VerticalAlignment="Center"/>
                             <TextBox Text="{Binding To}" VerticalAlignment="Center" MinWidth="8"/>
-                            <TextBlock Text="sets for each keyword" Margin="5,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Grid>
+                    <TextBlock Grid.Row="6" Grid.Column="1" Text="Maximum skips" Foreground="{StaticResource SecondaryAccentBrush}" Margin="5"/>
+                    <TextBox Grid.Row="7" Grid.Column="1" Margin="5" Text="{Binding MaximumSkips}" VerticalAlignment="Center"/>
                 </Grid>
                 <Border Margin="0,5"
                         BorderThickness="0,1,0,0"

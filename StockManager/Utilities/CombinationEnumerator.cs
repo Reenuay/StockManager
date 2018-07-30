@@ -5,10 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 
-namespace StockManager.Utilities
-{
-    class CombinationEnumerator
-    {
+namespace StockManager.Utilities {
+    class CombinationEnumerator {
         private Random dice;
         private BigInteger count;
         private bool calculated;
@@ -17,8 +15,7 @@ namespace StockManager.Utilities
         public int K { get; private set; }
         public int[] Current { get; private set; }
 
-        public BigInteger Count
-        {
+        public BigInteger Count {
             get {
                 if (!calculated) {
                     Calculate();
@@ -28,37 +25,29 @@ namespace StockManager.Utilities
             }
         }
 
-        public int[] Next
-        {
-            get
-            {
+        public int[] Next {
+            get {
                 var positions = new int[K];
                 Current.CopyTo(positions, 0);
 
-                for (var i = K - 1; i >= 0; i--)
-                {
+                for (var i = K - 1; i >= 0; i--) {
                     positions[i]++;
 
-                    if (i < K - 1)
-                    {
-                        for (var j = i + 1; j < K; j++)
-                        {
+                    if (i < K - 1) {
+                        for (var j = i + 1; j < K; j++) {
                             positions[j] = positions[i] + j - i;
                         }
                     }
 
-                    if (positions[i] > i + N - K)
-                    {
-                        if (i == 0)
-                        {
-                            for (var j = 0; j < K; j++)
-                            {
+                    if (positions[i] > i + N - K) {
+                        if (i == 0) {
+                            for (var j = 0; j < K; j++) {
                                 positions[j] = j;
                             }
                         }
                     }
-                    else
-                    {
+                    else {
+                        positions = Enumerable.Range(0, K).ToArray();
                         break;
                     }
                 }
@@ -67,10 +56,9 @@ namespace StockManager.Utilities
                 return Current;
             }
         }
-        public int[] Random
-        {
-            get
-            {
+
+        public int[] Random {
+            get {
                 // Список всех элементов множества.
                 var indexes = Enumerable.Range(0, N).ToArray();
 
@@ -81,14 +69,14 @@ namespace StockManager.Utilities
                 Current = indexes
                     .OrderBy(i => randomOrders[i])
                     .Take(K)
+                    .OrderBy(i => i)
                     .ToArray();
 
                 return Current;
             }
         }
 
-        public CombinationEnumerator(int n = 0, int k = 0)
-        {
+        public CombinationEnumerator(int n = 0, int k = 0) {
             dice = new Random();
             ChangeValues(n, k);
         }
@@ -111,8 +99,7 @@ namespace StockManager.Utilities
             }
         }
 
-        private void Calculate()
-        {
+        private void Calculate() {
             if (K == 0) {
                 count = 0;
                 return;
@@ -139,12 +126,10 @@ namespace StockManager.Utilities
                 count = ProductOfRange(N, N - K) / ProductOfRange(K, 1);
         }
 
-        private BigInteger ProductOfRange(int from, int to)
-        {
+        private BigInteger ProductOfRange(int from, int to) {
             BigInteger product = 1;
 
-            for (var i = from; i > to; i--)
-            {
+            for (var i = from; i > to; i--) {
                 product *= i;
             }
 
