@@ -31,7 +31,7 @@ namespace StockManager.ViewModels {
         private EventWaitHandle generatorHandle
             = new EventWaitHandle(false, EventResetMode.AutoReset);
         private Context context = new Context();
-        private DateTime startTime = DateTime.Now;
+        private DateTime keywordingStartTime = DateTime.Now;
 
         public int Total { get; set; }
         public bool UseRange { get; set; }
@@ -75,7 +75,7 @@ namespace StockManager.ViewModels {
 
         public string TimeElapsed {
             get {
-                return (Now - startTime).ToString(@"dd\:hh\:mm\:ss");
+                return (Now - keywordingStartTime).ToString(@"dd\:hh\:mm\:ss");
             }
         }
 
@@ -95,6 +95,12 @@ namespace StockManager.ViewModels {
             set {
                 if (value >= From && value > 0)
                     to = value;
+            }
+        }
+
+        public string AverageText {
+            get {
+                return Average.ToString("F2");
             }
         }
 
@@ -138,7 +144,7 @@ namespace StockManager.ViewModels {
                     o => {
                         if (!worker.IsBusy) {
                             IsGenerating = true;
-                            startTime = DateTime.Now;
+                            keywordingStartTime = DateTime.Now;
                             Total = 0;
                             Average = 0;
                             timer = new Timer(
@@ -673,6 +679,7 @@ namespace StockManager.ViewModels {
                                 composition.Name,
                                 composition.Set.Icons
                                     .SelectMany(i => i.IconKeywords)
+                                    .OrderBy(ik => ik.Priority)
                                     .Distinct()
                                     .Select(k => k.Keyword.Name)
                             );
@@ -734,7 +741,6 @@ namespace StockManager.ViewModels {
                         }
                     }
 
-                    Logger.Error(ex);
                     LogException(ex);
                     AddMessage("------------------ERROR-------------------");
                     AddMessage();

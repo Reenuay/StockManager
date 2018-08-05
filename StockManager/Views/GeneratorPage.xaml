@@ -207,7 +207,7 @@
                 <TextBlock Grid.Row="2" Text="Time Elapsed" Foreground="{StaticResource SecondaryAccentBrush}" Margin="5"/>
                 <TextBlock Grid.Row="3" Margin="5" Text="{Binding TimeElapsed}"/>
                 <TextBlock Text="Average Time (in seconds)" Grid.Row="2" Grid.Column="1" Foreground="{StaticResource SecondaryAccentBrush}" Margin="5"/>
-                <TextBlock Grid.Row="3" Grid.Column="1" Margin="5" Text="{Binding Average}"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Margin="5" Text="{Binding AverageText}"/>
                 <TextBlock Grid.Row="4" Text="Messages" Foreground="{StaticResource SecondaryAccentBrush}" Margin="5"/>
                 <TextBox Grid.Row="5"
                          Grid.ColumnSpan="2"

@@ -4,7 +4,6 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
       xmlns:lc="clr-namespace:StockManager.Controls"
       xmlns:commands="clr-namespace:StockManager.Commands"
@@ -18,6 +17,114 @@
       TextOptions.TextRenderingMode="Auto"
       FontFamily="{DynamicResource MaterialDesignFont}">
     <Grid>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Grid.Column="0"
+                  Style="{DynamicResource MaterialDesignGroupBox}"
+                  materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                  BorderThickness="0"
+                  Margin="5">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Settings" Height="32" Width="32" VerticalAlignment="Center"/>
+                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Settings"/>
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid IsEnabled="{c:Binding !IsKeywording}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Maximum" Foreground="{StaticResource SecondaryAccentBrush}" Margin="5"/>
+                    <TextBox Grid.Row="1" Margin="5" Text="{Binding Maximum}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Text="Add keywords if less than or equal to" Foreground="{StaticResource SecondaryAccentBrush}" Margin="5"/>
+                    <TextBox Grid.Row="3" Margin="5" Text="{Binding HaveLessOrEqualTo}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="4" Text="Refresh after each sets" Foreground="{StaticResource SecondaryAccentBrush}" Margin="5"/>
+                    <TextBox Grid.Row="5" Margin="5" Text="{Binding AfterEachNNames}" VerticalAlignment="Center"/>
+                </Grid>
+                <Border Margin="0,5"
+                        BorderThickness="0,1,0,0"
+                        BorderBrush="{DynamicResource MaterialDesignDivider}"
+                        Grid.Row="1"/>
+                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                        Grid.Row="2"
+                        Command="{Binding StartKeywordingCommand}"
+                        Visibility="{c:Binding !IsKeywording}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Play" Height="32" Width="32" VerticalAlignment="Center" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                        <TextBlock Text="Start" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                        Grid.Row="2"
+                        Command="{Binding StopKeywordingCommand}"
+                        Visibility="{c:Binding IsKeywording}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Stop" Height="32" Width="32" VerticalAlignment="Center" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                        <TextBlock Text="Stop" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Foreground="{StaticResource SecondaryAccentBrush}"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="1"
+                  Style="{DynamicResource MaterialDesignGroupBox}"
+                  materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                  BorderThickness="0"
+                  Margin="5">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Information" Height="32" Width="32" VerticalAlignment="Center"/>
+                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="Info"/>
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Total" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                <TextBlock Grid.Row="1" Margin="5" Text="{Binding Total}"/>
+                <TextBlock Text="Percentage" Grid.Column="1" Foreground="{StaticResource SecondaryAccentBrush}" Margin="0,5"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding Percentage}"/>
+                <TextBlock Grid.Row="2" Text="Time Elapsed" Foreground="{StaticResource SecondaryAccentBrush}" Margin="5"/>
+                <TextBlock Grid.Row="3" Margin="5" Text="{Binding TimeElapsed}"/>
+                <TextBlock Text="Average Time (in seconds)" Grid.Row="2" Grid.Column="1" Foreground="{StaticResource SecondaryAccentBrush}" Margin="5"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Margin="5" Text="{Binding AverageText}"/>
+                <TextBlock Grid.Row="4" Text="Messages" Foreground="{StaticResource SecondaryAccentBrush}" Margin="5"/>
+                <TextBox Grid.Row="5"
+                         Grid.ColumnSpan="2"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Auto"
+                         Margin="5"
+                         Text="{Binding Message, Mode=OneWay}"
+                         IsReadOnly="True"
+                         Style="{StaticResource MaterialDesignTextAreaTextBox}"/>
+            </Grid>
+        </GroupBox>
     </Grid>
 </Page>
+
