@@ -456,18 +456,28 @@ namespace StockManager.ViewModels {
                             AddMessage($" - {iconKeyword.Icon.Name}");
                         }
 
-                        var snapshot = HashGenerator.TextSequenceToMD5(
-                            from i in combination select i.CheckSum
-                        );
+                        AddMessage("Checking similarity...");
 
-                        AddMessage($"Snapshot - {snapshot}");
+                        var combinationIds = combination
+                            .Select(i => i.Id)
+                            .ToArray();
 
-                        var set = context
-                            .Sets
-                            .SingleOrDefault(s => s.Snapshot == snapshot);
+                        var tooSimilar = context.Sets
+                            .Any(s => (double)s.Icons.Count(i => combinationIds.Contains(i.Id))
+                                / s.Icons.Count
+                                >= 0.7
+                            );
 
-                        if (set == null) {
-                            AddMessage("Set not found. Generating...");
+                        Set set;
+
+                        if (!tooSimilar) {
+                            AddMessage("Ok. Generating...");
+
+                            var snapshot = HashGenerator.TextSequenceToMD5(
+                                from i in combination select i.CheckSum
+                            );
+
+                            AddMessage($"Snapshot - {snapshot}");
 
                             set = new Set {
                                 Snapshot = snapshot,
@@ -478,11 +488,7 @@ namespace StockManager.ViewModels {
                             context.SaveChanges();
                         }
                         else {
-                            AddMessage("Set is already in database. Checking compositions...");
-
-                            if (set.Compositions.Any()) {
-                                AddMessage("Set has composition already, skipping...");
-                            }
+                            AddMessage("Set is too similar. Skipping...");
 
                             var skipTime = DateTime.Now;
 
