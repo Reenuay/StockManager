@@ -463,7 +463,7 @@ namespace StockManager.ViewModels {
                             .ToArray();
 
                         var tooSimilar = context.Sets
-                            .Any(s => s.Icons.Count == combinationIds.Length
+                            .Any(s => s.Icons.Count == combinationIds.Count()
                                 && (double)s.Icons.Count(i => combinationIds.Contains(i.Id))
                                 / s.Icons.Count
                                 >= 0.7
